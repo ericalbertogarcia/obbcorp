@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>OBB Corp — NYC Uniform Specialists</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -30,6 +30,7 @@ body {
   background: var(--black);
   color: var(--cream);
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* ── SCROLLBAR ── */
@@ -653,8 +654,9 @@ nav {
 }
 
 .mockup-canvas-wrap canvas {
+  width: 100% !important;
+  height: auto !important;
   max-width: 100%;
-  max-height: 100%;
   display: block;
 }
 
@@ -999,23 +1001,220 @@ footer {
 /* ══════════════════════════════
    RESPONSIVE
 ══════════════════════════════ */
-@media (max-width: 900px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .hero-content { padding: 0 24px 0 32px; }
-  .hero-line { display: none; }
-  .section-header, .products-section, .logo-tool-section,
-  .quote-section, footer { padding-left: 24px; padding-right: 24px; }
-  .logo-tool-inner { grid-template-columns: 1fr; }
-  .logo-controls { grid-template-columns: 1fr; }
-  .lifestyle-grid, .sport-grid, .union-grid { margin: 0 24px 48px; grid-template-columns: 1fr; height: auto; }
-  .lifestyle-grid { height: auto; }
-  .lifestyle-cell { height: 180px; }
-  .sport-card { height: 240px; }
-  .page-hero-content { padding: 32px 24px; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-  .hero-strip { display: none; }
+
+/* ══════════════════════════════
+   HAMBURGER MENU
+══════════════════════════════ */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1100;
+  background: none;
+  border: none;
 }
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--cream);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s, background 0.2s;
+}
+
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu {
+  display: flex;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10,10,10,0.98);
+  z-index: 999;
+  flex-direction: column;
+  padding: 32px 32px 48px;
+  overflow-y: auto;
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.mobile-menu a {
+  display: block;
+  font-family: var(--font-cond);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.mobile-menu a:hover, .mobile-menu a.active { color: var(--gold); }
+
+.mobile-menu-cta {
+  margin-top: 24px;
+  background: var(--gold) !important;
+  color: var(--black) !important;
+  text-align: center;
+  border-radius: 2px;
+  padding: 18px !important;
+  font-size: 16px !important;
+  border-bottom: none !important;
+}
+
+.mobile-menu-footer {
+  margin-top: auto;
+  padding-top: 32px;
+  font-family: var(--font-cond);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(138,136,128,0.4);
+}
+
+/* ══════════════════════════════
+   TABLET  ≤ 1024px
+══════════════════════════════ */
+@media (max-width: 1024px) {
+  .section-header { padding: 60px 48px 36px; }
+  .products-section { padding: 0 48px 60px; }
+  .lifestyle-grid  { margin: 0 48px 60px; }
+  .sport-grid      { margin: 0 48px 60px; }
+  .union-grid      { padding: 0 48px 60px; }
+  .logo-tool-section { padding: 60px 48px; }
+  .quote-section   { padding: 60px 48px; }
+  footer           { padding: 48px 48px 32px; }
+  .footer-grid     { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .page-hero-content { padding: 40px 48px; }
+  .hero-content    { padding: 0 60px 0 72px; }
+}
+
+/* ══════════════════════════════
+   MOBILE  ≤ 768px
+══════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Nav */
+  nav { padding: 0 20px; height: 60px; }
+  .page { padding-top: 60px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .mobile-menu { top: 60px !important; }
+
+  /* Hero */
+  .home-hero { min-height: calc(100svh - 60px); align-items: flex-end; padding-bottom: 80px; }
+  .hero-bg { grid-template-columns: 1fr !important; }
+  .hero-bg-panel:nth-child(2),
+  .hero-bg-panel:nth-child(3) { display: none; }
+  .hero-bg-panel:nth-child(1) { filter: brightness(0.22) saturate(0.5) !important; }
+  .hero-line { display: none; }
+  .hero-content {
+    padding: 0 24px;
+    max-width: 100%;
+  }
+  .hero-h1 { font-size: clamp(42px, 12vw, 72px); }
+  .hero-sub { font-size: 15px; max-width: 100%; }
+  .hero-actions { flex-direction: column; gap: 12px; }
+  .hero-actions .btn-gold,
+  .hero-actions .btn-ghost { width: 100%; text-align: center; padding: 16px; }
+  .hero-strip { display: none; }
+
+  /* Panel labels & dividers */
+  [style*="grid-template-columns:1.4fr"] { display: none !important; }
+
+  /* Page heroes */
+  .page-hero { height: 300px; }
+  .page-hero-content { padding: 28px 20px; }
+  .page-hero-h1 { font-size: clamp(32px, 10vw, 56px); }
+  .page-hero-sub { font-size: 13px; }
+
+  /* Section headers */
+  .section-header { padding: 48px 20px 28px; }
+  .sec-h2 { font-size: clamp(32px, 9vw, 52px); }
+
+  /* Products grid */
+  .products-section { padding: 0 20px 48px; }
+  .product-grid { grid-template-columns: 1fr; gap: 0; }
+  .product-card { padding: 28px 24px; }
+  .product-num { font-size: 36px; }
+
+  /* Lifestyle grid */
+  .lifestyle-grid { margin: 0 20px 48px; grid-template-columns: 1fr; height: auto; }
+  .lifestyle-cell { height: 200px; }
+
+  /* Sport grid */
+  .sport-grid { margin: 0 20px 48px; grid-template-columns: 1fr; }
+  .sport-card { height: 220px; }
+
+  /* Union grid */
+  .union-grid { grid-template-columns: 1fr; padding: 0 20px 48px; gap: 16px; }
+  .union-card-img { height: 180px; }
+
+  /* Logo tool */
+  .logo-tool-section { padding: 48px 20px; }
+  .logo-tool-inner { grid-template-columns: 1fr; gap: 40px; }
+  .logo-controls { grid-template-columns: 1fr 1fr; }
+  .mockup-actions { flex-direction: column; }
+  .mockup-actions button { width: 100%; text-align: center; }
+  .mockup-switcher { gap: 6px; }
+  .mockup-btn { font-size: 10px; padding: 5px 10px; }
+
+  /* Quote form */
+  .quote-section { padding: 48px 20px; }
+  .quote-grid { grid-template-columns: 1fr; }
+  .q-field.full { grid-column: 1; }
+  .sec-h2 { margin-bottom: 24px; }
+
+  /* Footer */
+  footer { padding: 40px 20px 28px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+
+  /* Quote info stats */
+  [style*="grid-template-columns: repeat(3, 1fr)"] {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Toast */
+  .toast { left: 20px; right: 20px; bottom: 20px; }
+
+  /* Quote stats */
+  .quote-stats { grid-template-columns: 1fr !important; gap: 16px !important; }
+
+  /* Remove inline grid override */
+  [style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: 1fr !important; }
+}
+
+/* ══════════════════════════════
+   SMALL MOBILE  ≤ 380px
+══════════════════════════════ */
+@media (max-width: 380px) {
+  .hero-h1 { font-size: 38px; }
+  .logo-controls { grid-template-columns: 1fr; }
+  .mockup-btn { font-size: 9px; padding: 4px 8px; }
+}
+
 </style>
 </head>
 <body>
@@ -1034,7 +1233,25 @@ footer {
     <li><a id="nav-union"    onclick="showPage('union')">Union & Transit</a></li>
     <li><a id="nav-quote"    onclick="showPage('quote')" class="nav-cta">Get a Quote</a></li>
   </ul>
+  <!-- Hamburger -->
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a onclick="navTo('home')">Home</a>
+  <a onclick="navTo('charter')">Charter Schools</a>
+  <a onclick="navTo('sports')">Sports Uniforms</a>
+  <a onclick="navTo('football')">Football</a>
+  <a onclick="navTo('soccer')">Soccer</a>
+  <a onclick="navTo('baseball')">Baseball</a>
+  <a onclick="navTo('basketball')">Basketball</a>
+  <a onclick="navTo('union')">Union &amp; Transit</a>
+  <a onclick="navTo('quote')" class="mobile-menu-cta">Get a Quote →</a>
+  <div class="mobile-menu-footer">OBB Corp · New York City</div>
+</div>
 
 <!-- ═══════════════════════════════════════════ -->
 <!-- PAGE: HOME                                  -->
@@ -1959,7 +2176,7 @@ footer {
       <button class="btn-gold" onclick="submitQuote()" style="padding: 16px 40px; font-size: 13px;">Send Quote Request →</button>
     </div>
 
-    <div style="margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+    <div class="quote-stats" style="margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
       <div style="border-left: 2px solid var(--gold); padding-left: 20px;">
         <div style="font-family:var(--font-cond); font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px;">Response Time</div>
         <div style="font-family:var(--font-display); font-size:22px; color:var(--white);">1 Business Day</div>
@@ -2391,6 +2608,47 @@ document.querySelectorAll('.upload-zone').forEach(zone => {
 });
 
 
+
+// ── MOBILE MENU ──────────────────────────────────────
+function toggleMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const ham  = document.getElementById('hamburger');
+  const isOpen = menu.classList.contains('open');
+  if (isOpen) {
+    menu.classList.remove('open');
+    ham.classList.remove('open');
+    document.body.style.overflow = '';
+  } else {
+    menu.classList.add('open');
+    ham.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function navTo(id) {
+  // Close mobile menu then navigate
+  const menu = document.getElementById('mobile-menu');
+  const ham  = document.getElementById('hamburger');
+  menu.classList.remove('open');
+  ham.classList.remove('open');
+  document.body.style.overflow = '';
+  // Update active state in mobile menu
+  document.querySelectorAll('.mobile-menu a').forEach(a => a.classList.remove('active'));
+  showPage(id);
+}
+
+// Close menu on outside tap
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobile-menu');
+  const ham  = document.getElementById('hamburger');
+  if (menu && menu.classList.contains('open')) {
+    if (!menu.contains(e.target) && !ham.contains(e.target)) {
+      menu.classList.remove('open');
+      ham.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+});
 
 // ── INIT ──────────────────────────────────────────────────────
 // Render all mockup canvases on load
