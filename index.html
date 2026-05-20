@@ -1,0 +1,2403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBB Corp — NYC Uniform Specialists</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:    #0A0A0A;
+  --charcoal: #1A1A1A;
+  --steel:    #2C2C2C;
+  --gold:     #C9A84C;
+  --gold-lt:  #E8C96A;
+  --cream:    #F5F0E8;
+  --white:    #FFFFFF;
+  --muted:    #8A8880;
+  --border:   rgba(201,168,76,0.2);
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Barlow', sans-serif;
+  --font-cond:    'Barlow Condensed', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--cream);
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+/* ══════════════════════════════
+   NAVIGATION
+══════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 70px;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.nav-brand span { color: var(--gold); }
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0;
+  align-items: center;
+}
+
+.nav-links a {
+  display: block;
+  padding: 0 14px;
+  height: 70px;
+  line-height: 70px;
+  font-family: var(--font-cond);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 14px; right: 14px;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.25s;
+}
+
+.nav-links a:hover { color: var(--cream); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a.active { color: var(--gold); }
+.nav-links a.active::after { transform: scaleX(1); }
+
+.nav-cta {
+  background: var(--gold) !important;
+  color: var(--black) !important;
+  height: 38px !important;
+  line-height: 38px !important;
+  padding: 0 20px !important;
+  border-radius: 2px;
+  margin-left: 8px;
+}
+.nav-cta::after { display: none !important; }
+.nav-cta:hover { background: var(--gold-lt) !important; }
+
+/* ══════════════════════════════
+   PAGE SYSTEM
+══════════════════════════════ */
+.page { display: none; padding-top: 70px; min-height: 100vh; }
+.page.active { display: block; }
+
+/* ══════════════════════════════
+   HOME HERO
+══════════════════════════════ */
+.home-hero {
+  position: relative;
+  height: calc(100vh - 70px);
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  transform: scale(1.06);
+  animation: heroZoom 16s ease-in-out infinite alternate;
+  overflow: hidden;
+}
+
+.hero-bg-panel {
+  background-size: cover;
+  background-position: center;
+  background-color: #1a1a1a;
+  filter: brightness(0.28) saturate(0.55);
+}
+
+@keyframes heroZoom {
+  from { transform: scale(1.05); }
+  to   { transform: scale(1.12); }
+}
+
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.hero-line {
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 120px;
+  background: linear-gradient(180deg, transparent, var(--gold), transparent);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 80px 0 100px;
+  max-width: 900px;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 8vw, 110px);
+  line-height: 0.92;
+  font-weight: 900;
+  color: var(--white);
+  margin-bottom: 32px;
+  letter-spacing: -1px;
+}
+
+.hero-h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 300;
+  color: rgba(245,240,232,0.7);
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+  letter-spacing: 0.3px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-gold {
+  font-family: var(--font-cond);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  padding: 14px 32px;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-gold:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+.btn-ghost {
+  font-family: var(--font-cond);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(245,240,232,0.35);
+  padding: 14px 32px;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: border-color 0.2s, color 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Hero bottom strip */
+.hero-strip {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  border-top: 1px solid var(--border);
+}
+
+.hero-strip-item {
+  flex: 1;
+  padding: 20px 32px;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-strip-item:last-child { border-right: none; }
+.hero-strip-item:hover { background: rgba(201,168,76,0.05); }
+
+.strip-icon { font-size: 20px; }
+
+.strip-text {
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+.hero-strip-item:hover .strip-text { color: var(--gold); }
+
+/* ══════════════════════════════
+   SECTION HEADERS
+══════════════════════════════ */
+.section-header {
+  padding: 80px 80px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sec-tag {
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sec-tag::before {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.sec-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 0.95;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+
+.sec-h2 em { font-style: italic; color: var(--gold); }
+
+.sec-sub {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* ══════════════════════════════
+   PAGE HERO BANNER (inner pages)
+══════════════════════════════ */
+.page-hero {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.page-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.3) saturate(0.7);
+  transition: filter 0.3s;
+}
+
+.page-hero:hover .page-hero-bg { filter: brightness(0.35) saturate(0.8); }
+
+.page-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 60%);
+}
+
+.page-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 48px 80px;
+  width: 100%;
+}
+
+.page-hero-tag {
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.page-hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 0.95;
+  letter-spacing: -1px;
+}
+
+.page-hero-sub {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(245,240,232,0.65);
+  margin-top: 12px;
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════
+   PRODUCT GRID
+══════════════════════════════ */
+.products-section {
+  padding: 0 80px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.product-card {
+  background: var(--charcoal);
+  padding: 40px 36px;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.product-card:hover { background: var(--steel); }
+
+.product-num {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 900;
+  font-style: italic;
+  color: rgba(201,168,76,0.15);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.product-name {
+  font-family: var(--font-cond);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 10px;
+}
+
+.product-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.product-tag {
+  display: inline-block;
+  font-family: var(--font-cond);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  border-radius: 1px;
+}
+
+/* ══════════════════════════════
+   LOGO UPLOAD MOCKUP TOOL
+══════════════════════════════ */
+.logo-tool-section {
+  background: var(--charcoal);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 80px;
+}
+
+.logo-tool-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.logo-tool-info h3 {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.logo-tool-info p {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 4px;
+  padding: 32px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.04);
+}
+
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.upload-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+
+.upload-zone p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.upload-zone strong { color: var(--gold); }
+
+/* Logo controls */
+.logo-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ctrl-group label {
+  display: block;
+  font-family: var(--font-cond);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.ctrl-group input[type="range"] {
+  width: 100%;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.ctrl-group select, .ctrl-group input[type="color"] {
+  width: 100%;
+  background: var(--steel);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  padding: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+/* Mockup canvas */
+.mockup-area {
+  position: relative;
+}
+
+.mockup-title {
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.mockup-switcher {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.mockup-btn {
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.15s;
+}
+.mockup-btn.active, .mockup-btn:hover {
+  background: var(--gold);
+  color: var(--black);
+  border-color: var(--gold);
+}
+
+.mockup-canvas-wrap {
+  position: relative;
+  background: var(--steel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mockup-canvas-wrap canvas {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+.mockup-placeholder {
+  text-align: center;
+  color: var(--muted);
+}
+
+.mockup-placeholder span { font-size: 48px; display: block; margin-bottom: 12px; }
+.mockup-placeholder p { font-size: 13px; }
+
+.mockup-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* ══════════════════════════════
+   LIFESTYLE IMAGE GRID
+══════════════════════════════ */
+.lifestyle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 380px;
+  gap: 2px;
+  background: var(--border);
+  margin: 0 80px 80px;
+}
+
+.lifestyle-cell {
+  position: relative;
+  overflow: hidden;
+}
+
+.lifestyle-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.6) brightness(0.6);
+  transition: filter 0.4s, transform 0.5s;
+}
+
+.lifestyle-cell:hover img {
+  filter: saturate(0.9) brightness(0.75);
+  transform: scale(1.04);
+}
+
+.lifestyle-label {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ══════════════════════════════
+   SPORT CARDS (sports page)
+══════════════════════════════ */
+.sport-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  background: var(--border);
+  margin: 0 80px 80px;
+}
+
+.sport-card {
+  position: relative;
+  height: 340px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.sport-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.3) saturate(0.5);
+  transition: filter 0.4s, transform 0.5s;
+}
+
+.sport-card:hover img {
+  filter: brightness(0.45) saturate(0.7);
+  transform: scale(1.03);
+}
+
+.sport-card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 32px;
+  background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 60%);
+}
+
+.sport-icon { font-size: 32px; margin-bottom: 10px; }
+
+.sport-name {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.sport-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(245,240,232,0.6);
+}
+
+/* ══════════════════════════════
+   UNION PAGE
+══════════════════════════════ */
+.union-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  padding: 0 80px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.union-card {
+  background: var(--charcoal);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.union-card:hover { border-color: rgba(201,168,76,0.5); }
+
+.union-card-img {
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+
+.union-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.5) brightness(0.55);
+  transition: filter 0.3s, transform 0.4s;
+}
+
+.union-card:hover .union-card-img img {
+  filter: saturate(0.7) brightness(0.7);
+  transform: scale(1.03);
+}
+
+.union-card-body {
+  padding: 28px 28px 24px;
+}
+
+.union-card-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+
+.union-card-name {
+  font-family: var(--font-cond);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+
+.union-card-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.union-badge {
+  display: inline-block;
+  font-family: var(--font-cond);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+}
+
+/* ══════════════════════════════
+   CONTACT / QUOTE FORM
+══════════════════════════════ */
+.quote-section {
+  padding: 80px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.quote-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.q-field.full { grid-column: 1 / -1; }
+
+.q-field label {
+  font-family: var(--font-cond);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.q-field input,
+.q-field select,
+.q-field textarea {
+  background: var(--charcoal);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  border-radius: 1px;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+
+.q-field input:focus,
+.q-field select:focus,
+.q-field textarea:focus {
+  border-color: var(--gold);
+}
+
+.q-field textarea { min-height: 120px; resize: vertical; }
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer {
+  background: var(--charcoal);
+  border-top: 1px solid var(--border);
+  padding: 60px 80px 40px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto 48px;
+}
+
+.footer-brand-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.footer-brand-name span { color: var(--gold); }
+
+.footer-brand-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+.footer-col h4 {
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.footer-col a {
+  display: block;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 5px 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.footer-col a:hover { color: var(--cream); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: rgba(138,136,128,0.5);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ══════════════════════════════
+   TOAST
+══════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: var(--gold);
+  color: var(--black);
+  padding: 14px 24px;
+  font-family: var(--font-cond);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  z-index: 9999;
+  transform: translateY(120px);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+  border-radius: 1px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero-content { padding: 0 24px 0 32px; }
+  .hero-line { display: none; }
+  .section-header, .products-section, .logo-tool-section,
+  .quote-section, footer { padding-left: 24px; padding-right: 24px; }
+  .logo-tool-inner { grid-template-columns: 1fr; }
+  .logo-controls { grid-template-columns: 1fr; }
+  .lifestyle-grid, .sport-grid, .union-grid { margin: 0 24px 48px; grid-template-columns: 1fr; height: auto; }
+  .lifestyle-grid { height: auto; }
+  .lifestyle-cell { height: 180px; }
+  .sport-card { height: 240px; }
+  .page-hero-content { padding: 32px 24px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .hero-strip { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav>
+  <a class="nav-brand" onclick="showPage('home')">OBB <span>Corp</span></a>
+  <ul class="nav-links">
+    <li><a id="nav-home"     onclick="showPage('home')"     class="active">Home</a></li>
+    <li><a id="nav-charter"  onclick="showPage('charter')">Charter Schools</a></li>
+    <li><a id="nav-sports"   onclick="showPage('sports')">Sports Uniforms</a></li>
+    <li><a id="nav-football" onclick="showPage('football')">Football</a></li>
+    <li><a id="nav-soccer"   onclick="showPage('soccer')">Soccer</a></li>
+    <li><a id="nav-baseball" onclick="showPage('baseball')">Baseball</a></li>
+    <li><a id="nav-basketball" onclick="showPage('basketball')">Basketball</a></li>
+    <li><a id="nav-union"    onclick="showPage('union')">Union & Transit</a></li>
+    <li><a id="nav-quote"    onclick="showPage('quote')" class="nav-cta">Get a Quote</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: HOME                                  -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <section class="home-hero">
+    <div class="hero-bg">
+      <!-- Panel 1: Transit/hi-vis worker uniform — confirmed free Unsplash -->
+      <div class="hero-bg-panel" style="background-image: url('https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=85'); background-position: center top;"></div>
+      <!-- Panel 2: School uniforms / students in polo shirts — confirmed free -->
+      <div class="hero-bg-panel" style="background-image: url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=85'); background-position: center;"></div>
+      <!-- Panel 3: Sports team uniforms / athletic gear — confirmed free -->
+      <div class="hero-bg-panel" style="background-image: url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&q=85'); background-position: center top;"></div>
+    </div>
+    <!-- Panel dividers -->
+    <div style="position:absolute;inset:0;z-index:2;display:grid;grid-template-columns:1.4fr 1fr 1fr;pointer-events:none;">
+      <div style="border-right:1px solid rgba(201,168,76,0.2);"></div>
+      <div style="border-right:1px solid rgba(201,168,76,0.2);"></div>
+      <div></div>
+    </div>
+    <!-- Panel labels -->
+    <div style="position:absolute;bottom:84px;left:0;right:0;z-index:3;display:grid;grid-template-columns:1.4fr 1fr 1fr;pointer-events:none;padding:0 100px 0 100px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,0.6);">Transit &amp; Union</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,0.6);padding-left:24px;">Charter Schools</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,0.6);padding-left:24px;">Athletics</div>
+    </div>
+    <div class="hero-grain"></div>
+    <div class="hero-line"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">New York City's Uniform Specialists</div>
+      <h1 class="hero-h1">
+        Dressed for<br>
+        <em>Every</em><br>
+        Mission.
+      </h1>
+      <p class="hero-sub">
+        From charter school halls to championship fields, from subway platforms to port docks — OBB Corp outfits the people who keep New York moving.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-gold" onclick="showPage('charter')">Explore Uniforms</button>
+        <button class="btn-ghost" onclick="showPage('quote')">Request Quote</button>
+      </div>
+    </div>
+
+    <div class="hero-strip">
+      <div class="hero-strip-item" onclick="showPage('charter')">
+        <span class="strip-icon">🏫</span>
+        <span class="strip-text">Charter Schools</span>
+      </div>
+      <div class="hero-strip-item" onclick="showPage('sports')">
+        <span class="strip-icon">🏆</span>
+        <span class="strip-text">Sports Uniforms</span>
+      </div>
+      <div class="hero-strip-item" onclick="showPage('union')">
+        <span class="strip-icon">🚇</span>
+        <span class="strip-text">Union & Transit</span>
+      </div>
+      <div class="hero-strip-item" onclick="showPage('quote')">
+        <span class="strip-icon">✦</span>
+        <span class="strip-text">Custom Quote</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: CHARTER SCHOOLS                       -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-charter" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1400&q=85');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="page-hero-tag">New York City Charter Schools</span>
+      <h1 class="page-hero-h1">School<br>Uniforms</h1>
+      <p class="page-hero-sub">Custom-designed uniforms for NYC charter schools that instill pride, unity, and a sense of belonging — built to last through every school day.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="sec-tag">Our Offerings</div>
+    <h2 class="sec-h2">Built for the<br><em>Classroom</em></h2>
+    <p class="sec-sub">Every uniform is customizable with your school's colors, logo, and branding. Minimum orders from 12 pieces per item.</p>
+  </div>
+
+  <div class="products-section">
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-num">01</div>
+        <div class="product-name">Polo Shirts</div>
+        <p class="product-desc">Piqué cotton blend, embroidered school logo, available in full color range. Sizes youth XS through adult 3XL.</p>
+        <span class="product-tag">MOQ: 24 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">02</div>
+        <div class="product-name">Oxford Dress Shirts</div>
+        <p class="product-desc">Wrinkle-resistant twill, chest pocket with optional logo patch, available in white and school colors.</p>
+        <span class="product-tag">MOQ: 24 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">03</div>
+        <div class="product-name">Trousers & Skirts</div>
+        <p class="product-desc">School-approved cuts in navy, khaki, and grey. Elastic waistband options for younger grades.</p>
+        <span class="product-tag">MOQ: 24 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">04</div>
+        <div class="product-name">Fleece Jackets</div>
+        <p class="product-desc">Full-zip or pullover, school logo embroidered on chest and back. Ideal for fall and spring transitions.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">05</div>
+        <div class="product-name">Gym Uniforms</div>
+        <p class="product-desc">Moisture-wicking shorts and reversible tees in school colors. Sublimation printing for full-color designs.</p>
+        <span class="product-tag">MOQ: 24 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">06</div>
+        <div class="product-name">Staff Apparel</div>
+        <p class="product-desc">Coordinated shirts, vests, and lanyards for teachers and admin. Keep the whole campus on-brand.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lifestyle-grid">
+    <div class="lifestyle-cell">
+      <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80" alt="Students in classroom">
+      <span class="lifestyle-label">Classroom Ready</span>
+    </div>
+    <div class="lifestyle-cell">
+      <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80" alt="School hallway">
+      <span class="lifestyle-label">Built for Pride</span>
+    </div>
+    <div class="lifestyle-cell">
+      <img src="https://images.unsplash.com/photo-1551966775-a4ddc8df052b?w=600&q=80" alt="Students learning">
+      <span class="lifestyle-label">NYC Charter</span>
+    </div>
+  </div>
+
+  <!-- LOGO UPLOAD TOOL -->
+  <div class="logo-tool-section" id="charter-tool">
+    <div class="logo-tool-inner">
+      <div class="logo-tool-info">
+        <div class="sec-tag" style="margin-bottom: 12px;">Design Tool</div>
+        <h3>Place Your<br>School Logo</h3>
+        <p>Upload your school's logo and see it placed on a uniform mockup instantly. Adjust size, position, and garment color. Download your preview to share with your administration.</p>
+        <div class="upload-zone" id="charter-upload-zone">
+          <input type="file" id="charter-file" accept="image/*" onchange="handleUpload(event,'charter')">
+          <span class="upload-icon">↑</span>
+          <p><strong>Click or drag</strong> your logo file here<br><span style="font-size:11px;color:#5a5855;">PNG, JPG, SVG — transparent backgrounds work best</span></p>
+        </div>
+        <div class="logo-controls">
+          <div class="ctrl-group" style="grid-column:1/-1;">
+            <label>Garment Style</label>
+            <select id="charter-garment" onchange="renderMockup('charter')">
+              <option value="polo">Polo Shirt</option>
+              <option value="dress">Dress Shirt</option>
+              <option value="jacket">Fleece Jacket</option>
+              <option value="tee">Gym Tee</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <label>Garment Color</label>
+            <input type="color" id="charter-color" value="#1a3a6e" onchange="renderMockup('charter')">
+          </div>
+          <div class="ctrl-group">
+            <label>Logo Size</label>
+            <input type="range" id="charter-size" min="30" max="160" value="90" oninput="renderMockup('charter')">
+          </div>
+          <div class="ctrl-group">
+            <label>Horizontal Position</label>
+            <input type="range" id="charter-x" min="20" max="80" value="35" oninput="renderMockup('charter')">
+          </div>
+          <div class="ctrl-group">
+            <label>Vertical Position</label>
+            <input type="range" id="charter-y" min="15" max="75" value="35" oninput="renderMockup('charter')">
+          </div>
+        </div>
+        <div class="mockup-actions">
+          <button class="btn-gold" onclick="downloadMockup('charter')">Download Preview</button>
+          <button class="btn-ghost" onclick="showPage('quote')">Request This Design</button>
+        </div>
+      </div>
+
+      <div class="mockup-area">
+        <div class="mockup-title">Live Mockup Preview</div>
+        <div class="mockup-switcher" id="charter-switcher">
+          <button class="mockup-btn active" onclick="setView('charter','front',this)">Front</button>
+          <button class="mockup-btn" onclick="setView('charter','back',this)">Back</button>
+          <button class="mockup-btn" onclick="setView('charter','chest',this)">Chest Detail</button>
+        </div>
+        <div class="mockup-canvas-wrap">
+          <canvas id="charter-canvas" width="500" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: SPORTS (overview)                     -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-sports" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1400&q=85');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="page-hero-tag">Athletic Uniforms</span>
+      <h1 class="page-hero-h1">Play Hard.<br>Look Sharp.</h1>
+      <p class="page-hero-sub">Competition-grade uniforms for every sport, built for NYC school athletics. Full sublimation printing, custom numbers, and team branding.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="sec-tag">Choose Your Sport</div>
+    <h2 class="sec-h2">Championship<br><em>Gear</em></h2>
+    <p class="sec-sub">Select a sport below for detailed product options and to try our live logo placement tool.</p>
+  </div>
+
+  <div class="sport-grid">
+    <div class="sport-card" onclick="showPage('football')">
+      <img src="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=800&q=80" alt="Football">
+      <div class="sport-card-overlay">
+        <span class="sport-icon">🏈</span>
+        <div class="sport-name">Football</div>
+        <p class="sport-desc">Jerseys, pants, pads covers, sideline gear</p>
+      </div>
+    </div>
+    <div class="sport-card" onclick="showPage('soccer')">
+      <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80" alt="Soccer">
+      <div class="sport-card-overlay">
+        <span class="sport-icon">⚽</span>
+        <div class="sport-name">Soccer</div>
+        <p class="sport-desc">Jerseys, shorts, socks, goalkeeper kits</p>
+      </div>
+    </div>
+    <div class="sport-card" onclick="showPage('baseball')">
+      <img src="https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=800&q=80" alt="Baseball">
+      <div class="sport-card-overlay">
+        <span class="sport-icon">⚾</span>
+        <div class="sport-name">Baseball</div>
+        <p class="sport-desc">Jerseys, pants, caps, batting helmets</p>
+      </div>
+    </div>
+    <div class="sport-card" onclick="showPage('basketball')">
+      <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&q=80" alt="Basketball">
+      <div class="sport-card-overlay">
+        <span class="sport-icon">🏀</span>
+        <div class="sport-name">Basketball</div>
+        <p class="sport-desc">Jerseys, shorts, warm-up suits, shooter shirts</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: FOOTBALL                              -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-football" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=1400&q=85');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="page-hero-tag">Sport Uniforms — Football</span>
+      <h1 class="page-hero-h1">Built for<br>the Gridiron.</h1>
+      <p class="page-hero-sub">Heavy-duty mesh jerseys, tackle twill numbering, and coordinated sideline apparel for NYC school football programs.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="sec-tag">Football Collection</div>
+    <h2 class="sec-h2">Game Day<br><em>Ready</em></h2>
+    <p class="sec-sub">Full uniform packages from jerseys to sideline gear. NYSPHSAA compliant numbering and color standards available.</p>
+  </div>
+
+  <div class="products-section">
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-num">01</div>
+        <div class="product-name">Game Jerseys</div>
+        <p class="product-desc">Heavy-weight mesh, tackle twill or sublimated numbers, reinforced seams, moisture-wicking fabric.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">02</div>
+        <div class="product-name">Practice Jerseys</div>
+        <p class="product-desc">Lightweight mesh reversible jerseys in two team colors. Durable enough for daily practice.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">03</div>
+        <div class="product-name">Football Pants</div>
+        <p class="product-desc">Integrated pad pockets, durable nylon shell, team stripe options. Youth and adult sizing.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">04</div>
+        <div class="product-name">Sideline Gear</div>
+        <p class="product-desc">Coaches' polos, sideline hoodies, staff vests. Keep your team unified from field to sideline.</p>
+        <span class="product-tag">MOQ: 6 pcs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tool-section" id="football-tool">
+    <div class="logo-tool-inner">
+      <div class="logo-tool-info">
+        <div class="sec-tag" style="margin-bottom: 12px;">Design Tool</div>
+        <h3>Preview Your<br>Team Jersey</h3>
+        <p>Upload your team logo or school crest. Place it on a football jersey mockup and download the preview for your athletic director's approval.</p>
+        <div class="upload-zone" id="football-upload-zone">
+          <input type="file" id="football-file" accept="image/*" onchange="handleUpload(event,'football')">
+          <span class="upload-icon">↑</span>
+          <p><strong>Click or drag</strong> your logo here<br><span style="font-size:11px;color:#5a5855;">PNG recommended — transparent background ideal</span></p>
+        </div>
+        <div class="logo-controls">
+          <div class="ctrl-group" style="grid-column:1/-1;">
+            <label>Jersey Style</label>
+            <select id="football-garment" onchange="renderMockup('football')">
+              <option value="jersey">Game Jersey</option>
+              <option value="practice">Practice Jersey</option>
+              <option value="sideline">Sideline Hoodie</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <label>Primary Color</label>
+            <input type="color" id="football-color" value="#1a2e6e" onchange="renderMockup('football')">
+          </div>
+          <div class="ctrl-group">
+            <label>Logo Size</label>
+            <input type="range" id="football-size" min="30" max="160" value="90" oninput="renderMockup('football')">
+          </div>
+          <div class="ctrl-group">
+            <label>Horizontal</label>
+            <input type="range" id="football-x" min="20" max="80" value="50" oninput="renderMockup('football')">
+          </div>
+          <div class="ctrl-group">
+            <label>Vertical</label>
+            <input type="range" id="football-y" min="15" max="75" value="38" oninput="renderMockup('football')">
+          </div>
+        </div>
+        <div class="mockup-actions">
+          <button class="btn-gold" onclick="downloadMockup('football')">Download Preview</button>
+          <button class="btn-ghost" onclick="showPage('quote')">Request Quote</button>
+        </div>
+      </div>
+      <div class="mockup-area">
+        <div class="mockup-title">Live Jersey Preview</div>
+        <div class="mockup-switcher" id="football-switcher">
+          <button class="mockup-btn active" onclick="setView('football','front',this)">Front</button>
+          <button class="mockup-btn" onclick="setView('football','back',this)">Back</button>
+          <button class="mockup-btn" onclick="setView('football','side',this)">Side</button>
+        </div>
+        <div class="mockup-canvas-wrap">
+          <canvas id="football-canvas" width="500" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: SOCCER                                -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-soccer" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=1400&q=85');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="page-hero-tag">Sport Uniforms — Soccer</span>
+      <h1 class="page-hero-h1">Fluid.<br>Fast. <em>Fierce.</em></h1>
+      <p class="page-hero-sub">Sublimation-printed soccer kits for NYC school teams. Lightweight performance fabric, custom numbers, goalkeeper specials.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="sec-tag">Soccer Collection</div>
+    <h2 class="sec-h2">The Full<br><em>Kit</em></h2>
+    <p class="sec-sub">Complete soccer uniform packages from $24.99/player. Includes jersey, shorts, and socks in matching team colors.</p>
+  </div>
+
+  <div class="products-section">
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-num">01</div>
+        <div class="product-name">Match Jerseys</div>
+        <p class="product-desc">Full sublimation printing, polyester performance fabric, custom name and number on back.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">02</div>
+        <div class="product-name">Shorts & Socks</div>
+        <p class="product-desc">Matching sublimated shorts with inner brief, team socks in two heights (crew and knee-high).</p>
+        <span class="product-tag">MOQ: 12 sets</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">03</div>
+        <div class="product-name">Goalkeeper Kits</div>
+        <p class="product-desc">Padded goalkeeper jerseys in contrasting colorway. Matching shorts and gloves coordination available.</p>
+        <span class="product-tag">MOQ: 3 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">04</div>
+        <div class="product-name">Training Kits</div>
+        <p class="product-desc">Lightweight training bibs, practice jerseys, and warm-up tracksuits in team colors.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tool-section" id="soccer-tool">
+    <div class="logo-tool-inner">
+      <div class="logo-tool-info">
+        <div class="sec-tag" style="margin-bottom: 12px;">Design Tool</div>
+        <h3>Preview Your<br>Soccer Kit</h3>
+        <p>Upload your school or club crest and place it on a soccer jersey mockup. Adjust size and position, then download your preview.</p>
+        <div class="upload-zone" id="soccer-upload-zone">
+          <input type="file" id="soccer-file" accept="image/*" onchange="handleUpload(event,'soccer')">
+          <span class="upload-icon">↑</span>
+          <p><strong>Click or drag</strong> your crest here<br><span style="font-size:11px;color:#5a5855;">PNG or SVG with transparent background</span></p>
+        </div>
+        <div class="logo-controls">
+          <div class="ctrl-group" style="grid-column:1/-1;">
+            <label>Kit Style</label>
+            <select id="soccer-garment" onchange="renderMockup('soccer')">
+              <option value="jersey">Match Jersey</option>
+              <option value="gk">Goalkeeper Jersey</option>
+              <option value="training">Training Top</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <label>Kit Color</label>
+            <input type="color" id="soccer-color" value="#0e3f1a" onchange="renderMockup('soccer')">
+          </div>
+          <div class="ctrl-group">
+            <label>Logo Size</label>
+            <input type="range" id="soccer-size" min="30" max="160" value="80" oninput="renderMockup('soccer')">
+          </div>
+          <div class="ctrl-group">
+            <label>Horizontal</label>
+            <input type="range" id="soccer-x" min="20" max="80" value="35" oninput="renderMockup('soccer')">
+          </div>
+          <div class="ctrl-group">
+            <label>Vertical</label>
+            <input type="range" id="soccer-y" min="15" max="75" value="32" oninput="renderMockup('soccer')">
+          </div>
+        </div>
+        <div class="mockup-actions">
+          <button class="btn-gold" onclick="downloadMockup('soccer')">Download Preview</button>
+          <button class="btn-ghost" onclick="showPage('quote')">Request Quote</button>
+        </div>
+      </div>
+      <div class="mockup-area">
+        <div class="mockup-title">Live Kit Preview</div>
+        <div class="mockup-switcher" id="soccer-switcher">
+          <button class="mockup-btn active" onclick="setView('soccer','front',this)">Front</button>
+          <button class="mockup-btn" onclick="setView('soccer','back',this)">Back</button>
+        </div>
+        <div class="mockup-canvas-wrap">
+          <canvas id="soccer-canvas" width="500" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: BASEBALL                              -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-baseball" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1400&q=85');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="page-hero-tag">Sport Uniforms — Baseball</span>
+      <h1 class="page-hero-h1">America's<br><em>Game.</em></h1>
+      <p class="page-hero-sub">Classic and modern baseball uniforms for NYC school teams. Pinstripes, full-color sublimation, or traditional twill — your call.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="sec-tag">Baseball Collection</div>
+    <h2 class="sec-h2">Batter <em>Up</em></h2>
+    <p class="sec-sub">Full uniform packages including jerseys, pants, caps, and socks. Home and away colorways included.</p>
+  </div>
+
+  <div class="products-section">
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-num">01</div>
+        <div class="product-name">Game Jerseys</div>
+        <p class="product-desc">Two-button or full-button styles. Sublimated or tackle twill lettering. Home and away sets available.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">02</div>
+        <div class="product-name">Baseball Pants</div>
+        <p class="product-desc">Knicker or full-length cut, pinstripe or solid, double-knee reinforcement for sliding durability.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">03</div>
+        <div class="product-name">Team Caps</div>
+        <p class="product-desc">Structured 6-panel caps, custom embroidered logo, team colorways. Flexfit and adjustable options.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">04</div>
+        <div class="product-name">Socks & Stirrups</div>
+        <p class="product-desc">Traditional stirrups over sanitaries, or modern team-color crew socks. Custom stripes available.</p>
+        <span class="product-tag">MOQ: 12 pairs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tool-section" id="baseball-tool">
+    <div class="logo-tool-inner">
+      <div class="logo-tool-info">
+        <div class="sec-tag" style="margin-bottom: 12px;">Design Tool</div>
+        <h3>Preview Your<br>Baseball Jersey</h3>
+        <p>Upload your team logo and place it on a baseball jersey mockup. Choose home or away styling and download your preview.</p>
+        <div class="upload-zone" id="baseball-upload-zone">
+          <input type="file" id="baseball-file" accept="image/*" onchange="handleUpload(event,'baseball')">
+          <span class="upload-icon">↑</span>
+          <p><strong>Click or drag</strong> your logo here<br><span style="font-size:11px;color:#5a5855;">PNG with transparent background works best</span></p>
+        </div>
+        <div class="logo-controls">
+          <div class="ctrl-group" style="grid-column:1/-1;">
+            <label>Jersey Style</label>
+            <select id="baseball-garment" onchange="renderMockup('baseball')">
+              <option value="home">Home Jersey (White)</option>
+              <option value="away">Away Jersey (Grey)</option>
+              <option value="alt">Alternate (Color)</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <label>Team Color</label>
+            <input type="color" id="baseball-color" value="#1a2e6e" onchange="renderMockup('baseball')">
+          </div>
+          <div class="ctrl-group">
+            <label>Logo Size</label>
+            <input type="range" id="baseball-size" min="30" max="160" value="85" oninput="renderMockup('baseball')">
+          </div>
+          <div class="ctrl-group">
+            <label>Horizontal</label>
+            <input type="range" id="baseball-x" min="20" max="80" value="50" oninput="renderMockup('baseball')">
+          </div>
+          <div class="ctrl-group">
+            <label>Vertical</label>
+            <input type="range" id="baseball-y" min="15" max="75" value="35" oninput="renderMockup('baseball')">
+          </div>
+        </div>
+        <div class="mockup-actions">
+          <button class="btn-gold" onclick="downloadMockup('baseball')">Download Preview</button>
+          <button class="btn-ghost" onclick="showPage('quote')">Request Quote</button>
+        </div>
+      </div>
+      <div class="mockup-area">
+        <div class="mockup-title">Live Jersey Preview</div>
+        <div class="mockup-switcher" id="baseball-switcher">
+          <button class="mockup-btn active" onclick="setView('baseball','front',this)">Front</button>
+          <button class="mockup-btn" onclick="setView('baseball','back',this)">Back</button>
+        </div>
+        <div class="mockup-canvas-wrap">
+          <canvas id="baseball-canvas" width="500" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: BASKETBALL                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-basketball" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1400&q=85');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="page-hero-tag">Sport Uniforms — Basketball</span>
+      <h1 class="page-hero-h1">Elevate<br>Your <em>Game.</em></h1>
+      <p class="page-hero-sub">NBA-inspired sublimation jerseys for NYC school hoops. Full team packages with warm-ups, shooter shirts, and sideline gear.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="sec-tag">Basketball Collection</div>
+    <h2 class="sec-h2">Court <em>Ready</em></h2>
+    <p class="sec-sub">Complete basketball packages from jerseys to warm-ups. PSAL compliant numbering standards available on request.</p>
+  </div>
+
+  <div class="products-section">
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-num">01</div>
+        <div class="product-name">Game Jerseys</div>
+        <p class="product-desc">Full sublimation, sleeveless cut, moisture-wicking mesh. Custom name and number on front and back.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">02</div>
+        <div class="product-name">Shorts</div>
+        <p class="product-desc">Matching sublimated shorts, elastic waistband with drawstring. Mid-length cut, team logo on leg.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">03</div>
+        <div class="product-name">Warm-Up Suits</div>
+        <p class="product-desc">Zip-front jacket and pants in team colors. Snap-button breakdown option for quick on-court warm-ups.</p>
+        <span class="product-tag">MOQ: 12 sets</span>
+      </div>
+      <div class="product-card">
+        <div class="product-num">04</div>
+        <div class="product-name">Shooter Shirts</div>
+        <p class="product-desc">Reversible shooter shirts for pre-game warmup. Team logo sublimated on chest, number on back.</p>
+        <span class="product-tag">MOQ: 12 pcs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tool-section" id="basketball-tool">
+    <div class="logo-tool-inner">
+      <div class="logo-tool-info">
+        <div class="sec-tag" style="margin-bottom: 12px;">Design Tool</div>
+        <h3>Preview Your<br>Basketball Jersey</h3>
+        <p>Upload your team logo, choose home or away colorway, and see it on a basketball jersey mockup instantly. Download and share with your coach.</p>
+        <div class="upload-zone" id="basketball-upload-zone">
+          <input type="file" id="basketball-file" accept="image/*" onchange="handleUpload(event,'basketball')">
+          <span class="upload-icon">↑</span>
+          <p><strong>Click or drag</strong> your logo here<br><span style="font-size:11px;color:#5a5855;">PNG with transparent background ideal</span></p>
+        </div>
+        <div class="logo-controls">
+          <div class="ctrl-group" style="grid-column:1/-1;">
+            <label>Jersey Style</label>
+            <select id="basketball-garment" onchange="renderMockup('basketball')">
+              <option value="home">Home Jersey</option>
+              <option value="away">Away Jersey</option>
+              <option value="warmup">Warm-Up Jacket</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <label>Primary Color</label>
+            <input type="color" id="basketball-color" value="#8B0000" onchange="renderMockup('basketball')">
+          </div>
+          <div class="ctrl-group">
+            <label>Logo Size</label>
+            <input type="range" id="basketball-size" min="30" max="160" value="80" oninput="renderMockup('basketball')">
+          </div>
+          <div class="ctrl-group">
+            <label>Horizontal</label>
+            <input type="range" id="basketball-x" min="20" max="80" value="50" oninput="renderMockup('basketball')">
+          </div>
+          <div class="ctrl-group">
+            <label>Vertical</label>
+            <input type="range" id="basketball-y" min="15" max="75" value="30" oninput="renderMockup('basketball')">
+          </div>
+        </div>
+        <div class="mockup-actions">
+          <button class="btn-gold" onclick="downloadMockup('basketball')">Download Preview</button>
+          <button class="btn-ghost" onclick="showPage('quote')">Request Quote</button>
+        </div>
+      </div>
+      <div class="mockup-area">
+        <div class="mockup-title">Live Jersey Preview</div>
+        <div class="mockup-switcher" id="basketball-switcher">
+          <button class="mockup-btn active" onclick="setView('basketball','front',this)">Front</button>
+          <button class="mockup-btn" onclick="setView('basketball','back',this)">Back</button>
+        </div>
+        <div class="mockup-canvas-wrap">
+          <canvas id="basketball-canvas" width="500" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: UNION & TRANSIT                       -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-union" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1400&q=85');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="page-hero-tag">Union & Municipal Workwear</span>
+      <h1 class="page-hero-h1">The People<br>Who Move <em>NYC.</em></h1>
+      <p class="page-hero-sub">Durable, union-compliant workwear for MTA workers, Port Authority personnel, and all NYC municipal employees. Bulk pricing available.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="sec-tag">Municipal Sectors</div>
+    <h2 class="sec-h2">Outfitting<br><em>Essential</em> Workers</h2>
+    <p class="sec-sub">We understand union requirements, city procurement codes, and the specific durability demands of transit and port work.</p>
+  </div>
+
+  <div class="union-grid">
+    <div class="union-card">
+      <div class="union-card-img">
+        <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=600&q=80" alt="MTA transit worker">
+      </div>
+      <div class="union-card-body">
+        <span class="union-card-icon">🚇</span>
+        <div class="union-card-name">MTA — Transit Workers</div>
+        <p class="union-card-desc">Hi-vis vests, reflective safety jackets, uniform polos, work shirts, and caps for subway and bus operators. TWU Local 100 compliant.</p>
+        <span class="union-badge">TWU / ATU Compliant</span>
+      </div>
+    </div>
+    <div class="union-card">
+      <div class="union-card-img">
+        <img src="https://images.unsplash.com/photo-1587574293340-e0011c4e8ecf?w=600&q=80" alt="Port Authority worker">
+      </div>
+      <div class="union-card-body">
+        <span class="union-card-icon">⚓</span>
+        <div class="union-card-name">Port Authority of NY & NJ</div>
+        <p class="union-card-desc">Hi-vis outerwear, hardhat covers, work uniforms, and embroidered polos for PANYNJ personnel across bridges, tunnels, and airports.</p>
+        <span class="union-badge">ANSI Class 2 & 3</span>
+      </div>
+    </div>
+    <div class="union-card">
+      <div class="union-card-img">
+        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80" alt="Construction workers">
+      </div>
+      <div class="union-card-body">
+        <span class="union-card-icon">🔨</span>
+        <div class="union-card-name">Trades & Construction Unions</div>
+        <p class="union-card-desc">Work shirts, union-logo jackets, hi-vis outerwear, and embroidered beanies for IBEW, Plumbers Local, Carpenter unions and more.</p>
+        <span class="union-badge">Union Made Options</span>
+      </div>
+    </div>
+    <div class="union-card">
+      <div class="union-card-img">
+        <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&q=80" alt="Municipal fleet vehicle">
+      </div>
+      <div class="union-card-body">
+        <span class="union-card-icon">🏙️</span>
+        <div class="union-card-name">City Agency Staff</div>
+        <p class="union-card-desc">Embroidered uniforms, branded outerwear, and ID-compliant staff apparel for NYC agencies including DOT, Sanitation, Parks, and Housing.</p>
+        <span class="union-badge">NYC Vendor Registered</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGO UPLOAD TOOL — UNION -->
+  <div class="logo-tool-section" id="union-tool">
+    <div class="logo-tool-inner">
+      <div class="logo-tool-info">
+        <div class="sec-tag" style="margin-bottom: 12px;">Design Tool</div>
+        <h3>Preview Your<br>Union Apparel</h3>
+        <p>Upload your union logo, agency seal, or departmental crest. Place it on a workwear mockup to preview embroidery or print placement before ordering.</p>
+        <div class="upload-zone" id="union-upload-zone">
+          <input type="file" id="union-file" accept="image/*" onchange="handleUpload(event,'union')">
+          <span class="upload-icon">↑</span>
+          <p><strong>Click or drag</strong> your seal or logo here<br><span style="font-size:11px;color:#5a5855;">PNG or EPS — we match embroidery thread colors</span></p>
+        </div>
+        <div class="logo-controls">
+          <div class="ctrl-group" style="grid-column:1/-1;">
+            <label>Garment Type</label>
+            <select id="union-garment" onchange="renderMockup('union')">
+              <option value="polo">Work Polo</option>
+              <option value="hiviz">Hi-Vis Safety Vest</option>
+              <option value="jacket">Work Jacket</option>
+              <option value="tee">Work T-Shirt</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <label>Garment Color</label>
+            <input type="color" id="union-color" value="#1c3a5e" onchange="renderMockup('union')">
+          </div>
+          <div class="ctrl-group">
+            <label>Logo Size</label>
+            <input type="range" id="union-size" min="30" max="160" value="80" oninput="renderMockup('union')">
+          </div>
+          <div class="ctrl-group">
+            <label>Horizontal</label>
+            <input type="range" id="union-x" min="20" max="80" value="35" oninput="renderMockup('union')">
+          </div>
+          <div class="ctrl-group">
+            <label>Vertical</label>
+            <input type="range" id="union-y" min="15" max="75" value="32" oninput="renderMockup('union')">
+          </div>
+        </div>
+        <div class="mockup-actions">
+          <button class="btn-gold" onclick="downloadMockup('union')">Download Preview</button>
+          <button class="btn-ghost" onclick="showPage('quote')">Request Quote</button>
+        </div>
+      </div>
+      <div class="mockup-area">
+        <div class="mockup-title">Live Workwear Preview</div>
+        <div class="mockup-switcher" id="union-switcher">
+          <button class="mockup-btn active" onclick="setView('union','front',this)">Front</button>
+          <button class="mockup-btn" onclick="setView('union','back',this)">Back</button>
+          <button class="mockup-btn" onclick="setView('union','chest',this)">Chest Logo</button>
+        </div>
+        <div class="mockup-canvas-wrap">
+          <canvas id="union-canvas" width="500" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PAGE: QUOTE                                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="page-quote" class="page">
+
+  <div class="page-hero" style="height: 340px;">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=85'); filter: brightness(0.2) saturate(0.4);"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="page-hero-tag">Custom Orders</span>
+      <h1 class="page-hero-h1" style="font-size: clamp(36px,5vw,64px);">Request a Quote</h1>
+      <p class="page-hero-sub">Tell us what you need. We'll respond within one business day with pricing and a sample timeline.</p>
+    </div>
+  </div>
+
+  <div class="quote-section">
+    <div class="sec-tag" style="margin-bottom: 12px;">Contact Form</div>
+    <h2 class="sec-h2" style="font-size: 36px; margin-bottom: 32px;">Let's Build<br><em>Something</em></h2>
+
+    <div class="quote-grid">
+      <div class="q-field">
+        <label>First Name *</label>
+        <input type="text" placeholder="First name">
+      </div>
+      <div class="q-field">
+        <label>Last Name *</label>
+        <input type="text" placeholder="Last name">
+      </div>
+      <div class="q-field">
+        <label>Organization / School / Union *</label>
+        <input type="text" placeholder="e.g. PS 123 Charter School">
+      </div>
+      <div class="q-field">
+        <label>Email *</label>
+        <input type="email" placeholder="you@org.com">
+      </div>
+      <div class="q-field">
+        <label>Phone</label>
+        <input type="tel" placeholder="+1 (646) 000-0000">
+      </div>
+      <div class="q-field">
+        <label>Uniform Category *</label>
+        <select>
+          <option>Select a category...</option>
+          <option>Charter School Uniforms</option>
+          <option>Football Uniforms</option>
+          <option>Soccer Uniforms</option>
+          <option>Baseball Uniforms</option>
+          <option>Basketball Uniforms</option>
+          <option>MTA / Transit Workwear</option>
+          <option>Port Authority Workwear</option>
+          <option>Construction / Trades Union</option>
+          <option>Other Municipal</option>
+        </select>
+      </div>
+      <div class="q-field">
+        <label>Estimated Quantity</label>
+        <select>
+          <option>Select range...</option>
+          <option>12–24 pieces</option>
+          <option>25–50 pieces</option>
+          <option>51–100 pieces</option>
+          <option>101–250 pieces</option>
+          <option>250+ pieces</option>
+        </select>
+      </div>
+      <div class="q-field">
+        <label>Timeline</label>
+        <select>
+          <option>Select timeline...</option>
+          <option>Rush (2–3 weeks)</option>
+          <option>Standard (4–6 weeks)</option>
+          <option>Planning ahead (6+ weeks)</option>
+        </select>
+      </div>
+      <div class="q-field full">
+        <label>Tell Us More</label>
+        <textarea placeholder="Colors, logo details, special requirements, number of styles needed..."></textarea>
+      </div>
+      <div class="q-field full" style="align-items:flex-start;">
+        <label>Upload Reference / Logo (optional)</label>
+        <div class="upload-zone" style="width:100%; text-align:left; padding: 16px 20px;">
+          <input type="file" accept="image/*,.pdf,.ai,.eps">
+          <div style="display:flex; align-items:center; gap:12px; pointer-events:none;">
+            <span style="font-size:24px;">📎</span>
+            <p style="margin:0; font-size:13px; color:var(--muted);"><strong style="color:var(--gold);">Attach a file</strong> — logo, reference image, or spec sheet<br><span style="font-size:11px;">PNG, JPG, PDF, AI, EPS up to 20MB</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 28px; display: flex; gap: 16px; flex-wrap: wrap;">
+      <button class="btn-gold" onclick="submitQuote()" style="padding: 16px 40px; font-size: 13px;">Send Quote Request →</button>
+    </div>
+
+    <div style="margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+      <div style="border-left: 2px solid var(--gold); padding-left: 20px;">
+        <div style="font-family:var(--font-cond); font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px;">Response Time</div>
+        <div style="font-family:var(--font-display); font-size:22px; color:var(--white);">1 Business Day</div>
+      </div>
+      <div style="border-left: 2px solid var(--gold); padding-left: 20px;">
+        <div style="font-family:var(--font-cond); font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px;">Minimum Order</div>
+        <div style="font-family:var(--font-display); font-size:22px; color:var(--white);">12 Pieces</div>
+      </div>
+      <div style="border-left: 2px solid var(--gold); padding-left: 20px;">
+        <div style="font-family:var(--font-cond); font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px;">Free Samples</div>
+        <div style="font-family:var(--font-display); font-size:22px; color:var(--white);">On Qualifying Orders</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">OBB <span>Corp</span></div>
+      <p class="footer-brand-desc">NYC's specialist in custom uniforms for charter schools, athletic programs, and union workwear. Locally operated, nationally shipped.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Uniforms</h4>
+      <a onclick="showPage('charter')">Charter Schools</a>
+      <a onclick="showPage('sports')">Sports Overview</a>
+      <a onclick="showPage('union')">Union & Transit</a>
+    </div>
+    <div class="footer-col">
+      <h4>Sports</h4>
+      <a onclick="showPage('football')">Football</a>
+      <a onclick="showPage('soccer')">Soccer</a>
+      <a onclick="showPage('baseball')">Baseball</a>
+      <a onclick="showPage('basketball')">Basketball</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a onclick="showPage('quote')">Get a Quote</a>
+      <a>About Us</a>
+      <a>Contact</a>
+      <a>NYC Vendor Info</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 OBB Corp. All rights reserved. New York City.</span>
+    <span>Privacy · Terms</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ Quote request submitted! We'll be in touch within 1 business day.</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- JAVASCRIPT                                  -->
+<!-- ═══════════════════════════════════════════ -->
+<script>
+// ── PAGE NAVIGATION ────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Render canvas for the page if it has one
+  setTimeout(() => renderMockup(id), 100);
+}
+
+// ── MOCKUP STATE ────────────────────────────────────────────
+const state = {};
+const logos = {};
+const views = {};
+
+['charter','football','soccer','baseball','basketball','union'].forEach(id => {
+  state[id] = null;
+  logos[id] = null;
+  views[id] = 'front';
+});
+
+// ── FILE UPLOAD ─────────────────────────────────────────────
+function handleUpload(event, section) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      logos[section] = img;
+      renderMockup(section);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+
+  // Visual feedback
+  const zone = document.getElementById(section + '-upload-zone');
+  if (zone) {
+    zone.style.borderColor = 'var(--gold)';
+    zone.querySelector('p').innerHTML = `<strong style="color:var(--gold);">✓ ${file.name}</strong><br><span style="font-size:11px;color:#5a5855;">Logo loaded — adjust controls on the right</span>`;
+  }
+}
+
+// ── SET VIEW ─────────────────────────────────────────────────
+function setView(section, view, btn) {
+  views[section] = view;
+  const switcher = document.getElementById(section + '-switcher');
+  if (switcher) {
+    switcher.querySelectorAll('.mockup-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  renderMockup(section);
+}
+
+// ── DRAW GARMENT SHAPE ────────────────────────────────────────
+function drawGarment(ctx, type, color, view, W, H) {
+  const cx = W / 2;
+  ctx.clearRect(0, 0, W, H);
+
+  // Shadow
+  ctx.shadowColor = 'rgba(0,0,0,0.4)';
+  ctx.shadowBlur = 24;
+  ctx.shadowOffsetY = 8;
+
+  ctx.fillStyle = color;
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1.5;
+
+  const garmentMap = {
+    polo:       drawPolo,
+    dress:      drawDress,
+    jacket:     drawJacket,
+    tee:        drawTee,
+    jersey:     drawJersey,
+    practice:   drawJersey,
+    sideline:   drawJacket,
+    gk:         drawJersey,
+    training:   drawTee,
+    home:       view === 'back' ? drawJerseyBack : drawJersey,
+    away:       view === 'back' ? drawJerseyBack : drawJersey,
+    alt:        view === 'back' ? drawJerseyBack : drawJersey,
+    hiviz:      drawHiViz,
+    warmup:     drawJacket,
+  };
+
+  const fn = garmentMap[type] || drawTee;
+  fn(ctx, cx, W, H, color, view);
+
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetY = 0;
+}
+
+function drawTee(ctx, cx, W, H, color, view) {
+  ctx.beginPath();
+  // Body
+  ctx.moveTo(cx - 100, 90);
+  ctx.lineTo(cx - 130, 60);
+  ctx.lineTo(cx - 165, 75);
+  ctx.lineTo(cx - 150, 130);
+  ctx.lineTo(cx - 110, 135);
+  ctx.lineTo(cx - 105, H - 60);
+  ctx.lineTo(cx + 105, H - 60);
+  ctx.lineTo(cx + 110, 135);
+  ctx.lineTo(cx + 150, 130);
+  ctx.lineTo(cx + 165, 75);
+  ctx.lineTo(cx + 130, 60);
+  ctx.lineTo(cx + 100, 90);
+  // Collar
+  ctx.quadraticCurveTo(cx + 50, 105, cx, 100);
+  ctx.quadraticCurveTo(cx - 50, 105, cx - 100, 90);
+  ctx.closePath();
+  ctx.fill(); ctx.stroke();
+}
+
+function drawPolo(ctx, cx, W, H, color, view) {
+  ctx.beginPath();
+  ctx.moveTo(cx - 100, 95);
+  ctx.lineTo(cx - 135, 60);
+  ctx.lineTo(cx - 168, 78);
+  ctx.lineTo(cx - 152, 135);
+  ctx.lineTo(cx - 110, 140);
+  ctx.lineTo(cx - 108, H - 55);
+  ctx.lineTo(cx + 108, H - 55);
+  ctx.lineTo(cx + 110, 140);
+  ctx.lineTo(cx + 152, 135);
+  ctx.lineTo(cx + 168, 78);
+  ctx.lineTo(cx + 135, 60);
+  ctx.lineTo(cx + 100, 95);
+  ctx.quadraticCurveTo(cx + 42, 108, cx + 16, 100);
+  ctx.lineTo(cx + 16, 140);
+  ctx.lineTo(cx - 16, 140);
+  ctx.lineTo(cx - 16, 100);
+  ctx.quadraticCurveTo(cx - 42, 108, cx - 100, 95);
+  ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // Collar detail
+  ctx.fillStyle = adjustBrightness(color, -30);
+  ctx.fillRect(cx - 16, 95, 32, 5);
+}
+
+function drawDress(ctx, cx, W, H, color, view) {
+  // Same as polo but buttons strip
+  drawPolo(ctx, cx, W, H, color, view);
+  // Button strip
+  ctx.fillStyle = adjustBrightness(color, -20);
+  for (let y = 108; y < 160; y += 14) {
+    ctx.beginPath();
+    ctx.arc(cx, y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawJacket(ctx, cx, W, H, color, view) {
+  ctx.beginPath();
+  ctx.moveTo(cx - 105, 90);
+  ctx.lineTo(cx - 140, 58);
+  ctx.lineTo(cx - 178, 80);
+  ctx.lineTo(cx - 160, 145);
+  ctx.lineTo(cx - 115, 148);
+  ctx.lineTo(cx - 112, H - 50);
+  ctx.lineTo(cx + 112, H - 50);
+  ctx.lineTo(cx + 115, 148);
+  ctx.lineTo(cx + 160, 145);
+  ctx.lineTo(cx + 178, 80);
+  ctx.lineTo(cx + 140, 58);
+  ctx.lineTo(cx + 105, 90);
+  ctx.lineTo(cx, 95);
+  ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // Zipper line
+  ctx.strokeStyle = adjustBrightness(color, -40);
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(cx, 95); ctx.lineTo(cx, H - 50); ctx.stroke();
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+}
+
+function drawJersey(ctx, cx, W, H, color, view) {
+  // Sleeveless athletic jersey
+  ctx.beginPath();
+  ctx.moveTo(cx - 95, 88);
+  ctx.lineTo(cx - 120, 65);
+  ctx.lineTo(cx - 148, 80);
+  ctx.lineTo(cx - 138, 128);
+  ctx.lineTo(cx - 108, 132);
+  ctx.lineTo(cx - 105, H - 55);
+  ctx.lineTo(cx + 105, H - 55);
+  ctx.lineTo(cx + 108, 132);
+  ctx.lineTo(cx + 138, 128);
+  ctx.lineTo(cx + 148, 80);
+  ctx.lineTo(cx + 120, 65);
+  ctx.lineTo(cx + 95, 88);
+  ctx.quadraticCurveTo(cx + 40, 105, cx, 98);
+  ctx.quadraticCurveTo(cx - 40, 105, cx - 95, 88);
+  ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // Side stripe
+  ctx.fillStyle = adjustBrightness(color, view === 'front' ? 30 : -20);
+  ctx.beginPath();
+  ctx.moveTo(cx - 105, H - 55); ctx.lineTo(cx - 108, 132);
+  ctx.lineTo(cx - 88, 132); ctx.lineTo(cx - 85, H - 55);
+  ctx.closePath(); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(cx + 105, H - 55); ctx.lineTo(cx + 108, 132);
+  ctx.lineTo(cx + 88, 132); ctx.lineTo(cx + 85, H - 55);
+  ctx.closePath(); ctx.fill();
+}
+
+function drawJerseyBack(ctx, cx, W, H, color, view) {
+  drawJersey(ctx, cx, W, H, color, 'back');
+  // Number placeholder on back
+  ctx.fillStyle = 'rgba(255,255,255,0.12)';
+  ctx.font = 'bold 72px Barlow Condensed, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('00', cx, H - 110);
+}
+
+function drawHiViz(ctx, cx, W, H, color, view) {
+  // Safety vest over dark shirt
+  ctx.fillStyle = '#1a1a1a';
+  drawTee(ctx, cx, W, H, '#1a1a1a', view);
+  // Vest overlay
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.95;
+  ctx.beginPath();
+  ctx.moveTo(cx - 90, 92);
+  ctx.lineTo(cx - 105, H - 58);
+  ctx.lineTo(cx - 25, H - 58);
+  ctx.lineTo(cx - 25, 105);
+  ctx.quadraticCurveTo(cx - 50, 108, cx - 90, 92);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(cx + 90, 92);
+  ctx.lineTo(cx + 105, H - 58);
+  ctx.lineTo(cx + 25, H - 58);
+  ctx.lineTo(cx + 25, 105);
+  ctx.quadraticCurveTo(cx + 50, 108, cx + 90, 92);
+  ctx.closePath();
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  // Reflective stripes
+  ctx.fillStyle = 'rgba(255,230,0,0.85)';
+  const sy = H - 130;
+  ctx.fillRect(cx - 105, sy, 80, 8);
+  ctx.fillRect(cx + 25, sy, 80, 8);
+  ctx.fillRect(cx - 105, sy + 20, 80, 8);
+  ctx.fillRect(cx + 25, sy + 20, 80, 8);
+}
+
+// ── HELPERS ─────────────────────────────────────────────────
+function adjustBrightness(hex, amount) {
+  const num = parseInt(hex.replace('#',''), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + amount));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0xff) + amount));
+  const b = Math.min(255, Math.max(0, (num & 0xff) + amount));
+  return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+// ── MAIN RENDER ─────────────────────────────────────────────
+function renderMockup(section) {
+  const canvas = document.getElementById(section + '-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Background
+  ctx.fillStyle = '#2C2C2C';
+  ctx.fillRect(0, 0, W, H);
+
+  // Grid pattern
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 24) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 24) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+  const garmentSel = document.getElementById(section + '-garment');
+  const colorSel   = document.getElementById(section + '-color');
+  const sizeSel    = document.getElementById(section + '-size');
+  const xSel       = document.getElementById(section + '-x');
+  const ySel       = document.getElementById(section + '-y');
+
+  if (!garmentSel || !colorSel) return;
+
+  const garmentType = garmentSel.value;
+  const color = colorSel.value;
+  const view = views[section] || 'front';
+
+  // Draw garment
+  drawGarment(ctx, garmentType, color, view, W, H);
+
+  // "FRONT" / "BACK" label
+  ctx.fillStyle = 'rgba(201,168,76,0.4)';
+  ctx.font = '500 10px Barlow Condensed, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.letterSpacing = '2px';
+  ctx.fillText(view.toUpperCase() + ' VIEW', 16, H - 16);
+
+  // Draw logo if uploaded
+  if (logos[section] && sizeSel && xSel && ySel) {
+    const logoSize = parseInt(sizeSel.value);
+    const xPct = parseInt(xSel.value) / 100;
+    const yPct = parseInt(ySel.value) / 100;
+    const lx = W * xPct - logoSize / 2;
+    const ly = H * yPct - logoSize / 2;
+
+    // Scale logo maintaining aspect ratio
+    const logo = logos[section];
+    const aspect = logo.width / logo.height;
+    let lw = logoSize, lh = logoSize;
+    if (aspect > 1) { lh = logoSize / aspect; }
+    else            { lw = logoSize * aspect; }
+
+    ctx.globalAlpha = 0.92;
+    ctx.drawImage(logo, lx - (lw - logoSize)/2, ly - (lh - logoSize)/2, lw, lh);
+    ctx.globalAlpha = 1;
+
+    // Drag hint on first load
+    ctx.fillStyle = 'rgba(201,168,76,0.5)';
+    ctx.font = '500 10px Barlow Condensed, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('Use sliders to reposition', W - 16, H - 16);
+  } else {
+    // Placeholder hint
+    ctx.fillStyle = 'rgba(201,168,76,0.3)';
+    ctx.font = '600 13px Barlow Condensed, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Upload your logo to preview placement', W/2, H - 16);
+  }
+}
+
+// ── DOWNLOAD MOCKUP ──────────────────────────────────────────
+function downloadMockup(section) {
+  const canvas = document.getElementById(section + '-canvas');
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.download = `borough-threads-${section}-mockup.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// ── QUOTE SUBMIT ─────────────────────────────────────────────
+function submitQuote() {
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+// ── DRAG & DROP UPLOAD ZONES ─────────────────────────────────
+document.querySelectorAll('.upload-zone').forEach(zone => {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    const input = zone.querySelector('input[type="file"]');
+    if (input) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+});
+
+
+
+// ── INIT ──────────────────────────────────────────────────────
+// Render all mockup canvases on load
+['charter','football','soccer','baseball','basketball','union'].forEach(id => {
+  setTimeout(() => renderMockup(id), 200);
+});
+</script>
+
+</body>
+</html>
