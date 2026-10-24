@@ -3,14 +3,21 @@ obb corp apparel
 
 ## NY Sports Wire (`/sports`)
 
-News, scores and roster moves for the Giants, Jets, Yankees, Mets, Devils, Rangers and Islanders.
+News, live games, injuries, beat-reporter posts and roster moves for the Giants, Jets, Yankees, Mets, Devils, Rangers and Islanders.
 
-- `sports/` — static site (open `sports/index.html` via any static host, e.g. GitHub Pages).
-- `scripts/update-sports.mjs` — aggregates ESPN news/schedules/rosters, MLB.com transactions,
-  Google News and team beat-outlet RSS into `sports/data/feed.json`, and detects roster
-  adds/removals by diffing against the previous run. No dependencies (Node 18+).
-- `.github/workflows/sports-update.yml` — runs the updater every 15 minutes and commits the feed.
-- The browser also pulls live ESPN headlines and scores directly, so the page stays current between runs.
-- Teams, feeds and search keywords live in `sports/data/teams.json`.
+- `sports/` — static site. Team pages have Live (play-by-play, scoring, in-game injuries), Insiders, News, Injuries, Roster Moves and Roster tabs.
+- `sports/data/reporters.json` — the beat reporters and national insiders we follow (X handles, optional Bluesky handles and author RSS feeds). Edit freely.
+- `scripts/update-sports.mjs` — aggregates ESPN, MLB.com transactions, Google News, team RSS and reporter posts into `sports/data/feed.json`;
+  detects roster adds/removals; flags X handles that no longer exist or have gone quiet. No dependencies (Node 18+).
+- `.github/workflows/sports-update.yml` — runs the updater every 5 minutes and deploys the site to GitHub Pages
+  (set Settings → Pages → Source to "GitHub Actions"). The feed is deployed, not committed, so git history stays clean.
+- In the browser: live scores every 30s during games, play-by-play every 20s, Bluesky reporter posts every 60s,
+  and optional desktop alerts (bell icon) for injuries and roster moves.
+
+### Beat reporter posts on X
+
+X only allows reading posts through its paid API. Add an `X_BEARER_TOKEN` repository secret
+(Settings → Secrets and variables → Actions) to pull posts every ~5 minutes. For ~1-minute updates, also deploy the
+proxy in `workers/insiders/` and put its URL in `sports/data/config.json`.
 
 Run locally: `node scripts/update-sports.mjs && python3 -m http.server` then open http://localhost:8000/sports/

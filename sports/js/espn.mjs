@@ -34,6 +34,17 @@ export function espnNews(json) {
   })).filter((a) => a.title && a.url && a.published);
 }
 
+// Down & distance (NFL), count and outs (MLB); hockey scoreboards carry no situation.
+function situationText(sit) {
+  if (!sit) return '';
+  if (sit.downDistanceText) return [sit.downDistanceText, sit.isRedZone ? 'Red zone' : ''].filter(Boolean).join(' · ');
+  if (sit.outs != null) {
+    const bases = [['onFirst', '1st'], ['onSecond', '2nd'], ['onThird', '3rd']].filter(([k]) => sit[k]).map(([, b]) => b);
+    return `${sit.balls ?? 0}-${sit.strikes ?? 0}, ${sit.outs} out${sit.outs === 1 ? '' : 's'}${bases.length ? ` · on ${bases.join(', ')}` : ''}`;
+  }
+  return '';
+}
+
 // Reduces an ESPN event to the game from one team's point of view.
 export function gameSummary(event, teamId) {
   const comp = event?.competitions?.[0];
@@ -58,5 +69,7 @@ export function gameSummary(event, teamId) {
     detail: status.shortDetail || status.detail || '',
     venue: comp.venue?.fullName || '',
     broadcast: comp.broadcasts?.[0]?.media?.shortName || comp.broadcasts?.[0]?.names?.[0] || '',
+    lastPlay: comp.situation?.lastPlay?.text || '',
+    situation: situationText(comp.situation),
   };
 }

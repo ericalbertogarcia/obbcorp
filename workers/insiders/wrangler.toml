@@ -1,0 +1,9 @@
+name = "ny-sports-insiders"
+main = "worker.js"
+compatibility_date = "2025-06-01"
+
+[vars]
+# Set to your site's origin (e.g. https://you.github.io) to stop other sites using your X quota.
+ALLOWED_ORIGIN = "*"
+CACHE_SECONDS = "60"
+WINDOW_MINUTES = "15"

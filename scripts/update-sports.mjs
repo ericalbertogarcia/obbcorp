@@ -1,13 +1,20 @@
 #!/usr/bin/env node
 // Builds sports/data/feed.json: news from ESPN, Google News and team RSS feeds,
-// plus records, schedules, rosters and roster moves for the seven NY teams.
-// Runs on a schedule in GitHub Actions (see .github/workflows/sports-update.yml).
+// beat-reporter posts (X, Bluesky, author RSS), plus records, schedules, rosters
+// and roster moves for the seven NY teams.
+// X posts need an API bearer token in the X_BEARER_TOKEN env var; without it X is skipped.
+// Runs every 5 minutes in GitHub Actions (see .github/workflows/sports-update.yml).
 // No dependencies: Node 18+ (global fetch).
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { ESPN, espnRoster, espnNews, gameSummary } from '../sports/js/espn.mjs';
+import {
+  MOVE_WORDS, INJURY_WORDS, flattenReporters, buildXQueries, xSearchUrl, parseXSearch,
+  bskyFeedUrl, parseBskyFeed, teamsForPost, mergePosts,
+} from '../sports/js/insiders.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA_DIR = path.join(ROOT, 'sports', 'data');
@@ -16,26 +23,29 @@ const FEED_PATH = path.join(DATA_DIR, 'feed.json');
 const MAX_NEWS = 400;
 const MAX_MOVES = 300;
 const NEWS_MAX_AGE_DAYS = 21;
-const MOVE_WORDS = /\b(sign(s|ed|ing)?|re-sign(s|ed)?|waive(s|d)?|release(s|d)?|trade(s|d)?|acquire(s|d)?|claim(s|ed)?|activate(s|d)?|placed|place(s)? .* on|recall(s|ed)?|option(s|ed)?|reassign(s|ed)?|designat(e|es|ed) for assignment|DFA|injured reserve|IR\b|IL\b|injured list|extension|call(s|ed)? up|promote(s|d)?|cut(s)?)\b/i;
+const MAX_INSIDERS = 600;
+const INSIDER_MAX_AGE_DAYS = 4;
+const REPORTER_CHECK_HOURS = 24;
+const STALE_REPORTER_DAYS = 30;
 
 // ───────────────────────── helpers ─────────────────────────
 
-async function fetchText(url, { timeout = 15000 } = {}) {
+async function fetchText(url, { timeout = 15000, headers = {} } = {}) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeout);
   try {
     const res = await fetch(url, {
       signal: ctrl.signal,
-      headers: { 'user-agent': 'Mozilla/5.0 (compatible; NYSportsWire/1.0)', accept: '*/*' },
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; NYSportsWire/1.0)', accept: '*/*', ...headers },
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}${res.status === 400 ? `: ${(await res.text()).slice(0, 200)}` : ''}`);
     return await res.text();
   } finally {
     clearTimeout(t);
   }
 }
 
-const fetchJSON = async (url) => JSON.parse(await fetchText(url));
+const fetchJSON = async (url, opts) => JSON.parse(await fetchText(url, opts));
 
 const errors = [];
 async function attempt(label, fn, fallback = null) {
@@ -153,6 +163,81 @@ async function mlbTransactions(team) {
   }));
 }
 
+// ───────────────────────── beat reporters ─────────────────────────
+
+async function xPosts(reporters, teams, prev, token) {
+  const auth = { headers: { authorization: `Bearer ${token}` } };
+  const sinceIds = { ...(prev.insiderState?.sinceIds || {}) };
+  const posts = [];
+  const startTime = new Date(Date.now() - 24 * 3600e3).toISOString();
+  for (const query of buildXQueries(reporters)) {
+    const key = createHash('sha1').update(query).digest('hex').slice(0, 12);
+    let json = await attempt('x search', () => fetchJSON(xSearchUrl(query, { sinceId: sinceIds[key], startTime }), auth));
+    // since_id older than X's 7-day search window is rejected; fall back to a time window.
+    if (!json && sinceIds[key]) json = await attempt('x search retry', () => fetchJSON(xSearchUrl(query, { startTime }), auth));
+    if (!json) continue;
+    if (json.meta?.newest_id) sinceIds[key] = json.meta.newest_id;
+    posts.push(...parseXSearch(json, reporters, teams));
+  }
+
+  // Once a day, look up every handle so renamed or deleted accounts get flagged.
+  let missing = prev.reporterStatus?.missing || [];
+  let checkedAt = prev.reporterStatus?.checkedAt || null;
+  if (!checkedAt || Date.now() - Date.parse(checkedAt) > REPORTER_CHECK_HOURS * 3600e3) {
+    const handles = reporters.filter((r) => r.x).map((r) => r.x);
+    const found = new Set();
+    let ok = true;
+    for (let i = 0; i < handles.length; i += 100) {
+      const json = await attempt('x user lookup', () => fetchJSON(`https://api.x.com/2/users/by?usernames=${handles.slice(i, i + 100).join(',')}`, auth));
+      if (!json) { ok = false; break; }
+      for (const u of json.data || []) found.add(u.username.toLowerCase());
+    }
+    if (ok) { missing = handles.filter((h) => !found.has(h.toLowerCase())); checkedAt = new Date().toISOString(); }
+  }
+  return { posts, sinceIds, missing, checkedAt };
+}
+
+async function insiders(teams, prev) {
+  const dir = JSON.parse(await readFile(path.join(DATA_DIR, 'reporters.json'), 'utf8'));
+  const reporters = flattenReporters(dir);
+  const token = process.env.X_BEARER_TOKEN;
+
+  const x = token ? await xPosts(reporters, teams, prev, token) : null;
+  if (!token) errors.push('X_BEARER_TOKEN not set: X posts skipped');
+
+  const bsky = (await Promise.all(reporters.filter((r) => r.bsky).map((r) =>
+    attempt(`bsky ${r.bsky}`, async () => parseBskyFeed(await fetchJSON(bskyFeedUrl(r.bsky)), r, teams), [])))).flat();
+
+  const rss = (await Promise.all(reporters.filter((r) => r.rss).map((r) =>
+    attempt(`rss ${r.name}`, async () => parseFeed(await fetchText(r.rss), r.outlet).map((i) => ({
+      id: `rss-${normTitle(i.title).replace(/ /g, '-').slice(0, 60)}`, platform: 'article', url: i.url, published: i.published,
+      text: i.title, image: i.image, reporter: r.name, outlet: r.outlet, handle: r.x || '', avatar: '',
+      teams: teamsForPost(i.title, r, teams), isMove: MOVE_WORDS.test(i.title), isInjury: INJURY_WORDS.test(i.title), national: !r.team,
+    })).filter((p) => p.published && p.teams.length), [])))).flat();
+
+  const cutoff = Date.now() - INSIDER_MAX_AGE_DAYS * 864e5;
+  const posts = mergePosts(x?.posts || [], bsky, rss, prev.insiders || [])
+    .filter((p) => Date.parse(p.published) >= cutoff)
+    .slice(0, MAX_INSIDERS);
+
+  // Last post per reporter, carried across runs, to spot handles that went quiet.
+  const lastPost = { ...(prev.reporterStatus?.lastPost || {}) };
+  for (const p of posts) if (!lastPost[p.reporter] || p.published > lastPost[p.reporter]) lastPost[p.reporter] = p.published;
+  const staleCutoff = Date.now() - STALE_REPORTER_DAYS * 864e5;
+  const stale = token ? reporters.filter((r) => lastPost[r.name] && Date.parse(lastPost[r.name]) < staleCutoff).map((r) => r.name) : [];
+
+  return {
+    insiders: posts,
+    insiderState: { sinceIds: x?.sinceIds || prev.insiderState?.sinceIds || {} },
+    reporterStatus: {
+      checkedAt: x?.checkedAt || prev.reporterStatus?.checkedAt || null,
+      missing: x?.missing || prev.reporterStatus?.missing || [],
+      stale,
+      lastPost,
+    },
+  };
+}
+
 // ───────────────────────── main ─────────────────────────
 
 // Nicknames like "Giants" or "Rangers" are ambiguous league-wide, so cross-tagging only
@@ -235,11 +320,14 @@ async function main() {
       image: item.image || '',
       teams: teamKeys,
       isMove: item.isMove || MOVE_WORDS.test(item.title),
+      isInjury: INJURY_WORDS.test(item.title),
     });
   }
   const news = [...byKey.values()]
     .sort((a, b) => Date.parse(b.published) - Date.parse(a.published))
     .slice(0, MAX_NEWS);
+
+  const insiderData = await insiders(teams, prev);
 
   const seen = new Set();
   moves = moves
@@ -247,16 +335,11 @@ async function main() {
     .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
     .slice(0, MAX_MOVES);
 
-  // Only rewrite the file when content changed, so the scheduled job doesn't commit timestamp-only diffs.
-  const content = { teams: teamOut, news, moves };
-  const strip = (t) => Object.fromEntries(Object.entries(t || {}).map(([k, v]) => [k, { ...v, updatedAt: undefined }]));
-  const same = JSON.stringify({ ...content, teams: strip(teamOut) }) === JSON.stringify({ teams: strip(prev.teams), news: prev.news, moves: prev.moves });
-  if (same) {
-    console.log('No content changes.');
-  } else {
-    await writeFile(FEED_PATH, JSON.stringify({ generatedAt: now, ...content, errors }, null, 1) + '\n');
-  }
-  console.log(`news=${news.length} moves=${moves.length} teams=${Object.keys(teamOut).length} errors=${errors.length}`);
+  const content = { teams: teamOut, news, moves, ...insiderData };
+  await writeFile(FEED_PATH, JSON.stringify({ generatedAt: now, ...content, errors }, null, 1) + '\n');
+  console.log(`news=${news.length} moves=${moves.length} insiders=${insiderData.insiders.length} teams=${Object.keys(teamOut).length} errors=${errors.length}`);
+  if (insiderData.reporterStatus.missing.length) console.warn(`  ! X handles not found: ${insiderData.reporterStatus.missing.join(', ')}`);
+  if (insiderData.reporterStatus.stale.length) console.warn(`  ! No posts in ${STALE_REPORTER_DAYS}d: ${insiderData.reporterStatus.stale.join(', ')}`);
   for (const e of errors) console.warn('  ! ' + e);
 }
 

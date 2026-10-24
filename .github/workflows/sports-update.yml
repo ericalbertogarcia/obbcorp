@@ -1,41 +1,55 @@
 name: Update NY Sports Wire
 
+# Refreshes sports/data/feed.json and publishes the whole site to GitHub Pages.
+# The feed is deployed rather than committed, so the 5-minute schedule doesn't flood git history.
+# Requires: Settings → Pages → Source = "GitHub Actions".
+# Optional secret: X_BEARER_TOKEN (beat-reporter posts from X).
+
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
   push:
-    paths:
-      - 'scripts/update-sports.mjs'
-      - 'sports/js/espn.mjs'
-      - 'sports/data/teams.json'
+    branches: [main]
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: sports-update
+  group: pages
   cancel-in-progress: false
 
 jobs:
-  update:
+  deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Fetch news, schedules, rosters and moves
-        run: node scripts/update-sports.mjs
-      - name: Commit updated feed
+      - id: pages
+        uses: actions/configure-pages@v5
+      # The previous feed carries roster snapshots (for move detection), X since_ids and older stories.
+      - name: Restore last published feed
         run: |
-          if git diff --quiet -- sports/data/feed.json; then
-            echo "No changes"; exit 0
+          if curl -fsSL "${{ steps.pages.outputs.base_url }}/sports/data/feed.json" -o "$RUNNER_TEMP/feed.json" \
+             && node -e "JSON.parse(require('fs').readFileSync(process.argv[1]))" "$RUNNER_TEMP/feed.json"; then
+            cp "$RUNNER_TEMP/feed.json" sports/data/feed.json
+          else
+            echo "No published feed yet; starting fresh"
           fi
-          git config user.name "ny-sports-wire-bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sports/data/feed.json
-          git commit -m "Update NY sports feed"
-          git pull --rebase origin "$GITHUB_REF_NAME"
-          git push origin "HEAD:$GITHUB_REF_NAME"
+      - name: Fetch news, reporter posts, schedules, rosters and moves
+        run: node scripts/update-sports.mjs
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,70 @@
+{
+  "_readme": "Beat reporters per team plus national insiders. x = X/Twitter handle, bsky = Bluesky handle (optional, polled live in the browser), rss = author feed (optional). National insiders only surface posts that mention a NY team. The updater flags handles that X can't find or that haven't posted in 30 days (see feed.json -> reporterStatus).",
+  "teams": {
+    "nyg": [
+      { "name": "Jordan Raanan", "outlet": "ESPN", "x": "JordanRaanan" },
+      { "name": "Dan Duggan", "outlet": "The Athletic", "x": "DDuggan21" },
+      { "name": "Ryan Dunleavy", "outlet": "New York Post", "x": "rydunleavy", "rss": "https://nypost.com/author/ryan-dunleavy/feed/" },
+      { "name": "Pat Leonard", "outlet": "Daily News", "x": "PLeonardNYDN" },
+      { "name": "Art Stapleton", "outlet": "The Record", "x": "art_stapleton" },
+      { "name": "Ralph Vacchiano", "outlet": "SNY", "x": "RVacchianoSNY" }
+    ],
+    "nyj": [
+      { "name": "Rich Cimini", "outlet": "ESPN", "x": "RichCimini" },
+      { "name": "Zack Rosenblatt", "outlet": "The Athletic", "x": "ZackBlatt" },
+      { "name": "Brian Costello", "outlet": "New York Post", "x": "BCost3", "rss": "https://nypost.com/author/brian-costello/feed/" },
+      { "name": "Connor Hughes", "outlet": "SNY", "x": "Connor_J_Hughes" },
+      { "name": "Al Iannazzone", "outlet": "Newsday", "x": "Al_Iannazzone" },
+      { "name": "Andy Vasquez", "outlet": "The Record", "x": "andyv" }
+    ],
+    "nyy": [
+      { "name": "Bryan Hoch", "outlet": "MLB.com", "x": "BryanHoch" },
+      { "name": "Brendan Kuty", "outlet": "The Athletic", "x": "BrendanKutyNJ" },
+      { "name": "Greg Joyce", "outlet": "New York Post", "x": "GregJoyce13", "rss": "https://nypost.com/author/greg-joyce/feed/" },
+      { "name": "Gary Phillips", "outlet": "Daily News", "x": "GaryHPhillips" },
+      { "name": "Erik Boland", "outlet": "Newsday", "x": "eboland11" },
+      { "name": "Jack Curry", "outlet": "YES Network", "x": "JackCurryYES" },
+      { "name": "Joel Sherman", "outlet": "New York Post", "x": "Joelsherman1" }
+    ],
+    "nym": [
+      { "name": "Anthony DiComo", "outlet": "MLB.com", "x": "AnthonyDiComo" },
+      { "name": "Will Sammon", "outlet": "The Athletic", "x": "WillSammon" },
+      { "name": "Mike Puma", "outlet": "New York Post", "x": "NYPost_Mets", "rss": "https://nypost.com/author/mike-puma/feed/" },
+      { "name": "Tim Healey", "outlet": "Newsday", "x": "timbhealey" },
+      { "name": "Abbey Mastracco", "outlet": "Daily News", "x": "AbbeyMastracco" },
+      { "name": "Andy Martino", "outlet": "SNY", "x": "martinonyc" }
+    ],
+    "njd": [
+      { "name": "Amanda Stein", "outlet": "Devils", "x": "amandacstein" },
+      { "name": "Corey Masisak", "outlet": "The Athletic", "x": "CoreyMasisak" },
+      { "name": "Chris Ryan", "outlet": "NJ.com", "x": "ChrisRyan_NJ" },
+      { "name": "Ryan Novozinsky", "outlet": "NJ.com", "x": "RyanNovozinsky" }
+    ],
+    "nyr": [
+      { "name": "Vince Z. Mercogliano", "outlet": "The Journal News", "x": "vzmercogliano" },
+      { "name": "Mollie Walker", "outlet": "New York Post", "x": "MollieeWalkerr", "rss": "https://nypost.com/author/mollie-walker/feed/" },
+      { "name": "Larry Brooks", "outlet": "New York Post", "x": "NYP_Brooksie" },
+      { "name": "Peter Baugh", "outlet": "The Athletic", "x": "Peter_Baugh" },
+      { "name": "Rick Carpiniello", "outlet": "The Athletic", "x": "RCarpiniello" },
+      { "name": "Colin Stephenson", "outlet": "Newsday", "x": "ColinStephenson" }
+    ],
+    "nyi": [
+      { "name": "Andrew Gross", "outlet": "Newsday", "x": "AGrossNewsday" },
+      { "name": "Arthur Staple", "outlet": "The Athletic", "x": "StapeAthletic" },
+      { "name": "Ethan Sears", "outlet": "New York Post", "x": "Ethan_Sears", "rss": "https://nypost.com/author/ethan-sears/feed/" },
+      { "name": "Stefen Rosner", "outlet": "NY Islanders Hockey Now", "x": "StefenRosner" },
+      { "name": "Brian Compton", "outlet": "Islanders.com", "x": "BComptonNHL" }
+    ]
+  },
+  "national": [
+    { "name": "Adam Schefter", "outlet": "ESPN", "league": "NFL", "x": "AdamSchefter" },
+    { "name": "Ian Rapoport", "outlet": "NFL Network", "league": "NFL", "x": "RapSheet" },
+    { "name": "Tom Pelissero", "outlet": "NFL Network", "league": "NFL", "x": "TomPelissero" },
+    { "name": "Jeff Passan", "outlet": "ESPN", "league": "MLB", "x": "JeffPassan" },
+    { "name": "Ken Rosenthal", "outlet": "The Athletic", "league": "MLB", "x": "Ken_Rosenthal" },
+    { "name": "Jon Heyman", "outlet": "New York Post", "league": "MLB", "x": "JonHeyman" },
+    { "name": "Elliotte Friedman", "outlet": "Sportsnet", "league": "NHL", "x": "FriedgeHNIC" },
+    { "name": "Pierre LeBrun", "outlet": "TSN / The Athletic", "league": "NHL", "x": "PierreVLeBrun" },
+    { "name": "Chris Johnston", "outlet": "The Athletic", "league": "NHL", "x": "reporterchris" }
+  ]
+}
