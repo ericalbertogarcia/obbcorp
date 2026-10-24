@@ -1,0 +1,62 @@
+// ESPN public site-API parsers, shared by the browser app and scripts/update-sports.mjs.
+
+export const ESPN = 'https://site.api.espn.com/apis/site/v2/sports';
+
+export const leagueBase = (team) => `${ESPN}/${team.sport}/${team.espnLeague}`;
+
+const isoOrNull = (d) => { const t = Date.parse(d); return Number.isNaN(t) ? null : new Date(t).toISOString(); };
+const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s);
+
+// Rosters come grouped ({ position, items: [...] }) for most leagues, flat for others.
+export function espnRoster(json) {
+  const groups = json.athletes || [];
+  const flat = groups.flatMap((g) => (Array.isArray(g.items) ? g.items.map((a) => ({ ...a, _group: g.position })) : [g]));
+  return flat.map((a) => ({
+    id: String(a.id ?? a.fullName),
+    name: a.fullName || a.displayName,
+    jersey: a.jersey ?? '',
+    pos: a.position?.abbreviation || '',
+    group: a._group || a.position?.parent?.name || a.position?.name || '',
+    age: a.age ?? null,
+    headshot: a.headshot?.href || '',
+    status: a.injuries?.[0]?.status || '',
+  })).filter((p) => p.name);
+}
+
+export function espnNews(json) {
+  return (json.articles || []).map((a) => ({
+    title: a.headline,
+    url: a.links?.web?.href || '',
+    summary: truncate(a.description || '', 260),
+    source: 'ESPN',
+    published: isoOrNull(a.published),
+    image: a.images?.[0]?.url || '',
+  })).filter((a) => a.title && a.url && a.published);
+}
+
+// Reduces an ESPN event to the game from one team's point of view.
+export function gameSummary(event, teamId) {
+  const comp = event?.competitions?.[0];
+  if (!comp) return null;
+  const us = comp.competitors.find((c) => String(c.id ?? c.team?.id) === String(teamId));
+  const them = comp.competitors.find((c) => c !== us);
+  if (!us || !them) return null;
+  const score = (c) => (typeof c.score === 'object' ? c.score?.displayValue : c.score) ?? '';
+  const status = comp.status?.type || event.status?.type || {};
+  return {
+    id: event.id,
+    date: event.date,
+    name: event.shortName || event.name,
+    home: us.homeAway === 'home',
+    opponent: them.team?.displayName || them.team?.name,
+    opponentAbbr: them.team?.abbreviation,
+    opponentLogo: them.team?.logos?.[0]?.href || them.team?.logo || '',
+    us: score(us),
+    them: score(them),
+    winner: us.winner === true ? true : them.winner === true ? false : null,
+    state: status.state || '',
+    detail: status.shortDetail || status.detail || '',
+    venue: comp.venue?.fullName || '',
+    broadcast: comp.broadcasts?.[0]?.media?.shortName || comp.broadcasts?.[0]?.names?.[0] || '',
+  };
+}
