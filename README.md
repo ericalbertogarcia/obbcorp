@@ -1,7 +1,9 @@
 # obb-corp
 obb corp apparel 
 
-## NY Sports Wire (`/sports`)
+## NY Sports Bar (`/sports`)
+
+_The #1 site for New York sports._
 
 News, live games, injuries, beat-reporter posts and roster moves for the Giants, Jets, Yankees, Mets, Devils, Rangers and Islanders.
 

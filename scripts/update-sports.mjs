@@ -36,7 +36,7 @@ async function fetchText(url, { timeout = 15000, headers = {} } = {}) {
   try {
     const res = await fetch(url, {
       signal: ctrl.signal,
-      headers: { 'user-agent': 'Mozilla/5.0 (compatible; NYSportsWire/1.0)', accept: '*/*', ...headers },
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; NYSportsBar/1.0)', accept: '*/*', ...headers },
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}${res.status === 400 ? `: ${(await res.text()).slice(0, 200)}` : ''}`);
     return await res.text();

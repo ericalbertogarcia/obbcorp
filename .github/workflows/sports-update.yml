@@ -1,4 +1,4 @@
-name: Update NY Sports Wire
+name: Update NY Sports Bar
 
 # Refreshes sports/data/feed.json and publishes the whole site to GitHub Pages.
 # The feed is deployed rather than committed, so the 5-minute schedule doesn't flood git history.

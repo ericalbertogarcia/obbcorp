@@ -599,7 +599,7 @@ function render() {
   const gen = state.feed.generatedAt;
   $('#updated').textContent = state.live.news.length ? `Live · feed ${gen ? timeAgo(gen) : 'pending'}` : gen ? `Updated ${timeAgo(gen)}` : 'Connecting…';
   const anyLive = state.teams.some((t) => isLive(t.key));
-  document.title = `${anyLive ? '● ' : ''}${key ? `${state.byKey[key].full} — NY Sports Wire` : 'NY Sports Wire — Giants · Jets · Yankees · Mets · Devils · Rangers · Islanders'}`;
+  document.title = `${anyLive ? '● ' : ''}${key ? `${state.byKey[key].full} — NY Sports Bar` : 'NY Sports Bar — The #1 Site for New York Sports'}`;
 }
 
 // ───────────────────────── events ─────────────────────────

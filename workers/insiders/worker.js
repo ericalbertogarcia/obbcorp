@@ -1,4 +1,4 @@
-// Near-real-time beat-reporter feed for NY Sports Wire.
+// Near-real-time beat-reporter feed for NY Sports Bar.
 // Holds the X API token server-side; the site polls this every minute.
 // Deploy: see workers/insiders/README.md.
 
