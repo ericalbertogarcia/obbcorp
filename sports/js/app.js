@@ -1,4 +1,4 @@
-import { leagueBase, espnNews, espnRoster, gameSummary, betResults } from './espn.mjs';
+import { leagueBase, espnNews, espnRoster, gameSummary, betResults, resultsRecord } from './espn.mjs';
 import { INJURY_WORDS, classify, flattenReporters, bskyFeedUrl, parseBskyFeed, mergePosts } from './insiders.mjs';
 import { parseSummary } from './gamecenter.mjs';
 import { teamPath, parsePath, teamMeta, homeMeta } from './seo.mjs';
@@ -276,14 +276,13 @@ async function loadSummary(key) {
 }
 
 // Box score for the team's most recent finished game (not today's), loaded when its game tab opens.
-async function loadRecap(key) {
-  const g = teamInfo(key).lastGame;
-  if (!g?.id || state.live.recapTried.has(g.id)) return;
-  state.live.recapTried.add(g.id);
+async function loadRecap(key, id = teamInfo(key).lastGame?.id) {
+  if (!id || state.live.recapTried.has(id)) return;
+  state.live.recapTried.add(id);
   const team = state.byKey[key];
   try {
-    const json = await getJSON(`${leagueBase(team)}/summary?event=${g.id}`);
-    state.live.recaps[g.id] = parseSummary(json, teamInfo(key).espnId, team.sport);
+    const json = await getJSON(`${leagueBase(team)}/summary?event=${id}`);
+    state.live.recaps[id] = parseSummary(json, teamInfo(key).espnId, team.sport);
   } catch {
     // The recap section says it's unavailable.
   }
@@ -633,6 +632,48 @@ function boxScoreHTML(t, s, { final }) {
     ${players || stats ? `<div class="panel"><div class="section-title"><span>Player stats</span></div>${players}${stats ? `<h4 class="box-team">Team stats</h4>${stats}` : ''}</div>` : ''}`;
 }
 
+function resultsTabHTML(key) {
+  const t = state.byKey[key];
+  const results = teamInfo(key).results || [];
+  if (!results.length) return '<div class="empty">No finished games yet this season.</div>';
+  const rec = resultsRecord(results);
+  const fmt = (a) => `${a[0]}-${a[1]}${a[2] ? `-${a[2]}` : ''}`;
+  const abbr = t.espn.toUpperCase();
+  const chips = `<div class="bets rec">
+    <div class="bet"><span>Last ${results.length}</span><b>${fmt(rec.su)}</b><em>Straight up</em></div>
+    ${rec.withLine ? `<div class="bet"><span>Against the spread</span><b>${fmt(rec.ats)}</b><em>${rec.withLine} games with a line</em></div>
+    <div class="bet hit"><span>Over / Under</span><b>${rec.ou[0]}–${rec.ou[1]}${rec.ou[2] ? `–${rec.ou[2]}` : ''}</b><em>Overs–unders${rec.ou[2] ? '–pushes' : ''}</em></div>` : ''}
+  </div>`;
+  const rows = results.map((g) => {
+    const bet = betResults(g.odds, g.us, g.them);
+    const res = g.winner === true ? 'W' : g.winner === false ? 'L' : 'T';
+    const open = state.openResult === g.id;
+    const spread = bet?.spread ? `<span class="res ${BET_CLASS[bet.spread.result]}"><span class="ab">${abbr} </span>${signed(bet.spread.line)} · ${bet.spread.result === 'Did not cover' ? 'Missed' : bet.spread.result}</span>` : '<span class="muted">—</span>';
+    const total = bet?.total ? `<span class="res ${BET_CLASS[bet.total.result]}">${bet.total.result} ${bet.total.line}</span>` : '<span class="muted">—</span>';
+    return `<tr class="${open ? 'open' : ''}">
+      <td class="d">${esc(new Date(g.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }))}</td>
+      <td>${g.home ? 'vs' : '@'} ${esc(g.opponentAbbr || g.opponent)}</td>
+      <td><b class="${res === 'W' ? 'win' : res === 'L' ? 'loss' : ''}">${res} ${esc(g.us)}–${esc(g.them)}</b></td>
+      <td>${spread}</td><td>${total}</td>
+      <td><button class="box-btn" data-result="${esc(g.id)}" aria-expanded="${open}">${open ? 'Hide' : 'Box<span class="ab"> score</span>'}</button></td>
+    </tr>${open ? `<tr class="box-row"><td colspan="6">${resultBoxHTML(key, g.id)}</td></tr>` : ''}`;
+  }).join('');
+  return `<div class="stack">${chips}
+    <div class="panel"><div class="section-title"><span>Recent results</span><span class="count">Closing lines</span></div>
+      <div class="table-wrap"><table class="results"><thead><tr><th>Date</th><th>Opp</th><th>Result</th><th>Spread</th><th>Total</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="rg">${esc(RG_NOTE)}</p></div></div>`;
+}
+
+function resultBoxHTML(key, id) {
+  const s = state.live.recaps[id];
+  if (!s) {
+    if (state.live.recapTried.has(id)) return '<div class="empty">Box score unavailable right now.</div>';
+    loadRecap(key, id);
+    return '<div class="skeleton"></div>';
+  }
+  return `<div class="stack">${boxScoreHTML(state.byKey[key], s, { final: true })}</div>`;
+}
+
 function lastGameRecapHTML(key) {
   const t = state.byKey[key];
   const g = teamInfo(key).lastGame;
@@ -737,11 +778,12 @@ function renderTeam(key, tab) {
     insiders: () => `<div class="layout"><section>${insidersPanel(key, 60)}</section><aside class="stack"><div class="panel"><div class="section-title"><span>Who we follow</span></div>${reporterDirectory(key)}</div></aside></div>`,
     injuries: () => injuriesTabHTML(key),
     rumors: () => `<div class="panel">${rumorListHTML(rumorItems(key))}</div>`,
+    results: () => resultsTabHTML(key),
     moves: () => `<div class="panel">${movesHTML(moves)}</div>`,
     roster: () => rosterHTML(key),
   }[tab]?.() ?? newsSection(key);
   const gameLabel = live?.state === 'in' ? '<span class="live-pip"></span>Live' : live?.state === 'post' ? 'Game recap' : 'Game';
-  const tabs = { game: gameLabel, insiders: 'Insiders', news: 'News', rumors: 'Rumors', injuries: 'Injuries', moves: `Roster Moves (${moves.length})`, roster: 'Roster' };
+  const tabs = { game: gameLabel, results: 'Results', insiders: 'Insiders', news: 'News', rumors: 'Rumors', injuries: 'Injuries', moves: `Roster Moves (${moves.length})`, roster: 'Roster' };
   return `<div style="${teamVars(t)}">
     <section class="team-hero">
       <div class="team-hero-top">${logoHTML(t, info)}
@@ -798,6 +840,8 @@ document.addEventListener('click', (e) => {
   const tab = e.target.closest('[data-tab]');
   if (tab) { navigate(teamPath(state.byKey[route().key], tab.dataset.tab)); return; }
   if (e.target.id === 'more') { state.shown += PAGE_SIZE; render(); return; }
+  const box = e.target.closest('[data-result]');
+  if (box) { state.openResult = state.openResult === box.dataset.result ? null : box.dataset.result; render(); return; }
   if (e.target.closest('#refresh')) refreshAll();
   if (e.target.closest('#alerts')) toggleAlerts();
 });

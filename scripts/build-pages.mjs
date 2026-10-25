@@ -11,6 +11,7 @@ import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { SITE_NAME, TAGLINE, TAB_PATHS, INDEXED_TABS, teamPath, teamMeta, homeMeta } from '../sports/js/seo.mjs';
+import { betResults, resultsRecord } from '../sports/js/espn.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'sports');
@@ -69,6 +70,20 @@ function teamBody(t, tab, feed) {
   let body = '';
   if (tab === 'news') {
     body = `${gameSentence(t, info)}${lastGameSentence(t, info)}<h2>Latest ${esc(t.name)} headlines</h2>${storyList(news, 25)}`;
+  } else if (tab === 'results') {
+    const results = info.results || [];
+    const rec = resultsRecord(results);
+    const fmt = (a) => `${a[0]}-${a[1]}${a[2] ? `-${a[2]}` : ''}`;
+    const abbr = t.espn.toUpperCase();
+    body = results.length ? `<p>Over the last ${results.length} games the ${esc(t.name)} are ${fmt(rec.su)} straight up${rec.withLine
+      ? `, ${fmt(rec.ats)} against the spread, and ${rec.ou[0]} overs, ${rec.ou[1]} unders${rec.ou[2] ? ` and ${rec.ou[2]} pushes` : ''} on the total` : ''}.</p>
+      <h2>Recent ${esc(t.name)} scores</h2>
+      <table class="seo-table"><thead><tr><th>Date</th><th>Opponent</th><th>Result</th><th>Spread</th><th>Total</th></tr></thead><tbody>${results.map((g) => {
+        const bet = betResults(g.odds, g.us, g.them);
+        const res = g.winner === true ? 'W' : g.winner === false ? 'L' : 'T';
+        return `<tr><td>${esc(new Date(g.date).toLocaleDateString('en-US', { timeZone: TZ, month: 'short', day: 'numeric' }))}</td><td>${g.home ? 'vs' : 'at'} ${esc(g.opponent)}</td><td>${res} ${esc(g.us)}–${esc(g.them)}</td>
+          <td>${bet?.spread ? `${abbr} ${signed(bet.spread.line)}: ${bet.spread.result}` : '—'}</td><td>${bet?.total ? `${bet.total.result} ${bet.total.line}` : '—'}</td></tr>`;
+      }).join('')}</tbody></table>` : '<p>No finished games yet this season.</p>';
   } else if (tab === 'rumors') {
     body = `<h2>${esc(t.name)} trade and signing rumors</h2>${storyList(news.filter((n) => n.isRumor), 30)}<p>Rumors are unconfirmed reports from the outlets linked.</p>`;
   } else if (tab === 'injuries') {

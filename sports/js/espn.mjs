@@ -93,6 +93,22 @@ export function betResults(odds, us, them) {
   return Object.keys(out).length ? { ...out, provider: odds.provider } : null;
 }
 
+// Straight-up, against-the-spread and over/under records over a list of finished games.
+export function resultsRecord(results) {
+  const r = { su: [0, 0, 0], ats: [0, 0, 0], ou: [0, 0, 0], withLine: 0 };
+  for (const g of results) {
+    const a = Number(g.us);
+    const b = Number(g.them);
+    r.su[a > b ? 0 : a < b ? 1 : 2]++;
+    const bet = betResults(g.odds, g.us, g.them);
+    if (!bet) continue;
+    r.withLine++;
+    if (bet.spread) r.ats[{ Covered: 0, 'Did not cover': 1, Push: 2 }[bet.spread.result]]++;
+    if (bet.total) r.ou[{ Over: 0, Under: 1, Push: 2 }[bet.total.result]]++;
+  }
+  return r;
+}
+
 // Reduces an ESPN event to the game from one team's point of view.
 export function gameSummary(event, teamId) {
   const comp = event?.competitions?.[0];

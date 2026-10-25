@@ -5,9 +5,9 @@ export const SITE_NAME = 'NY Sports Bar';
 export const TAGLINE = 'The #1 site for New York sports';
 
 // Tab id (as used in the app) → URL segment. Segments match what fans search for.
-export const TAB_PATHS = { news: '', rumors: 'rumors', injuries: 'injuries', roster: 'roster', moves: 'transactions', game: 'live', insiders: 'insiders' };
+export const TAB_PATHS = { news: '', results: 'results', rumors: 'rumors', injuries: 'injuries', roster: 'roster', moves: 'transactions', game: 'live', insiders: 'insiders' };
 // Live and insider views change minute to minute and add little for search; they're noindexed.
-export const INDEXED_TABS = ['news', 'rumors', 'injuries', 'roster', 'moves'];
+export const INDEXED_TABS = ['news', 'results', 'rumors', 'injuries', 'roster', 'moves'];
 
 export function teamPath(team, tab = 'news') {
   const seg = TAB_PATHS[tab];
@@ -37,6 +37,8 @@ export function teamMeta(t, tab = 'news', year = new Date().getFullYear()) {
   const m = {
     news: [`${f} News, Rumors, Injuries & Scores`, `${f} News`,
       `The latest ${f} news, updated every few minutes: breaking headlines, beat reporter updates, trade rumors, injuries, live scores and betting odds.`],
+    results: [`${f} Scores, Results & Betting Record`, `${f} Results`,
+      `Recent ${f} scores and results with box scores, plus their record against the spread and over/under results for every game.`],
     rumors: [`${f} Rumors & Trade News`, `${f} Rumors`,
       `Latest ${f} trade rumors, free agent targets and signing buzz from ${t.name} beat reporters and national insiders, updated every few minutes.`],
     injuries: [`${f} Injury Report & Updates`, `${f} Injury Report`,

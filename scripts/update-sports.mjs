@@ -10,7 +10,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { ESPN, espnRoster, espnNews, gameSummary } from '../sports/js/espn.mjs';
+import { ESPN, espnRoster, espnNews, gameSummary, parseOdds } from '../sports/js/espn.mjs';
 import {
   classify, flattenReporters, buildXQueries, xSearchUrl, parseXSearch,
   bskyFeedUrl, parseBskyFeed, teamsForPost, mergePosts,
@@ -24,6 +24,8 @@ const MAX_NEWS = 400;
 const MAX_MOVES = 300;
 const NEWS_MAX_AGE_DAYS = 21;
 const MAX_INSIDERS = 600;
+const RESULTS_KEPT = 10;
+const LINE_BACKFILL_PER_RUN = 3;
 const INSIDER_MAX_AGE_DAYS = 4;
 const REPORTER_CHECK_HOURS = 24;
 const STALE_REPORTER_DAYS = 30;
@@ -113,7 +115,33 @@ export function parseFeed(xml, fallbackSource = '') {
 
 // ───────────────────────── ESPN ─────────────────────────
 
-async function teamData(team) {
+// Last few finished games with their closing lines. Schedules carry scores but no lines, so a line
+// comes from (1) last run's results, (2) the pregame line we saved while it was the next game, or
+// (3) the game summary's pickcenter, fetched a few games per run and never again once checked.
+async function recentResults(team, base, t, done, prevTeam) {
+  const known = new Map();
+  for (const r of prevTeam.results || []) if (r.odds || r.lineChecked) known.set(String(r.id), r.odds || null);
+  for (const g of [prevTeam.nextGame, prevTeam.lastGame]) if (g?.id && g.odds && !known.get(String(g.id))) known.set(String(g.id), g.odds);
+  let budget = LINE_BACKFILL_PER_RUN;
+  const out = [];
+  for (const g of done.slice(-RESULTS_KEPT).reverse()) {
+    let odds = known.get(String(g.id)) ?? null;
+    let lineChecked = known.has(String(g.id));
+    if (!lineChecked && budget > 0) {
+      budget--;
+      const sum = await attempt(`${team.key} line ${g.id}`, () => fetchJSON(`${base}/summary?event=${g.id}`));
+      if (sum) {
+        odds = parseOdds(sum.pickcenter || sum.odds, { home: g.home, abbr: t.abbreviation, oppAbbr: g.opponentAbbr });
+        lineChecked = true;
+      }
+    }
+    out.push({ id: g.id, date: g.date, home: g.home, opponent: g.opponent, opponentAbbr: g.opponentAbbr,
+      us: g.us, them: g.them, winner: g.winner, odds, lineChecked });
+  }
+  return out;
+}
+
+async function teamData(team, prevTeam = {}) {
   const base = `${ESPN}/${team.sport}/${team.espnLeague}`;
   const info = await fetchJSON(`${base}/teams/${team.espn}`);
   const t = info.team;
@@ -133,6 +161,7 @@ async function teamData(team) {
     const done = games.filter((g) => g.state === 'post');
     out.lastGame = done[done.length - 1] || null;
     if (!out.nextGame || out.nextGame.state === 'post') out.nextGame = games.find((g) => g.state !== 'post') || null;
+    out.results = await recentResults(team, base, t, done, prevTeam);
   }
 
   // Team schedules carry no betting lines; the scoreboard for the game's date does.
@@ -267,8 +296,8 @@ async function main() {
   let moves = [...(prev.moves || [])];
 
   await Promise.all(teams.map(async (team) => {
-    const data = await attempt(`${team.key} espn`, () => teamData(team));
     const prevTeam = prev.teams?.[team.key] || {};
+    const data = await attempt(`${team.key} espn`, () => teamData(team, prevTeam));
     if (data) {
       for (const n of data.news || []) rawNews.push({ ...n, teams: [team.key] });
       delete data.news;

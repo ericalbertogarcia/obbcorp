@@ -412,3 +412,24 @@ code { font-size: 12px; background: var(--panel-2); padding: 1px 5px; border-rad
   .linescore tbody th { font-size: 14px; padding-right: 6px; }
   .linescore .tot { font-size: 16px; }
 }
+
+/* ── Results ── */
+.bets.rec .bet b { font-size: 28px; }
+.results { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.results th { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.results td { padding: 9px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.results td.d { color: var(--muted); }
+.results td b { font-family: var(--cond); font-size: 16px; }
+.results .res { font-weight: 600; font-size: 13px; }
+.results .res.win, .results .res.hit { color: var(--good); }
+.results .res.hit { color: var(--accent); }
+.results .res.loss { color: var(--bad); }
+.results .res.push, .results .muted { color: var(--muted); }
+.results tr.open td { border-bottom-color: transparent; background: var(--panel-2); }
+.results tr.box-row > td { padding: 12px 0 16px; white-space: normal; }
+.box-btn { font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--line); color: var(--text); }
+.box-btn:hover, .box-btn[aria-expanded="true"] { background: var(--panel-2); border-color: rgba(255,255,255,0.2); }
+@media (max-width: 480px) {
+  .results th:first-child, .results td.d, .results .ab { display: none; }
+  .results th, .results td { padding-left: 5px; padding-right: 5px; }
+}
