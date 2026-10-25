@@ -54,7 +54,21 @@
       { "name": "Ethan Sears", "outlet": "New York Post", "x": "Ethan_Sears", "rss": "https://nypost.com/author/ethan-sears/feed/" },
       { "name": "Stefen Rosner", "outlet": "NY Islanders Hockey Now", "x": "StefenRosner" },
       { "name": "Brian Compton", "outlet": "Islanders.com", "x": "BComptonNHL" }
-    ]
+    ],
+    "nyk": [
+      { "name": "Stefan Bondy", "outlet": "New York Post", "x": "SBondyNYDN" },
+      { "name": "Ian Begley", "outlet": "SNY", "x": "IanBegley" },
+      { "name": "James L. Edwards III", "outlet": "The Athletic", "x": "JLEdwardsIII" },
+      { "name": "Fred Katz", "outlet": "The Athletic", "x": "FredKatz" },
+      { "name": "Steve Popper", "outlet": "Newsday", "x": "StevePopper" }
+    ],
+    "bkn": [
+      { "name": "Brian Lewis", "outlet": "New York Post", "x": "NYPost_Lewis" },
+      { "name": "Erik Slater", "outlet": "ClutchPoints", "x": "erikslater_" },
+      { "name": "Kristian Winfield", "outlet": "Daily News", "x": "Krisplashed" },
+      { "name": "NetsDaily", "outlet": "NetsDaily", "x": "NetsDaily" }
+    ],
+    "nyl": []
   },
   "national": [
     { "name": "Adam Schefter", "outlet": "ESPN", "league": "NFL", "x": "AdamSchefter" },
@@ -65,6 +79,10 @@
     { "name": "Jon Heyman", "outlet": "New York Post", "league": "MLB", "x": "JonHeyman" },
     { "name": "Elliotte Friedman", "outlet": "Sportsnet", "league": "NHL", "x": "FriedgeHNIC" },
     { "name": "Pierre LeBrun", "outlet": "TSN / The Athletic", "league": "NHL", "x": "PierreVLeBrun" },
-    { "name": "Chris Johnston", "outlet": "The Athletic", "league": "NHL", "x": "reporterchris" }
+    { "name": "Chris Johnston", "outlet": "The Athletic", "league": "NHL", "x": "reporterchris" },
+    { "name": "Shams Charania", "outlet": "ESPN", "league": "NBA", "x": "ShamsCharania" },
+    { "name": "Marc Stein", "outlet": "The Stein Line", "league": "NBA", "x": "TheSteinLine" },
+    { "name": "Alexa Philippou", "outlet": "ESPN", "league": "WNBA", "x": "alexaphilippou" },
+    { "name": "Ben Pickman", "outlet": "The Athletic", "league": "WNBA", "x": "BenPickman" }
   ]
 }

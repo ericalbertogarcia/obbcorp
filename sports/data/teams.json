@@ -26,5 +26,17 @@
   { "key": "nyi", "name": "Islanders", "full": "New York Islanders", "league": "NHL", "sport": "hockey", "espnLeague": "nhl", "espn": "nyi",
     "colors": ["#00539B", "#F47D30"], "query": "\"New York Islanders\"",
     "keywords": ["New York Islanders", "Islanders", "Isles", "UBS Arena"],
-    "feeds": ["https://nypost.com/new-york-islanders/feed/", "https://www.lighthousehockey.com/rss/current.xml"] }
+    "feeds": ["https://nypost.com/new-york-islanders/feed/", "https://www.lighthousehockey.com/rss/current.xml"] },
+  { "key": "nyk", "name": "Knicks", "full": "New York Knicks", "league": "NBA", "sport": "basketball", "espnLeague": "nba", "espn": "ny",
+    "colors": ["#006BB6", "#F58426"], "query": "\"New York Knicks\"",
+    "keywords": ["New York Knicks", "Knicks", "Knickerbockers"],
+    "feeds": ["https://nypost.com/new-york-knicks/feed/", "https://www.postingandtoasting.com/rss/current.xml"] },
+  { "key": "bkn", "name": "Nets", "full": "Brooklyn Nets", "league": "NBA", "sport": "basketball", "espnLeague": "nba", "espn": "bkn",
+    "colors": ["#000000", "#FFFFFF"], "query": "\"Brooklyn Nets\"",
+    "keywords": ["Brooklyn Nets", "Barclays Center"],
+    "feeds": ["https://nypost.com/brooklyn-nets/feed/", "https://www.netsdaily.com/rss/current.xml"] },
+  { "key": "nyl", "name": "Liberty", "full": "New York Liberty", "league": "WNBA", "sport": "basketball", "espnLeague": "wnba", "espn": "ny",
+    "colors": ["#86CEBC", "#000000"], "query": "\"New York Liberty\"",
+    "keywords": ["New York Liberty", "NY Liberty"],
+    "feeds": ["https://nypost.com/new-york-liberty/feed/"] }
 ]

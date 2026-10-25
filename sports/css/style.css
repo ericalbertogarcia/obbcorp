@@ -95,7 +95,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .chip:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
 .chip .sw { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(135deg, var(--c1) 50%, var(--c2) 50%); }
-.chip.active { color: #fff; background: var(--c1); border-color: var(--c1); }
+.chip.active { color: var(--on-c1, #fff); background: var(--c1); border-color: var(--c1); }
 .chip.active .sw { box-shadow: 0 0 0 2px rgba(255,255,255,0.6); }
 .chip[data-key="all"] { --c1: var(--accent); --c2: #fff; }
 
@@ -158,7 +158,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .badge {
   display: inline-block; padding: 2px 7px; border-radius: 4px;
   font-family: var(--cond); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-  background: var(--c1); color: #fff; border: 1px solid color-mix(in srgb, var(--c2) 40%, transparent);
+  background: var(--c1); color: var(--on-c1, #fff); border: 1px solid color-mix(in srgb, var(--c2) 40%, transparent);
 }
 .badge.tx { background: var(--accent); --c2: var(--accent); }
 .more { display: block; width: 100%; margin-top: 14px; padding: 12px; border-radius: 8px; border: 1px solid var(--line); font-family: var(--cond); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
@@ -191,7 +191,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ── Team page ── */
 .team-hero {
   position: relative; overflow: hidden; border-radius: var(--radius); margin-bottom: 20px;
-  padding: 28px; background: linear-gradient(120deg, var(--c1) 0%, color-mix(in srgb, var(--c1) 60%, #000) 100%);
+  padding: 28px; background: linear-gradient(120deg, color-mix(in srgb, var(--c1) 65%, #000) 0%, color-mix(in srgb, var(--c1) 40%, #000) 100%);
   border: 1px solid var(--line);
 }
 .team-hero::after {

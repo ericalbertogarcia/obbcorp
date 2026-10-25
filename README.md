@@ -5,7 +5,7 @@ obb corp apparel
 
 _The #1 site for New York sports._
 
-News, live games, injuries, beat-reporter posts and roster moves for the Giants, Jets, Yankees, Mets, Devils, Rangers and Islanders.
+News, live games, injuries, beat-reporter posts and roster moves for the Giants, Jets, Yankees, Mets, Knicks, Nets, Liberty, Devils, Rangers and Islanders.
 
 - `sports/` — the static site, published as the root of nysportsbar.com. Team pages have Live (play-by-play, scoring, in-game injuries), Insiders, News, Injuries, Roster Moves and Roster tabs.
 - `sports/data/reporters.json` — the beat reporters and national insiders we follow (X handles, optional Bluesky handles and author RSS feeds). Edit freely.

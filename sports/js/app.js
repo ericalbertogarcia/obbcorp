@@ -26,7 +26,12 @@ const state = {
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? esc(u) : '#');
-const teamVars = (t) => (t ? `--c1:${t.colors[0]};--c2:${t.colors[1]}` : '');
+// Dark text on light team colors (e.g. Liberty seafoam), white otherwise.
+const onColor = (hex) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.55 ? '#0b0d12' : '#fff';
+};
+const teamVars = (t) => (t ? `--c1:${t.colors[0]};--c2:${t.colors[1]};--on-c1:${onColor(t.colors[0])}` : '');
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
