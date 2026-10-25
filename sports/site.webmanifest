@@ -1,0 +1,13 @@
+{
+  "name": "NY Sports Bar",
+  "short_name": "NY Sports Bar",
+  "description": "The #1 site for New York sports",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07090d",
+  "theme_color": "#07090d",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
