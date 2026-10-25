@@ -1,6 +1,7 @@
 name: Update NY Sports Bar
 
-# Refreshes sports/data/feed.json and publishes the whole site to GitHub Pages.
+# Refreshes sports/data/feed.json and publishes the sports/ folder as the site root on GitHub Pages
+# (served at nysportsbar.com, set under Settings → Pages → Custom domain).
 # The feed is deployed rather than committed, so the 5-minute schedule doesn't flood git history.
 # Requires: Settings → Pages → Source = "GitHub Actions".
 # Optional secret: X_BEARER_TOKEN (beat-reporter posts from X).
@@ -38,7 +39,7 @@ jobs:
       # The previous feed carries roster snapshots (for move detection), X since_ids and older stories.
       - name: Restore last published feed
         run: |
-          if curl -fsSL "${{ steps.pages.outputs.base_url }}/sports/data/feed.json" -o "$RUNNER_TEMP/feed.json" \
+          if curl -fsSL "${{ steps.pages.outputs.base_url }}/data/feed.json" -o "$RUNNER_TEMP/feed.json" \
              && node -e "JSON.parse(require('fs').readFileSync(process.argv[1]))" "$RUNNER_TEMP/feed.json"; then
             cp "$RUNNER_TEMP/feed.json" sports/data/feed.json
           else
@@ -50,6 +51,6 @@ jobs:
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: sports
       - id: deployment
         uses: actions/deploy-pages@v4
