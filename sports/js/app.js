@@ -1,4 +1,4 @@
-import { leagueBase, espnNews, espnRoster, gameSummary } from './espn.mjs';
+import { leagueBase, espnNews, espnRoster, gameSummary, betResults } from './espn.mjs';
 import { INJURY_WORDS, classify, flattenReporters, bskyFeedUrl, parseBskyFeed, mergePosts } from './insiders.mjs';
 import { parseSummary } from './gamecenter.mjs';
 import { teamPath, parsePath, teamMeta, homeMeta } from './seo.mjs';
@@ -16,7 +16,7 @@ const state = {
   config: {},
   reporters: [],
   feed: { teams: {}, news: [], moves: [], insiders: [] },
-  live: { news: [], teams: {}, games: {}, rosters: {}, insiders: [], summaries: {}, summaryTried: new Set() },
+  live: { news: [], teams: {}, games: {}, rosters: {}, insiders: [], summaries: {}, summaryTried: new Set(), recaps: {}, recapTried: new Set() },
   seenPosts: null,
   freshPosts: new Set(),
   query: '',
@@ -273,6 +273,21 @@ async function loadSummary(key) {
   } catch {
     // Keep the last good summary.
   }
+}
+
+// Box score for the team's most recent finished game (not today's), loaded when its game tab opens.
+async function loadRecap(key) {
+  const g = teamInfo(key).lastGame;
+  if (!g?.id || state.live.recapTried.has(g.id)) return;
+  state.live.recapTried.add(g.id);
+  const team = state.byKey[key];
+  try {
+    const json = await getJSON(`${leagueBase(team)}/summary?event=${g.id}`);
+    state.live.recaps[g.id] = parseSummary(json, teamInfo(key).espnId, team.sport);
+  } catch {
+    // The recap section says it's unavailable.
+  }
+  render();
 }
 
 async function loadRoster(key) {
@@ -558,7 +573,7 @@ function renderHome() {
   </div>`;
 }
 
-function gameCard(label, g, t) {
+function gameCard(label, g, t, link = '') {
   if (!g) return '';
   const odds = t && g.state !== 'post' ? lineGame(t.key)?.odds : null;
   const at = g.home ? 'vs' : '@';
@@ -566,7 +581,8 @@ function gameCard(label, g, t) {
   return `<div class="game"><div class="lbl">${label}</div>
     <div class="vs">${score}${at} ${esc(g.opponent)}</div>
     <div class="when">${g.state === 'pre' || !g.state ? esc(fmtGameTime(g.date)) : esc(g.detail)}${g.broadcast ? ` · ${esc(g.broadcast)}` : ''}${g.venue ? ` · ${esc(g.venue)}` : ''}</div>
-    ${odds ? `<div class="when gl">${g.state === 'in' ? 'Pregame · ' : ''}${oddsCells(t, odds).map(([k, v]) => `${k} <b>${esc(v)}</b>`).join(' · ')}</div>` : ''}</div>`;
+    ${odds ? `<div class="when gl">${g.state === 'in' ? 'Pregame · ' : ''}${oddsCells(t, odds).map(([k, v]) => `${k} <b>${esc(v)}</b>`).join(' · ')}</div>` : ''}
+    ${link ? `<a class="box-link" href="${link}">Box score ›</a>` : ''}</div>`;
 }
 
 function playListHTML(plays) {
@@ -574,6 +590,63 @@ function playListHTML(plays) {
     <span class="pc">${esc(p.period)}${p.clock ? ` ${esc(p.clock)}` : ''}</span>
     <span class="pt">${p.team ? `<b>${esc(p.team)}</b> ` : ''}${esc(p.text)}${p.score ? ` <span class="psc">(${esc(p.score)})</span>` : ''}</span>
   </li>`).join('')}</ul>`;
+}
+
+const BET_CLASS = { Over: 'hit', Under: 'hit', Covered: 'win', Won: 'win', 'Did not cover': 'loss', Lost: 'loss', Push: 'push' };
+
+function betResultsHTML(t, s) {
+  const r = betResults(s.odds, s.us.score, s.them.score);
+  if (!r) return '';
+  const abbr = esc(s.us.abbr || t.espn.toUpperCase());
+  const cell = (label, line, res, extra = '') => `<div class="bet ${BET_CLASS[res] || ''}"><span>${label}</span><b>${res}</b><em>${line}${extra}</em></div>`;
+  return `<div class="panel"><div class="section-title"><span>Betting results</span><span class="count">Closing line · ${esc(r.provider)}</span></div>
+    <div class="bets">
+      ${r.total ? cell('Over/Under', `O/U ${r.total.line}`, r.total.result, ` · ${r.total.actual} scored`) : ''}
+      ${r.spread ? cell('Spread', `${abbr} ${signed(r.spread.line)}`, r.spread.result) : ''}
+      ${r.ml ? cell('Moneyline', `${abbr} ${signed(r.ml.line)}`, r.ml.result) : ''}
+    </div><p class="rg">${esc(RG_NOTE)}</p></div>`;
+}
+
+function lineScoreHTML(ls) {
+  if (!ls) return '';
+  return `<div class="table-wrap"><table class="linescore"><thead><tr><th></th>${ls.headers.map((h) => `<th>${h}</th>`).join('')}<th class="tot">${ls.rhe ? 'R' : 'T'}</th>${ls.rhe ? '<th>H</th><th>E</th>' : ''}</tr></thead>
+    <tbody>${ls.rows.map((r) => `<tr class="${r.ours ? 'ours' : ''}"><th>${esc(r.abbr)}</th>${ls.headers.map((_, i) => `<td>${esc(r.periods[i] ?? '')}</td>`).join('')}<td class="tot">${esc(r.total)}</td>${ls.rhe ? `<td>${esc(r.hits)}</td><td>${esc(r.errors)}</td>` : ''}</tr>`).join('')}</tbody></table></div>`;
+}
+
+function statTable(g) {
+  return `<div class="table-wrap"><table class="boxtable"><thead><tr><th>${esc(g.title)}</th>${g.labels.map((l) => `<th>${esc(l)}</th>`).join('')}</tr></thead>
+    <tbody>${g.rows.map((r) => `<tr><th>${esc(r.name)}${r.pos ? ` <span>${esc(r.pos)}</span>` : ''}</th>${r.stats.map((v) => `<td>${esc(v)}</td>`).join('')}</tr>`).join('')}
+    ${g.totals.length ? `<tr class="totals"><th>Team</th>${g.totals.map((v) => `<td>${esc(v)}</td>`).join('')}</tr>` : ''}</tbody></table></div>`;
+}
+
+// Final or live box score: line score, betting results (finals only), team totals and player stats.
+function boxScoreHTML(t, s, { final }) {
+  const stats = s.teamStats.length ? `<div class="table-wrap"><table class="teamstats"><thead><tr><th></th><th>${esc(s.us.abbr || '')}</th><th>${esc(s.them.abbr || '')}</th></tr></thead>
+    <tbody>${s.teamStats.map((r) => `<tr><th>${esc(r.label)}</th><td>${esc(r.us)}</td><td>${esc(r.them)}</td></tr>`).join('')}</tbody></table></div>` : '';
+  const players = s.boxPlayers.map((p, i) => {
+    const tables = p.groups.map(statTable).join('');
+    return i === 0 ? `<h4 class="box-team">${esc(p.name)}</h4>${tables}`
+      : `<details class="box-opp"><summary>${esc(p.name)} box score</summary>${tables}</details>`;
+  }).join('');
+  return `<div class="panel"><div class="section-title"><span>Box score</span><span class="count">${final ? 'Final' : 'Live'}</span></div>${lineScoreHTML(s.linescore)}</div>
+    ${final ? betResultsHTML(t, s) : ''}
+    ${players || stats ? `<div class="panel"><div class="section-title"><span>Player stats</span></div>${players}${stats ? `<h4 class="box-team">Team stats</h4>${stats}` : ''}</div>` : ''}`;
+}
+
+function lastGameRecapHTML(key) {
+  const t = state.byKey[key];
+  const g = teamInfo(key).lastGame;
+  if (!g || g.state !== 'post') return '';
+  const s = state.live.recaps[g.id];
+  if (!s) {
+    if (state.live.recapTried.has(g.id)) return '<div class="empty">Box score unavailable right now.</div>';
+    loadRecap(key);
+    return '<div class="skeleton"></div>';
+  }
+  const res = g.winner === true ? 'W' : g.winner === false ? 'L' : '';
+  return `<div class="panel"><div class="section-title"><span>Last game</span><span class="count">${esc(fmtGameTime(g.date))}</span></div>
+      <div class="recap-line"><b class="${res === 'W' ? 'win' : res === 'L' ? 'loss' : ''}">${res} ${esc(s.us.score)}–${esc(s.them.score)}</b> ${g.home ? 'vs' : '@'} ${esc(g.opponent)}</div></div>
+    ${boxScoreHTML(t, s, { final: true })}`;
 }
 
 function gameTabHTML(key) {
@@ -586,7 +659,8 @@ function gameTabHTML(key) {
       <div class="next-up">${next.home ? 'vs' : '@'} ${esc(next.opponent)}<span>${esc(fmtGameTime(next.date))}${next.broadcast ? ` · ${esc(next.broadcast)}` : ''}${next.venue ? ` · ${esc(next.venue)}` : ''}</span></div>
       ${next.odds ? oddsStripHTML(t, next.odds) : '<p class="rg">Betting line not posted yet.</p>'}
       ${next.odds ? `<p class="rg">${esc(RG_NOTE)}</p>` : ''}</div>` : ''}
-      <div class="empty" style="margin-top:16px">No game in progress. Live play-by-play, scoring and injury updates appear here at first pitch, puck drop, tip-off or kickoff.</div>`;
+      <p class="rg" style="margin:12px 0 16px">Live play-by-play, scoring and injury updates appear here at first pitch, puck drop, tip-off or kickoff.</p>
+      <div class="stack">${lastGameRecapHTML(key)}</div>`;
   }
   if (!s) {
     if (state.live.summaryTried.has(key)) return '<div class="empty">Live game data is unavailable right now — retrying shortly.</div>';
@@ -603,7 +677,8 @@ function gameTabHTML(key) {
         <div class="sb-mid"><div class="sb-state">${g.state === 'in' ? '<span class="live-pip"></span>' : ''}${esc(s.detail || g.detail)}</div>${g.situation ? `<div class="sb-sit">${esc(g.situation)}</div>` : ''}</div>
         <div class="sb-team">${s.them.logo ? `<img src="${safeUrl(s.them.logo)}" alt="">` : ''}<span>${esc(s.them.abbr || '')}</span><b>${esc(s.them.score)}</b></div>
       </div>
-      ${oddsStripHTML(state.byKey[key], s.odds || lineGame(key)?.odds, { label: g.state === 'pre' ? '' : 'Pregame line' })}
+      ${g.state === 'post' ? '' : oddsStripHTML(state.byKey[key], s.odds || lineGame(key)?.odds, { label: g.state === 'pre' ? '' : 'Pregame line' })}
+      ${boxScoreHTML(state.byKey[key], s, { final: g.state === 'post' })}
       ${s.inGameInjuries.length ? `<div class="panel alert"><div class="section-title"><span>⚠ In-game injury notes</span></div>${playListHTML(s.inGameInjuries)}</div>` : ''}
       <div class="panel"><div class="section-title"><span>Play-by-play</span><span class="count">${g.state === 'in' ? 'Updates every 20s' : 'Final'}</span></div>
         ${s.plays.length ? playListHTML(s.plays) : '<div class="empty">Plays will appear once the game is underway.</div>'}</div>
@@ -673,7 +748,7 @@ function renderTeam(key, tab) {
         <div><div class="league">${esc(t.league)}</div><h1>${esc(t.full)}</h1>
         <div class="standing">${esc([info.record, info.standing].filter(Boolean).join(' · '))}</div></div>
       </div>
-      <div class="games">${gameCard(next?.state === 'in' ? 'Live now' : 'Next game', next, t)}${gameCard('Last game', last)}</div>
+      <div class="games">${gameCard(next?.state === 'in' ? 'Live now' : 'Next game', next, t)}${gameCard('Last game', last, null, last?.state === 'post' ? teamPath(t, 'game') : '')}</div>
     </section>
     <div class="tabs" role="tablist" style="--c1-bright:${t.colors[0] === '#000000' ? t.colors[1] : t.colors[0]}">
       ${Object.entries(tabs).map(([x, label]) => `<button data-tab="${x}" class="${tab === x ? 'on' : ''}">${label}</button>`).join('')}

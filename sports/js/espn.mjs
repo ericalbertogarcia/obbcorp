@@ -73,6 +73,26 @@ export function parseOdds(list, { home, abbr, oppAbbr }) {
   return { provider: o.provider?.displayName || o.provider?.name || 'Sportsbook', spread, ml, oppMl, total, details: o.details || '' };
 }
 
+// How the closing line played out for a finished game, from one team's side.
+// Spread: our score + our spread vs theirs. Total: combined score vs the over/under.
+export function betResults(odds, us, them) {
+  const a = Number(us);
+  const b = Number(them);
+  if (!odds || !Number.isFinite(a) || !Number.isFinite(b)) return null;
+  const cmp = (x) => (x > 0 ? 1 : x < 0 ? -1 : 0);
+  const out = {};
+  if (odds.total != null) {
+    const r = cmp(a + b - odds.total);
+    out.total = { line: odds.total, actual: a + b, result: r > 0 ? 'Over' : r < 0 ? 'Under' : 'Push' };
+  }
+  if (odds.spread != null) {
+    const r = cmp(a + odds.spread - b);
+    out.spread = { line: odds.spread, result: r > 0 ? 'Covered' : r < 0 ? 'Did not cover' : 'Push' };
+  }
+  if (odds.ml != null && a !== b) out.ml = { line: odds.ml, result: a > b ? 'Won' : 'Lost' };
+  return Object.keys(out).length ? { ...out, provider: odds.provider } : null;
+}
+
 // Reduces an ESPN event to the game from one team's point of view.
 export function gameSummary(event, teamId) {
   const comp = event?.competitions?.[0];

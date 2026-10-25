@@ -29,6 +29,60 @@ function normPlay(p, sport, teamNames) {
   };
 }
 
+function periodHeader(sport, i) {
+  const n = i + 1;
+  const regulation = sport === 'hockey' ? 3 : sport === 'baseball' ? Infinity : 4;
+  if (n <= regulation) return String(n);
+  const ot = n - regulation;
+  return ot === 1 ? 'OT' : `${ot}OT`;
+}
+
+// Score by period/inning, away team first as in a printed box score.
+function lineScore(competitors, teamId, sport) {
+  const rows = [...competitors].sort((a, b) => (a.homeAway === 'away' ? -1 : b.homeAway === 'away' ? 1 : 0)).map((c) => ({
+    abbr: c.team?.abbreviation || '',
+    ours: String(c.id ?? c.team?.id) === String(teamId),
+    periods: (c.linescores || []).map((l) => l.displayValue ?? l.value ?? ''),
+    total: typeof c.score === 'object' ? c.score?.displayValue : c.score ?? '',
+    hits: c.hits ?? null,
+    errors: c.errors ?? null,
+  }));
+  const n = Math.max(0, ...rows.map((r) => r.periods.length));
+  if (!n) return null;
+  return { headers: Array.from({ length: n }, (_, i) => periodHeader(sport, i)), rows, rhe: sport === 'baseball' && rows.every((r) => r.hits != null) };
+}
+
+// Player stat tables per team and category (passing, batting, skaters, …).
+function playerBox(json, teamId) {
+  return (json.boxscore?.players || []).map((p) => ({
+    abbr: p.team?.abbreviation || '',
+    name: p.team?.displayName || '',
+    ours: String(p.team?.id) === String(teamId),
+    groups: (p.statistics || []).map((g) => ({
+      title: g.text || g.displayName || (g.name ? g.name[0].toUpperCase() + g.name.slice(1) : ''),
+      labels: g.labels || [],
+      rows: (g.athletes || []).filter((a) => a.stats?.length).map((a) => ({
+        name: a.athlete?.shortName || a.athlete?.displayName || '',
+        pos: a.athlete?.position?.abbreviation || '',
+        starter: !!a.starter,
+        stats: a.stats,
+      })),
+      totals: g.totals || [],
+    })).filter((g) => g.rows.length && g.labels.length),
+  })).filter((t) => t.groups.length).sort((a, b) => b.ours - a.ours);
+}
+
+// Side-by-side team totals (yards, shots, rebounds, …).
+function teamStats(json, teamId) {
+  const teams = json.boxscore?.teams || [];
+  const us = teams.find((t) => String(t.team?.id) === String(teamId));
+  const them = teams.find((t) => t !== us);
+  if (!us || !them) return [];
+  const theirs = new Map((them.statistics || []).map((s) => [s.name || s.label, s.displayValue]));
+  return (us.statistics || []).filter((s) => s.displayValue != null && theirs.has(s.name || s.label))
+    .map((s) => ({ label: s.label || s.name, us: s.displayValue, them: theirs.get(s.name || s.label) })).slice(0, 12);
+}
+
 export function parseSummary(json, teamId, sport) {
   const comp = json.header?.competitions?.[0] || {};
   const competitors = comp.competitors || [];
@@ -75,6 +129,9 @@ export function parseSummary(json, teamId, sport) {
     them: { name: them?.team?.displayName, abbr: them?.team?.abbreviation, score: them?.score ?? '', logo: them?.team?.logos?.[0]?.href || them?.team?.logo || '' },
     home: us?.homeAway === 'home',
     odds: parseOdds(json.pickcenter || json.odds, { home: us?.homeAway === 'home', abbr: us?.team?.abbreviation, oppAbbr: them?.team?.abbreviation }),
+    linescore: lineScore(competitors, teamId, sport),
+    boxPlayers: playerBox(json, teamId),
+    teamStats: teamStats(json, teamId),
     plays: plays.slice(-40).reverse(),
     scoring: scoring.reverse(),
     inGameInjuries: plays.filter((p) => p.injury).reverse(),

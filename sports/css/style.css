@@ -370,3 +370,45 @@ code { font-size: 12px; background: var(--panel-2); padding: 1px 5px; border-rad
 .seo-links ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 16px; }
 .seo-links li { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; }
 .seo-links li a:first-child { color: var(--text); font-weight: 600; flex-basis: 100%; }
+
+/* ── Box scores and betting results ── */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.linescore, .boxtable, .teamstats { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; }
+.linescore th, .linescore td { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.linescore thead th { font-size: 12px; color: var(--muted); font-weight: 500; }
+.linescore tbody th { text-align: left; font-family: var(--cond); font-size: 16px; }
+.linescore .tot { font-family: var(--cond); font-size: 18px; font-weight: 800; color: var(--text); }
+.linescore tr.ours th, .linescore tr.ours .tot { color: var(--accent); }
+.box-team { font-family: var(--cond); font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; margin: 14px 0 6px; }
+.box-team:first-child { margin-top: 0; }
+.boxtable { font-size: 13px; margin-bottom: 12px; }
+.boxtable th, .boxtable td { padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; text-align: right; }
+.boxtable thead th { font-size: 11px; color: var(--muted); font-weight: 600; }
+.boxtable thead th:first-child { text-align: left; color: var(--text); font-family: var(--cond); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+.boxtable tbody th { text-align: left; font-weight: 600; position: sticky; left: 0; background: var(--panel); }
+.boxtable tbody th span { color: var(--muted); font-weight: 400; font-size: 11px; }
+.boxtable tr.totals th, .boxtable tr.totals td { font-weight: 700; color: var(--text); border-bottom: 0; }
+.teamstats th, .teamstats td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; }
+.teamstats tbody th { text-align: left; color: var(--muted); font-weight: 500; }
+.teamstats thead th { font-family: var(--cond); font-size: 14px; }
+.box-opp { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.box-opp summary { cursor: pointer; font-family: var(--cond); font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+.box-opp summary:hover { color: var(--text); }
+.box-opp[open] summary { margin-bottom: 10px; color: var(--text); }
+.bets { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.bet { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2); border-left: 4px solid var(--muted); }
+.bet span { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.bet b { font-family: var(--cond); font-size: 24px; font-weight: 800; }
+.bet em { font-style: normal; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bet.win { border-left-color: var(--good); } .bet.win b { color: var(--good); }
+.bet.loss { border-left-color: var(--bad); } .bet.loss b { color: var(--bad); }
+.bet.hit { border-left-color: var(--accent); } .bet.hit b { color: var(--accent); }
+.bet.push { border-left-color: var(--muted); }
+.box-link { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--text); opacity: .9; }
+.box-link:hover { text-decoration: underline; }
+.recap-line { font-family: var(--cond); font-size: 22px; font-weight: 700; }
+@media (max-width: 600px) {
+  .linescore th, .linescore td { padding: 7px 3px; font-size: 13px; }
+  .linescore tbody th { font-size: 14px; padding-right: 6px; }
+  .linescore .tot { font-size: 16px; }
+}
