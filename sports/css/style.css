@@ -433,3 +433,17 @@ code { font-size: 12px; background: var(--panel-2); padding: 1px 5px; border-rad
   .results th:first-child, .results td.d, .results .ab { display: none; }
   .results th, .results td { padding-left: 5px; padding-right: 5px; }
 }
+
+/* ── Play-by-play by period ── */
+.periods { display: grid; gap: 8px; }
+.period { border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); }
+.period summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; cursor: pointer; list-style: none; }
+.period summary::-webkit-details-marker { display: none; }
+.period summary::before { content: '▸'; color: var(--muted); transition: transform .15s; }
+.period[open] summary::before { transform: rotate(90deg); }
+.period .pl { font-family: var(--cond); font-weight: 700; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; margin-right: auto; }
+.period .pm { font-size: 12px; color: var(--muted); }
+.period .pm b { font-weight: 600; }
+.period[open] summary { border-bottom: 1px solid var(--line); }
+.period .plays { padding: 0 12px 4px; }
+.period .plays li { grid-template-columns: 52px minmax(0, 1fr); }

@@ -19,6 +19,7 @@ const state = {
   live: { news: [], teams: {}, games: {}, rosters: {}, insiders: [], summaries: {}, summaryTried: new Set(), recaps: {}, recapTried: new Set() },
   seenPosts: null,
   freshPosts: new Set(),
+  periodOpen: {},
   query: '',
   kind: 'all',
   shown: PAGE_SIZE,
@@ -584,9 +585,23 @@ function gameCard(label, g, t, link = '') {
     ${link ? `<a class="box-link" href="${link}">Box score ›</a>` : ''}</div>`;
 }
 
-function playListHTML(plays) {
+// Collapsible play-by-play: one section per quarter/period/inning. The newest is open by default;
+// whatever the reader opens or closes is remembered across the live refreshes.
+function periodsHTML(gameId, periods) {
+  if (!periods?.length) return '<div class="empty">Plays will appear once the game is underway.</div>';
+  return `<div class="periods">${periods.map((p, i) => {
+    const key = `${gameId}:${p.label}`;
+    const open = state.periodOpen[key] ?? i === 0;
+    return `<details class="period" data-period="${esc(key)}"${open ? ' open' : ''}>
+      <summary><span class="pl">${esc(p.label)}</span><span class="pm">${p.plays.length} plays${p.scoring ? ` · <b class="win">${p.scoring} scoring</b>` : ''}${p.injury ? ' · <b class="inj">⚠ injury</b>' : ''}</span></summary>
+      ${playListHTML(p.plays, { clockOnly: true })}
+    </details>`;
+  }).join('')}</div>`;
+}
+
+function playListHTML(plays, { clockOnly = false } = {}) {
   return `<ul class="plays">${plays.map((p) => `<li class="${p.scoring ? 'scoring' : ''} ${p.injury ? 'injury' : ''}">
-    <span class="pc">${esc(p.period)}${p.clock ? ` ${esc(p.clock)}` : ''}</span>
+    <span class="pc">${clockOnly ? esc(p.clock || '') : `${esc(p.period)}${p.clock ? ` ${esc(p.clock)}` : ''}`}</span>
     <span class="pt">${p.team ? `<b>${esc(p.team)}</b> ` : ''}${esc(p.text)}${p.score ? ` <span class="psc">(${esc(p.score)})</span>` : ''}</span>
   </li>`).join('')}</ul>`;
 }
@@ -722,7 +737,7 @@ function gameTabHTML(key) {
       ${boxScoreHTML(state.byKey[key], s, { final: g.state === 'post' })}
       ${s.inGameInjuries.length ? `<div class="panel alert"><div class="section-title"><span>⚠ In-game injury notes</span></div>${playListHTML(s.inGameInjuries)}</div>` : ''}
       <div class="panel"><div class="section-title"><span>Play-by-play</span><span class="count">${g.state === 'in' ? 'Updates every 20s' : 'Final'}</span></div>
-        ${s.plays.length ? playListHTML(s.plays) : '<div class="empty">Plays will appear once the game is underway.</div>'}</div>
+        ${periodsHTML(g.id, s.periods)}</div>
       ${s.scoring.length ? `<div class="panel"><div class="section-title"><span>Scoring</span></div>${playListHTML(s.scoring)}</div>` : ''}
     </section>
     <aside class="stack">
@@ -866,6 +881,12 @@ document.addEventListener('click', (e) => {
   e.preventDefault();
   navigate(a.getAttribute('href'));
 });
+
+// <details> toggle events don't bubble, so listen in the capture phase.
+document.addEventListener('toggle', (e) => {
+  const key = e.target.dataset?.period;
+  if (key) state.periodOpen[key] = e.target.open;
+}, true);
 
 window.addEventListener('popstate', () => { state.shown = PAGE_SIZE; render(); });
 

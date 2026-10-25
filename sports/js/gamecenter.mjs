@@ -93,6 +93,22 @@ function teamStats(json, teamId) {
     .map((s) => ({ label: s.label || s.name, us: s.displayValue, them: theirs.get(s.name || s.label) })).slice(0, 12);
 }
 
+// Every play, grouped by quarter / period / inning, newest period first and newest play first.
+function groupByPeriod(plays) {
+  const groups = [];
+  for (const p of plays) {
+    let g = groups[groups.length - 1];
+    if (!g || g.label !== p.period) groups.push((g = { label: p.period || 'Game', plays: [] }));
+    g.plays.push(p);
+  }
+  return groups.reverse().map((g) => ({
+    label: g.label,
+    plays: g.plays.reverse(),
+    scoring: g.plays.filter((p) => p.scoring).length,
+    injury: g.plays.some((p) => p.injury),
+  }));
+}
+
 export function parseSummary(json, teamId, sport) {
   const comp = json.header?.competitions?.[0] || {};
   const competitors = comp.competitors || [];
@@ -143,6 +159,7 @@ export function parseSummary(json, teamId, sport) {
     boxPlayers: playerBox(json, teamId),
     teamStats: teamStats(json, teamId),
     plays: plays.slice(-40).reverse(),
+    periods: groupByPeriod(plays),
     scoring: scoring.reverse(),
     inGameInjuries: plays.filter((p) => p.injury).reverse(),
     injuries,
