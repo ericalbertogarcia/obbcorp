@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// One-off diagnostics: compares ESPN rosters with official/authoritative sources and checks each
+// Data-source diagnostics: compares ESPN rosters with official/authoritative sources and checks each
 // team's last-game box score data. Writes diagnostics/report.json. Run in GitHub Actions, which
-// can reach these APIs.
+// can reach these APIs (e.g. a temporary workflow that runs it and commits the report).
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';

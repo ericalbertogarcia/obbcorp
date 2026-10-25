@@ -115,6 +115,57 @@ export function parseFeed(xml, fallbackSource = '') {
 
 // ───────────────────────── ESPN ─────────────────────────
 
+// ───────────────────────── official rosters ─────────────────────────
+// ESPN's MLB roster leaves out the 60-day IL and its NHL rosters lag AHL call-ups and send-downs,
+// so those leagues use the league's own roster. ESPN injury designations are carried over by name.
+
+const nameKey = (n) => String(n || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  .replace(/[^a-z ]/g, '').replace(/\b(jr|sr|ii|iii|iv|v)\b/g, '').replace(/\s+/g, ' ').trim();
+
+const MLB_GROUPS = { Pitcher: 'Pitchers', 'Two-Way Player': 'Pitchers', Catcher: 'Catchers', Infielder: 'Infielders', Outfielder: 'Outfielders', Hitter: 'Infielders' };
+
+async function mlbRoster(team) {
+  const json = await fetchJSON(`https://statsapi.mlb.com/api/v1/teams/${team.mlbId}/roster?rosterType=40Man`);
+  return (json.roster || []).map((r) => {
+    const status = r.status?.description || '';
+    const injured = /injur/i.test(status);
+    return {
+      id: `mlb-${r.person.id}`,
+      name: r.person.fullName,
+      jersey: r.jerseyNumber || '',
+      pos: r.position?.abbreviation || '',
+      group: injured ? 'Injured List' : MLB_GROUPS[r.position?.type] || 'Roster',
+      age: null,
+      headshot: `https://img.mlbstatic.com/mlb-photos/image/upload/w_120,q_auto:best/v1/people/${r.person.id}/headshot/67/current`,
+      status: /^active$/i.test(status) ? '' : status,
+    };
+  });
+}
+
+async function nhlRoster(team) {
+  const json = await fetchJSON(`https://api-web.nhle.com/v1/roster/${team.nhl}/current`);
+  const group = (list, label) => (list || []).map((p) => ({
+    id: `nhl-${p.id}`,
+    name: `${p.firstName?.default || ''} ${p.lastName?.default || ''}`.trim(),
+    jersey: p.sweaterNumber != null ? String(p.sweaterNumber) : '',
+    pos: p.positionCode || '',
+    group: label,
+    age: null,
+    headshot: p.headshot || '',
+    status: '',
+  }));
+  return [...group(json.forwards, 'Forwards'), ...group(json.defensemen, 'Defense'), ...group(json.goalies, 'Goalies')];
+}
+
+async function officialRoster(team, espnList) {
+  const load = team.mlbId ? mlbRoster : team.nhl ? nhlRoster : null;
+  if (!load) return null;
+  const list = await attempt(`${team.key} official roster`, () => load(team));
+  if (!list?.length) return null;
+  const injuries = new Map(espnList.filter((p) => p.status).map((p) => [nameKey(p.name), p.status]));
+  return list.map((p) => ({ ...p, status: p.status || injuries.get(nameKey(p.name)) || '' }));
+}
+
 // Last few finished games with their closing lines. Schedules carry scores but no lines, so a line
 // comes from (1) last run's results, (2) the pregame line we saved while it was the next game, or
 // (3) the game summary's pickcenter, fetched a few games per run and never again once checked.
@@ -131,7 +182,7 @@ async function recentResults(team, base, t, done, prevTeam) {
       budget--;
       const sum = await attempt(`${team.key} line ${g.id}`, () => fetchJSON(`${base}/summary?event=${g.id}`));
       if (sum) {
-        odds = parseOdds(sum.pickcenter || sum.odds, { home: g.home, abbr: t.abbreviation, oppAbbr: g.opponentAbbr });
+        odds = parseOdds(sum.pickcenter || sum.odds, { home: g.home, abbr: t.abbreviation, oppAbbr: g.opponentAbbr, sport: team.sport });
         lineChecked = true;
       }
     }
@@ -150,14 +201,19 @@ async function teamData(team, prevTeam = {}) {
     logo: t.logos?.[0]?.href || '',
     record: t.record?.items?.find((i) => i.type === 'total')?.summary || t.record?.items?.[0]?.summary || '',
     standing: t.standingSummary || '',
-    nextGame: t.nextEvent?.[0] ? gameSummary(t.nextEvent[0], t.id) : null,
+    nextGame: t.nextEvent?.[0] ? gameSummary(t.nextEvent[0], t.id, team.sport) : null,
     lastGame: null,
     roster: [],
   };
 
-  const sched = await attempt(`${team.key} schedule`, () => fetchJSON(`${base}/teams/${t.id}/schedule`));
+  let sched = await attempt(`${team.key} schedule`, () => fetchJSON(`${base}/teams/${t.id}/schedule`));
+  // Once the postseason starts ESPN defaults to postseason games, which is empty for teams that missed it.
+  if (!sched?.events?.some((e) => e.competitions?.[0]?.status?.type?.state === 'post')) {
+    const regular = await attempt(`${team.key} regular season`, () => fetchJSON(`${base}/teams/${t.id}/schedule?seasontype=2`));
+    if (regular?.events?.length) sched = { ...regular, events: [...regular.events, ...(sched?.events || [])] };
+  }
   if (sched?.events) {
-    const games = sched.events.map((e) => gameSummary(e, t.id)).filter(Boolean);
+    const games = sched.events.map((e) => gameSummary(e, t.id, team.sport)).filter(Boolean);
     const done = games.filter((g) => g.state === 'post');
     out.lastGame = done[done.length - 1] || null;
     if (!out.nextGame || out.nextGame.state === 'post') out.nextGame = games.find((g) => g.state !== 'post') || null;
@@ -169,11 +225,15 @@ async function teamData(team, prevTeam = {}) {
     const day = new Date(out.nextGame.date).toLocaleDateString('en-CA', { timeZone: 'America/New_York' }).replace(/-/g, '');
     const board = await attempt(`${team.key} odds`, () => fetchJSON(`${base}/scoreboard?dates=${day}`));
     const ev = board?.events?.find((e) => String(e.id) === String(out.nextGame.id));
-    if (ev) out.nextGame = { ...out.nextGame, odds: gameSummary(ev, t.id)?.odds || null };
+    if (ev) out.nextGame = { ...out.nextGame, odds: gameSummary(ev, t.id, team.sport)?.odds || null };
   }
 
   const roster = await attempt(`${team.key} roster`, () => fetchJSON(`${base}/teams/${t.id}/roster`));
-  if (roster) out.roster = espnRoster(roster);
+  const espnList = roster ? espnRoster(roster) : [];
+  const official = await officialRoster(team, espnList);
+  out.roster = official || espnList;
+  // Roster diffs only compare like with like; a source change (or this format change) skips one diff.
+  out.rosterSource = official ? (team.mlbId ? 'mlb' : 'nhl') : 'espn-v2';
 
   const news = await attempt(`${team.key} espn news`, () => fetchJSON(`${base}/news?team=${t.id}&limit=30`), { articles: [] });
   out.news = espnNews(news);
@@ -306,16 +366,31 @@ async function main() {
       teamOut[team.key] = { ...data, updatedAt: now };
 
       // Roster diff → moves. Skipped on the first run (nothing to compare against).
-      if (prevTeam.roster?.length && data.roster.length) {
-        const before = new Map(prevTeam.roster.map((p) => [p.id, p]));
-        const after = new Map(data.roster.map((p) => [p.id, p]));
-        for (const [id, p] of after) if (!before.has(id)) moves.push({
-          id: `roster-${team.key}-${id}-in-${now.slice(0, 10)}`, team: team.key, date: now, type: 'Added to roster',
-          player: p.name, description: `${p.name}${p.pos ? ` (${p.pos})` : ''} joined the ${team.full} active roster.`, source: 'Roster tracker',
+      if (prevTeam.roster?.length && data.roster.length && prevTeam.rosterSource === data.rosterSource) {
+        // Keyed by name so a change of data source (ESPN → league API) isn't read as roster turnover.
+        const before = new Map(prevTeam.roster.map((p) => [nameKey(p.name), p]));
+        const after = new Map(data.roster.map((p) => [nameKey(p.name), p]));
+        for (const [k, p] of after) {
+          const old = before.get(k);
+          if (!old) continue;
+          const wasPs = old.group === 'Practice Squad';
+          const isPs = p.group === 'Practice Squad';
+          const wasIl = old.group === 'Injured List';
+          const isIl = p.group === 'Injured List';
+          const type = wasPs && !isPs ? 'Promoted' : !wasPs && isPs ? 'Moved to practice squad'
+            : !wasIl && isIl ? 'Placed on IL' : wasIl && !isIl ? 'Activated from IL' : '';
+          if (type) moves.push({
+            id: `roster-${team.key}-${k.replace(/ /g, '-')}-${type.replace(/ /g, '-').toLowerCase()}-${now.slice(0, 10)}`, team: team.key, date: now, type,
+            player: p.name, description: `${p.name}${p.pos ? ` (${p.pos})` : ''}: ${type === 'Promoted' ? 'promoted from the practice squad to the active roster' : type === 'Placed on IL' ? `placed on the ${p.status || 'injured list'}` : type.toLowerCase()}.`, source: 'Roster tracker',
+          });
+        }
+        for (const [k, p] of after) if (!before.has(k)) moves.push({
+          id: `roster-${team.key}-${k.replace(/ /g, '-')}-in-${now.slice(0, 10)}`, team: team.key, date: now, type: 'Added to roster',
+          player: p.name, description: `${p.name}${p.pos ? ` (${p.pos})` : ''} ${p.group === 'Practice Squad' ? 'signed to the practice squad' : `joined the ${team.full} roster`}.`, source: 'Roster tracker',
         });
-        for (const [id, p] of before) if (!after.has(id)) moves.push({
-          id: `roster-${team.key}-${id}-out-${now.slice(0, 10)}`, team: team.key, date: now, type: 'Removed from roster',
-          player: p.name, description: `${p.name}${p.pos ? ` (${p.pos})` : ''} is no longer on the ${team.full} active roster.`, source: 'Roster tracker',
+        for (const [k, p] of before) if (!after.has(k)) moves.push({
+          id: `roster-${team.key}-${k.replace(/ /g, '-')}-out-${now.slice(0, 10)}`, team: team.key, date: now, type: 'Removed from roster',
+          player: p.name, description: `${p.name}${p.pos ? ` (${p.pos})` : ''} is no longer on the ${team.full} roster.`, source: 'Roster tracker',
         });
       }
     } else if (prev.teams?.[team.key]) {

@@ -97,7 +97,7 @@ function teamBody(t, tab, feed) {
     body = `<h2>${esc(t.full)} roster</h2>${roster.length
       ? `<table class="seo-table"><thead><tr><th>No.</th><th>Player</th><th>Pos</th><th>Status</th></tr></thead><tbody>${roster
         .slice().sort((a, b) => (+a.jersey || 999) - (+b.jersey || 999))
-        .map((p) => `<tr><td>${esc(p.jersey)}</td><td>${esc(p.name)}</td><td>${esc(p.pos)}</td><td>${esc(p.status || 'Active')}</td></tr>`).join('')}</tbody></table>`
+        .map((p) => `<tr><td>${esc(p.jersey)}</td><td>${esc(p.name)}</td><td>${esc(p.pos)}</td><td>${esc(p.status || (p.group === 'Practice Squad' ? 'Practice squad' : 'Active'))}</td></tr>`).join('')}</tbody></table>`
       : '<p>Roster loading — check back shortly.</p>'}`;
   } else if (tab === 'moves') {
     const moves = (feed.moves || []).filter((m) => m.team === t.key);

@@ -11,16 +11,21 @@ const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + '…' :
 export function espnRoster(json) {
   const groups = json.athletes || [];
   const flat = groups.flatMap((g) => (Array.isArray(g.items) ? g.items.map((a) => ({ ...a, _group: g.position })) : [g]));
-  return flat.map((a) => ({
-    id: String(a.id ?? a.fullName),
-    name: a.fullName || a.displayName,
-    jersey: a.jersey ?? '',
-    pos: a.position?.abbreviation || '',
-    group: a._group || a.position?.parent?.name || a.position?.name || '',
-    age: a.age ?? null,
-    headshot: a.headshot?.href || '',
-    status: a.injuries?.[0]?.status || '',
-  })).filter((p) => p.name);
+  return flat.map((a) => {
+    // NFL rosters mix the practice squad in with the 53; status.name says which.
+    const rosterStatus = a.status?.name || '';
+    const practice = /practice squad/i.test(rosterStatus);
+    return {
+      id: String(a.id ?? a.fullName),
+      name: a.fullName || a.displayName,
+      jersey: a.jersey ?? '',
+      pos: a.position?.abbreviation || '',
+      group: practice ? 'Practice Squad' : a._group || a.position?.parent?.name || a.position?.name || '',
+      age: a.age ?? null,
+      headshot: a.headshot?.href || '',
+      status: a.injuries?.[0]?.status || (practice || /^active$/i.test(rosterStatus) ? '' : rosterStatus),
+    };
+  }).filter((p) => p.name);
 }
 
 export function espnNews(json) {
@@ -51,7 +56,7 @@ function situationText(sit) {
 const num = (v) => (v == null || v === '' || Number.isNaN(Number(String(v).replace(/^[ou]/i, ''))) ? null : Number(String(v).replace(/^[ou]/i, '')));
 const latest = (x) => x?.current ?? x?.close ?? x?.open;
 
-export function parseOdds(list, { home, abbr, oppAbbr }) {
+export function parseOdds(list, { home, abbr, oppAbbr, sport = '' }) {
   const o = (Array.isArray(list) ? list : []).find((x) => x && (x.details || x.overUnder != null || x.moneyline || x.pointSpread));
   if (!o) return null;
   const side = home ? 'home' : 'away';
@@ -60,7 +65,8 @@ export function parseOdds(list, { home, abbr, oppAbbr }) {
   const theirOdds = home ? o.awayTeamOdds : o.homeTeamOdds;
 
   let spread = num(latest(o.pointSpread?.[side])?.line);
-  if (spread == null && o.details) {
+  // In baseball and hockey `details` is the moneyline ("NYY -175"), never a spread.
+  if (spread == null && o.details && !/^(baseball|hockey)$/.test(sport)) {
     const m = String(o.details).match(/^([A-Z0-9]{2,4})\s+([+-]?\d+(?:\.\d+)?)$/i);
     if (/^(even|pk|pick)/i.test(o.details)) spread = 0;
     else if (m) spread = m[1].toUpperCase() === String(abbr).toUpperCase() ? Number(m[2])
@@ -110,7 +116,7 @@ export function resultsRecord(results) {
 }
 
 // Reduces an ESPN event to the game from one team's point of view.
-export function gameSummary(event, teamId) {
+export function gameSummary(event, teamId, sport = '') {
   const comp = event?.competitions?.[0];
   if (!comp) return null;
   const us = comp.competitors.find((c) => String(c.id ?? c.team?.id) === String(teamId));
@@ -135,6 +141,6 @@ export function gameSummary(event, teamId) {
     broadcast: comp.broadcasts?.[0]?.media?.shortName || comp.broadcasts?.[0]?.names?.[0] || '',
     lastPlay: comp.situation?.lastPlay?.text || '',
     situation: situationText(comp.situation),
-    odds: parseOdds(comp.odds, { home: us.homeAway === 'home', abbr: us.team?.abbreviation, oppAbbr: them.team?.abbreviation }),
+    odds: parseOdds(comp.odds, { home: us.homeAway === 'home', abbr: us.team?.abbreviation, oppAbbr: them.team?.abbreviation, sport }),
   };
 }

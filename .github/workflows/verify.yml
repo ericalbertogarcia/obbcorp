@@ -1,0 +1,58 @@
+name: Verify data changes
+
+# Temporary: runs the updater against live data and commits a summary to this branch.
+on:
+  push:
+    branches: [claude/nyc-sports-news-site-7jjbt4]
+    paths: ['.github/workflows/verify.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: curl -fsSL https://nysportsbar.com/data/feed.json -o sports/data/feed.json
+      - run: node scripts/update-sports.mjs
+      - name: Summarize
+        run: |
+          mkdir -p diagnostics
+          node --input-type=module -e "
+          import { readFileSync, writeFileSync } from 'node:fs';
+          import { parseSummary } from './sports/js/gamecenter.mjs';
+          const f = JSON.parse(readFileSync('sports/data/feed.json', 'utf8'));
+          const teams = JSON.parse(readFileSync('sports/data/teams.json', 'utf8'));
+          const out = { errors: f.errors, teams: {} };
+          for (const t of teams) {
+            const x = f.teams[t.key] || {};
+            const groups = {};
+            for (const p of x.roster || []) groups[p.group] = (groups[p.group] || 0) + 1;
+            const r = { source: x.rosterSource, rosterGroups: groups,
+              statuses: (x.roster || []).filter((p) => p.status).map((p) => p.name + ': ' + p.status).slice(0, 12),
+              sample: (x.roster || []).slice(0, 4).map((p) => [p.name, p.jersey, p.pos, p.group, p.headshot ? 'img' : 'noimg']),
+              lastGame: x.lastGame && { id: x.lastGame.id, date: x.lastGame.date, opp: x.lastGame.opponent },
+              results: (x.results || []).map((g) => g.date.slice(0, 10) + ' ' + g.us + '-' + g.them + (g.odds ? ' line' : '')) };
+            if (x.lastGame?.id) {
+              const s = await (await fetch('https://site.api.espn.com/apis/site/v2/sports/' + t.sport + '/' + t.espnLeague + '/summary?event=' + x.lastGame.id)).json();
+              const p = parseSummary(s, x.espnId, t.sport);
+              r.box = { line: p.linescore?.rows.map((l) => l.abbr + ' ' + l.periods.join(' ') + ' = ' + l.total + (l.hits != null ? ' H' + l.hits + ' E' + l.errors : '')),
+                groups: p.boxPlayers.map((b) => b.abbr + ': ' + b.groups.map((g) => g.title + '(' + g.rows.length + ')').join(', ')), odds: p.odds };
+            }
+            out.teams[t.key] = r;
+          }
+          out.newMoves = (f.moves || []).filter((m) => Date.now() - Date.parse(m.date) < 15 * 60e3).map((m) => m.team + ' ' + m.type + ' ' + m.player);
+          writeFileSync('diagnostics/verify.json', JSON.stringify(out, null, 1));
+          "
+      - name: Commit summary
+        run: |
+          git config user.name "ny-sports-bar-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/verify.json
+          git commit -m "Data verification summary"
+          git push origin "HEAD:$GITHUB_REF_NAME"

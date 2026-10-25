@@ -231,7 +231,7 @@ async function loadLiveTeams() {
       logo: t.logos?.[0]?.href || '',
       record: t.record?.items?.find((i) => i.type === 'total')?.summary || t.record?.items?.[0]?.summary || '',
       standing: t.standingSummary || '',
-      nextGame: t.nextEvent?.[0] ? gameSummary(t.nextEvent[0], t.id) : null,
+      nextGame: t.nextEvent?.[0] ? gameSummary(t.nextEvent[0], t.id, team.sport) : null,
     };
   }));
 }
@@ -248,7 +248,7 @@ async function loadScoreboards() {
       const isUs = (c) => String(c.id) === String(id) || c.team?.abbreviation?.toLowerCase() === team.espn;
       const ev = (json.events || []).find((e) => e.competitions?.[0]?.competitors?.some(isUs));
       if (!ev) { delete games[team.key]; continue; }
-      games[team.key] = { ...gameSummary(ev, ev.competitions[0].competitors.find(isUs).id), espnTeamId: ev.competitions[0].competitors.find(isUs).id };
+      games[team.key] = { ...gameSummary(ev, ev.competitions[0].competitors.find(isUs).id, team.sport), espnTeamId: ev.competitions[0].competitors.find(isUs).id };
     }
   }
   state.live.games = games;
@@ -759,8 +759,13 @@ function rosterHTML(key) {
   const groups = {};
   for (const p of roster) (groups[p.group || 'Roster'] ||= []).push(p);
   const label = (g) => g.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^\w/, (c) => c.toUpperCase());
-  return `<div class="section-title"><span>Active Roster</span><span class="count">${roster.length} players</span></div>` +
-    Object.entries(groups).map(([g, players]) => `<div class="roster-group"><h5>${esc(label(g))}</h5><div class="roster">${players
+  // Practice squad and injured list sit below the active roster and aren't counted in it.
+  const reserve = (g) => g === 'Practice Squad' || g === 'Injured List';
+  const entries = Object.entries(groups).sort(([a], [b]) => reserve(a) - reserve(b));
+  const active = entries.filter(([g]) => !reserve(g)).reduce((n, [, ps]) => n + ps.length, 0);
+  const extra = entries.filter(([g]) => reserve(g)).map(([g, ps]) => `${ps.length} ${g === 'Practice Squad' ? 'practice squad' : 'injured list'}`);
+  return `<div class="section-title"><span>Roster</span><span class="count">${active} active${extra.length ? ` · ${extra.join(' · ')}` : ''}</span></div>` +
+    entries.map(([g, players]) => `<div class="roster-group"><h5>${esc(label(g))}</h5><div class="roster">${players
       .sort((a, b) => (+a.jersey || 999) - (+b.jersey || 999))
       .map((p) => `<div class="player"><span class="num">${esc(p.jersey)}</span>${p.headshot ? `<img src="${safeUrl(p.headshot)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph'}))">` : '<span class="ph"></span>'}
         <div><div class="nm">${esc(p.name)}</div><div class="ps">${esc(p.pos)}${p.age ? ` · ${esc(p.age)}` : ''}${p.status ? ` · <span class="inj">${esc(p.status)}</span>` : ''}</div></div></div>`).join('')}</div></div>`).join('');

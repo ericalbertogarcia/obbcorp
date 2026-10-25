@@ -52,6 +52,16 @@ function lineScore(competitors, teamId, sport) {
   return { headers: Array.from({ length: n }, (_, i) => periodHeader(sport, i)), rows, rhe: sport === 'baseball' && rows.every((r) => r.hits != null) };
 }
 
+// ESPN names groups inconsistently: NFL "New York Passing" (+ name "passing"), MLB type "batting",
+// NHL name "defenses", NBA nothing at all.
+const GROUP_TITLES = { defenses: 'Defense', forwards: 'Forwards', goalies: 'Goalies', skaters: 'Skaters', kickReturns: 'Kick returns', puntReturns: 'Punt returns' };
+function groupTitle(g) {
+  const key = g.name || g.type || '';
+  if (GROUP_TITLES[key]) return GROUP_TITLES[key];
+  if (key) return key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^\w/, (c) => c.toUpperCase());
+  return g.displayName || 'Players';
+}
+
 // Player stat tables per team and category (passing, batting, skaters, …).
 function playerBox(json, teamId) {
   return (json.boxscore?.players || []).map((p) => ({
@@ -59,7 +69,7 @@ function playerBox(json, teamId) {
     name: p.team?.displayName || '',
     ours: String(p.team?.id) === String(teamId),
     groups: (p.statistics || []).map((g) => ({
-      title: g.text || g.displayName || (g.name ? g.name[0].toUpperCase() + g.name.slice(1) : ''),
+      title: groupTitle(g),
       labels: g.labels || [],
       rows: (g.athletes || []).filter((a) => a.stats?.length).map((a) => ({
         name: a.athlete?.shortName || a.athlete?.displayName || '',
@@ -128,7 +138,7 @@ export function parseSummary(json, teamId, sport) {
     us: { name: us?.team?.displayName, abbr: us?.team?.abbreviation, score: us?.score ?? '', logo: us?.team?.logos?.[0]?.href || us?.team?.logo || '' },
     them: { name: them?.team?.displayName, abbr: them?.team?.abbreviation, score: them?.score ?? '', logo: them?.team?.logos?.[0]?.href || them?.team?.logo || '' },
     home: us?.homeAway === 'home',
-    odds: parseOdds(json.pickcenter || json.odds, { home: us?.homeAway === 'home', abbr: us?.team?.abbreviation, oppAbbr: them?.team?.abbreviation }),
+    odds: parseOdds(json.pickcenter || json.odds, { home: us?.homeAway === 'home', abbr: us?.team?.abbreviation, oppAbbr: them?.team?.abbreviation, sport }),
     linescore: lineScore(competitors, teamId, sport),
     boxPlayers: playerBox(json, teamId),
     teamStats: teamStats(json, teamId),
