@@ -17,6 +17,14 @@
       { "name": "Al Iannazzone", "outlet": "Newsday", "x": "Al_Iannazzone" },
       { "name": "Andy Vasquez", "outlet": "The Record", "x": "andyv" }
     ],
+    "buf": [
+      { "name": "Alaina Getzenberg", "outlet": "ESPN", "x": "agetzenberg" },
+      { "name": "Joe Buscaglia", "outlet": "The Athletic", "x": "JoeBuscaglia" },
+      { "name": "Sal Capaccio", "outlet": "WGR 550", "x": "SalSports" },
+      { "name": "Jay Skurski", "outlet": "Buffalo News", "x": "JaySkurski" },
+      { "name": "Ryan O'Halloran", "outlet": "Buffalo News", "x": "RyanOHalloran" },
+      { "name": "Chris Brown", "outlet": "Bills.com", "x": "ChrisBrownBills" }
+    ],
     "nyy": [
       { "name": "Bryan Hoch", "outlet": "MLB.com", "x": "BryanHoch" },
       { "name": "Brendan Kuty", "outlet": "The Athletic", "x": "BrendanKutyNJ" },
