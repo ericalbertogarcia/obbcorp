@@ -63,6 +63,57 @@ const fmtGameTime = (iso) => new Date(iso).toLocaleString(undefined, { weekday: 
 const normTitle = (t) => t.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim().slice(0, 90);
 const isLive = (key) => state.live.games[key]?.state === 'in';
 
+// ───────────────────────── betting lines ─────────────────────────
+
+const RG_NOTE = 'Odds are for information only. 21+. Gambling problem? Call 1-877-8-HOPENY or text HOPENY (467369).';
+const signed = (n) => (n == null ? '' : n === 0 ? 'PK' : n > 0 ? `+${n}` : `${n}`);
+// Football and basketball bet the spread; baseball and hockey are moneyline sports.
+const spreadSport = (t) => t.sport === 'football' || t.sport === 'basketball';
+
+// The team's next or current game with its line: today's scoreboard first, then the feed's next game.
+function lineGame(key) {
+  const live = state.live.games[key];
+  const next = teamInfo(key).nextGame;
+  const g = live && live.state !== 'post' ? live : next && next.state !== 'post' ? next : null;
+  if (!g) return null;
+  const odds = g.odds || (next && next.id === g.id ? next.odds : null);
+  return odds ? { ...g, odds } : g;
+}
+
+// "-3.5" for spread sports, "-150" for moneyline sports.
+function headlineLine(t, odds) {
+  if (!odds) return '';
+  if (spreadSport(t) && odds.spread != null) return signed(odds.spread);
+  return odds.ml != null ? signed(odds.ml) : odds.spread != null ? signed(odds.spread) : '';
+}
+
+function oddsCells(t, odds) {
+  const abbr = t.espn.toUpperCase();
+  return [
+    odds.spread != null ? [spreadSport(t) ? 'Spread' : t.sport === 'baseball' ? 'Run line' : 'Puck line', `${abbr} ${signed(odds.spread)}`] : null,
+    odds.ml != null ? ['Moneyline', `${abbr} ${signed(odds.ml)}${odds.oppMl != null ? ` / ${signed(odds.oppMl)}` : ''}`] : null,
+    odds.total != null ? ['Total', `O/U ${odds.total}`] : null,
+  ].filter(Boolean);
+}
+
+function oddsStripHTML(t, odds, { label = '' } = {}) {
+  if (!odds) return '';
+  return `<div class="odds">${oddsCells(t, odds).map(([k, v]) => `<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}
+    <div class="odds-src">${label ? `${esc(label)} · ` : ''}${esc(odds.provider)}</div></div>`;
+}
+
+function linesPanelHTML() {
+  const rows = state.teams.map((t) => ({ t, g: lineGame(t.key) }))
+    .filter(({ g }) => g && g.state !== 'post' && Date.parse(g.date) - Date.now() < 8 * 864e5)
+    .sort((a, b) => Date.parse(a.g.date) - Date.parse(b.g.date));
+  if (!rows.length) return '<div class="empty">No upcoming games this week.</div>';
+  return `<ul class="lines">${rows.map(({ t, g }) => `<li style="${teamVars(t)}"><a href="#/${t.key}${g.state === 'in' ? '/game' : ''}">
+      <div class="ln-top">${badges([t.key])}<span>${g.home ? 'vs' : '@'} ${esc(g.opponentAbbr || g.opponent)}</span>
+        <span class="ln-when">${g.state === 'in' ? '<b class="live-txt">LIVE</b>' : esc(fmtGameTime(g.date))}</span></div>
+      ${g.odds ? `<div class="ln-odds">${oddsCells(t, g.odds).map(([k, v]) => `<span><em>${k}</em> ${esc(v)}</span>`).join('')}</div>` : '<div class="ln-odds muted">Line not posted yet</div>'}
+    </a></li>`).join('')}</ul><p class="rg">${esc(RG_NOTE)}</p>`;
+}
+
 // ───────────────────────── data merging ─────────────────────────
 
 function teamInfo(key) {
@@ -293,7 +344,8 @@ function renderTicker() {
     if (!g) return `<a class="tick" style="${teamVars(t)}" href="#/${t.key}"><b>${esc(t.name)}</b><span class="state">${esc(rec || 'No game scheduled')}</span></a>`;
     const at = g.home ? 'vs' : '@';
     if (g.state === 'pre' || !g.state) {
-      return `<a class="tick" style="${teamVars(t)}" href="#/${t.key}"><b>${esc(t.name)}</b><span>${at} ${esc(g.opponentAbbr || g.opponent)}</span><span class="state">${esc(fmtGameTime(g.date))}</span></a>`;
+      const line = headlineLine(t, lineGame(t.key)?.odds);
+      return `<a class="tick" style="${teamVars(t)}" href="#/${t.key}"><b>${esc(t.name)}</b><span>${at} ${esc(g.opponentAbbr || g.opponent)}</span>${line ? `<span class="tline" title="Betting line">${esc(line)}</span>` : ''}<span class="state">${esc(fmtGameTime(g.date))}</span></a>`;
     }
     const cls = g.state === 'in' ? 'live' : '';
     const res = g.state === 'post' && g.winner !== null ? `<span class="${g.winner ? 'win' : 'loss'}">${g.winner ? 'W' : 'L'}</span>` : '';
@@ -471,6 +523,7 @@ function renderHome() {
     <section>${newsSection('')}</section>
     <aside class="stack">
       <div class="panel"><div class="section-title"><span>Insider Feed</span><span class="count">Beat reporters</span></div>${insidersPanel('', 12)}</div>
+      <div class="panel"><div class="section-title"><span>The Lines</span><span class="count">Vegas odds</span></div>${linesPanelHTML()}</div>
       <div class="panel"><div class="section-title"><span>Injury Watch</span></div>${injuryListHTML(injuries, { compact: true })}</div>
       <div class="panel"><div class="section-title"><span>Roster Moves Wire</span></div>${movesHTML(allMoves().slice(0, 12), { compact: true })}</div>
       <div><div class="section-title"><span>The Teams</span></div>${teamCardsHTML()}</div>
@@ -478,13 +531,15 @@ function renderHome() {
   </div>`;
 }
 
-function gameCard(label, g) {
+function gameCard(label, g, t) {
   if (!g) return '';
+  const odds = t && g.state !== 'post' ? lineGame(t.key)?.odds : null;
   const at = g.home ? 'vs' : '@';
   const score = g.state && g.state !== 'pre' ? `<span class="${g.winner === true ? 'win' : g.winner === false ? 'loss' : ''}">${g.winner === true ? 'W ' : g.winner === false ? 'L ' : ''}${esc(g.us)}–${esc(g.them)}</span> ` : '';
   return `<div class="game"><div class="lbl">${label}</div>
     <div class="vs">${score}${at} ${esc(g.opponent)}</div>
-    <div class="when">${g.state === 'pre' || !g.state ? esc(fmtGameTime(g.date)) : esc(g.detail)}${g.broadcast ? ` · ${esc(g.broadcast)}` : ''}${g.venue ? ` · ${esc(g.venue)}` : ''}</div></div>`;
+    <div class="when">${g.state === 'pre' || !g.state ? esc(fmtGameTime(g.date)) : esc(g.detail)}${g.broadcast ? ` · ${esc(g.broadcast)}` : ''}${g.venue ? ` · ${esc(g.venue)}` : ''}</div>
+    ${odds ? `<div class="when gl">${g.state === 'in' ? 'Pregame · ' : ''}${oddsCells(t, odds).map(([k, v]) => `${k} <b>${esc(v)}</b>`).join(' · ')}</div>` : ''}</div>`;
 }
 
 function playListHTML(plays) {
@@ -498,8 +553,13 @@ function gameTabHTML(key) {
   const g = state.live.games[key];
   const s = state.live.summaries[key];
   if (!g || g.state === 'pre') {
-    const next = teamInfo(key).nextGame;
-    return `<div class="empty">No game in progress.${next ? ` Next up: ${next.home ? 'vs' : '@'} ${esc(next.opponent)} · ${esc(fmtGameTime(next.date))}${next.broadcast ? ` on ${esc(next.broadcast)}` : ''}.` : ''} Live play-by-play, scoring and injury updates appear here at first pitch, puck drop or kickoff.</div>`;
+    const next = lineGame(key);
+    const t = state.byKey[key];
+    return `${next ? `<div class="panel"><div class="section-title"><span>Next up</span></div>
+      <div class="next-up">${next.home ? 'vs' : '@'} ${esc(next.opponent)}<span>${esc(fmtGameTime(next.date))}${next.broadcast ? ` · ${esc(next.broadcast)}` : ''}${next.venue ? ` · ${esc(next.venue)}` : ''}</span></div>
+      ${next.odds ? oddsStripHTML(t, next.odds) : '<p class="rg">Betting line not posted yet.</p>'}
+      ${next.odds ? `<p class="rg">${esc(RG_NOTE)}</p>` : ''}</div>` : ''}
+      <div class="empty" style="margin-top:16px">No game in progress. Live play-by-play, scoring and injury updates appear here at first pitch, puck drop, tip-off or kickoff.</div>`;
   }
   if (!s) {
     if (state.live.summaryTried.has(key)) return '<div class="empty">Live game data is unavailable right now — retrying shortly.</div>';
@@ -516,6 +576,7 @@ function gameTabHTML(key) {
         <div class="sb-mid"><div class="sb-state">${g.state === 'in' ? '<span class="live-pip"></span>' : ''}${esc(s.detail || g.detail)}</div>${g.situation ? `<div class="sb-sit">${esc(g.situation)}</div>` : ''}</div>
         <div class="sb-team">${s.them.logo ? `<img src="${safeUrl(s.them.logo)}" alt="">` : ''}<span>${esc(s.them.abbr || '')}</span><b>${esc(s.them.score)}</b></div>
       </div>
+      ${oddsStripHTML(state.byKey[key], s.odds || lineGame(key)?.odds, { label: g.state === 'pre' ? '' : 'Pregame line' })}
       ${s.inGameInjuries.length ? `<div class="panel alert"><div class="section-title"><span>⚠ In-game injury notes</span></div>${playListHTML(s.inGameInjuries)}</div>` : ''}
       <div class="panel"><div class="section-title"><span>Play-by-play</span><span class="count">${g.state === 'in' ? 'Updates every 20s' : 'Final'}</span></div>
         ${s.plays.length ? playListHTML(s.plays) : '<div class="empty">Plays will appear once the game is underway.</div>'}</div>
@@ -584,7 +645,7 @@ function renderTeam(key, tab) {
         <div><div class="league">${esc(t.league)}</div><h1>${esc(t.full)}</h1>
         <div class="standing">${esc([info.record, info.standing].filter(Boolean).join(' · '))}</div></div>
       </div>
-      <div class="games">${gameCard(next?.state === 'in' ? 'Live now' : 'Next game', next)}${gameCard('Last game', last)}</div>
+      <div class="games">${gameCard(next?.state === 'in' ? 'Live now' : 'Next game', next, t)}${gameCard('Last game', last)}</div>
     </section>
     <div class="tabs" role="tablist" style="--c1-bright:${t.colors[0] === '#000000' ? t.colors[1] : t.colors[0]}">
       ${Object.entries(tabs).map(([x, label]) => `<button data-tab="${x}" class="${tab === x ? 'on' : ''}">${label}</button>`).join('')}

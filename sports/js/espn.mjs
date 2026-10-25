@@ -45,6 +45,34 @@ function situationText(sit) {
   return '';
 }
 
+// Sportsbook line from ESPN's `odds` (scoreboard) or `pickcenter` (summary), from one team's side.
+// ESPN has shipped two shapes: flat (details/overUnder/moneyLine) and nested (pointSpread/moneyline/total
+// with open/close), so both are read. `details` looks like "DAL -3.5" or "EVEN".
+const num = (v) => (v == null || v === '' || Number.isNaN(Number(String(v).replace(/^[ou]/i, ''))) ? null : Number(String(v).replace(/^[ou]/i, '')));
+const latest = (x) => x?.current ?? x?.close ?? x?.open;
+
+export function parseOdds(list, { home, abbr, oppAbbr }) {
+  const o = (Array.isArray(list) ? list : []).find((x) => x && (x.details || x.overUnder != null || x.moneyline || x.pointSpread));
+  if (!o) return null;
+  const side = home ? 'home' : 'away';
+  const other = home ? 'away' : 'home';
+  const ourOdds = home ? o.homeTeamOdds : o.awayTeamOdds;
+  const theirOdds = home ? o.awayTeamOdds : o.homeTeamOdds;
+
+  let spread = num(latest(o.pointSpread?.[side])?.line);
+  if (spread == null && o.details) {
+    const m = String(o.details).match(/^([A-Z0-9]{2,4})\s+([+-]?\d+(?:\.\d+)?)$/i);
+    if (/^(even|pk|pick)/i.test(o.details)) spread = 0;
+    else if (m) spread = m[1].toUpperCase() === String(abbr).toUpperCase() ? Number(m[2])
+      : m[1].toUpperCase() === String(oppAbbr).toUpperCase() ? -Number(m[2]) : null;
+  }
+  const ml = ourOdds?.moneyLine ?? num(latest(o.moneyline?.[side])?.odds);
+  const oppMl = theirOdds?.moneyLine ?? num(latest(o.moneyline?.[other])?.odds);
+  const total = o.overUnder ?? num(latest(o.total?.over)?.line);
+  if (spread == null && ml == null && total == null) return null;
+  return { provider: o.provider?.displayName || o.provider?.name || 'Sportsbook', spread, ml, oppMl, total, details: o.details || '' };
+}
+
 // Reduces an ESPN event to the game from one team's point of view.
 export function gameSummary(event, teamId) {
   const comp = event?.competitions?.[0];
@@ -71,5 +99,6 @@ export function gameSummary(event, teamId) {
     broadcast: comp.broadcasts?.[0]?.media?.shortName || comp.broadcasts?.[0]?.names?.[0] || '',
     lastPlay: comp.situation?.lastPlay?.text || '',
     situation: situationText(comp.situation),
+    odds: parseOdds(comp.odds, { home: us.homeAway === 'home', abbr: us.team?.abbreviation, oppAbbr: them.team?.abbreviation }),
   };
 }

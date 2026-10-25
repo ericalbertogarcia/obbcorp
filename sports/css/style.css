@@ -319,3 +319,26 @@ code { font-size: 12px; background: var(--panel-2); padding: 1px 5px; border-rad
   #updated { white-space: nowrap; }
   .icon-btn { width: 32px; height: 32px; }
 }
+
+/* ── Betting lines ── */
+.tick .tline { font-family: var(--cond); font-weight: 700; color: var(--accent); }
+.game .gl { margin-top: 6px; }
+.game .gl b { font-family: var(--cond); font-size: 14px; }
+.odds { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; padding: 12px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
+.odds > div:not(.odds-src) { display: flex; flex-direction: column; gap: 2px; }
+.odds span { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.odds b { font-family: var(--cond); font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.odds-src { grid-column: 1 / -1; font-size: 12px; color: var(--muted); }
+.next-up { font-family: var(--cond); font-size: 22px; font-weight: 700; margin-bottom: 12px; display: flex; flex-direction: column; }
+.next-up span { font-family: var(--font); font-size: 13px; font-weight: 400; color: var(--muted); }
+.lines { list-style: none; }
+.lines li { border-bottom: 1px solid var(--line); }
+.lines li:last-child { border-bottom: 0; }
+.lines a { display: block; padding: 10px 0; }
+.lines a:hover .ln-top span:not(.badge) { color: var(--text); }
+.ln-top { display: flex; align-items: center; gap: 8px; font-size: 14px; flex-wrap: wrap; }
+.ln-when { margin-left: auto; font-size: 12px; color: var(--muted); }
+.ln-odds { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; font-family: var(--cond); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ln-odds em { font-style: normal; font-family: var(--font); font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.ln-odds.muted { color: var(--muted); font-weight: 400; font-family: var(--font); font-size: 13px; }
+.rg { font-size: 11px; color: var(--muted); margin-top: 10px; }

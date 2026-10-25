@@ -2,6 +2,7 @@
 // Each league shapes its plays differently, so every field is read defensively.
 
 import { INJURY_WORDS } from './insiders.mjs';
+import { parseOdds } from './espn.mjs';
 
 const MLB_NOISE = /^(ball|strike|foul|pickoff|mound visit|batter timeout|pitch|\w+ (pitches|pitching) to\b)/i;
 
@@ -73,6 +74,7 @@ export function parseSummary(json, teamId, sport) {
     us: { name: us?.team?.displayName, abbr: us?.team?.abbreviation, score: us?.score ?? '', logo: us?.team?.logos?.[0]?.href || us?.team?.logo || '' },
     them: { name: them?.team?.displayName, abbr: them?.team?.abbreviation, score: them?.score ?? '', logo: them?.team?.logos?.[0]?.href || them?.team?.logo || '' },
     home: us?.homeAway === 'home',
+    odds: parseOdds(json.pickcenter || json.odds, { home: us?.homeAway === 'home', abbr: us?.team?.abbreviation, oppAbbr: them?.team?.abbreviation }),
     plays: plays.slice(-40).reverse(),
     scoring: scoring.reverse(),
     inGameInjuries: plays.filter((p) => p.injury).reverse(),

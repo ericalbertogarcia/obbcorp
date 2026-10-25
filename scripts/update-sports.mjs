@@ -135,6 +135,14 @@ async function teamData(team) {
     if (!out.nextGame || out.nextGame.state === 'post') out.nextGame = games.find((g) => g.state !== 'post') || null;
   }
 
+  // Team schedules carry no betting lines; the scoreboard for the game's date does.
+  if (out.nextGame && !out.nextGame.odds) {
+    const day = new Date(out.nextGame.date).toLocaleDateString('en-CA', { timeZone: 'America/New_York' }).replace(/-/g, '');
+    const board = await attempt(`${team.key} odds`, () => fetchJSON(`${base}/scoreboard?dates=${day}`));
+    const ev = board?.events?.find((e) => String(e.id) === String(out.nextGame.id));
+    if (ev) out.nextGame = { ...out.nextGame, odds: gameSummary(ev, t.id)?.odds || null };
+  }
+
   const roster = await attempt(`${team.key} roster`, () => fetchJSON(`${base}/teams/${t.id}/roster`));
   if (roster) out.roster = espnRoster(roster);
 
