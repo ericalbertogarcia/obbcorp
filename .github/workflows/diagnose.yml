@@ -1,0 +1,28 @@
+name: Diagnose data sources
+
+# Temporary: runs scripts/diagnose-data.mjs and commits diagnostics/report.json back to this branch.
+on:
+  push:
+    branches: [claude/nyc-sports-news-site-7jjbt4]
+    paths: ['scripts/diagnose-data.mjs', '.github/workflows/diagnose.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/diagnose-data.mjs
+      - name: Commit report
+        run: |
+          git config user.name "ny-sports-bar-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/report.json
+          git commit -m "Data diagnostics report"
+          git push origin "HEAD:$GITHUB_REF_NAME"
