@@ -7,6 +7,8 @@ export const leagueBase = (team) => `${ESPN}/${team.sport}/${team.espnLeague}`;
 const isoOrNull = (d) => { const t = Date.parse(d); return Number.isNaN(t) ? null : new Date(t).toISOString(); };
 const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s);
 
+const GROUP_NAMES = { offense: 'Offense', defense: 'Defense', specialTeam: 'Special Teams', injuredReserveOrOut: 'Injured Reserve' };
+
 // Rosters come grouped ({ position, items: [...] }) for most leagues, flat for others.
 export function espnRoster(json) {
   const groups = json.athletes || [];
@@ -20,7 +22,7 @@ export function espnRoster(json) {
       name: a.fullName || a.displayName,
       jersey: a.jersey ?? '',
       pos: a.position?.abbreviation || '',
-      group: practice ? 'Practice Squad' : a._group || a.position?.parent?.name || a.position?.name || '',
+      group: practice ? 'Practice Squad' : GROUP_NAMES[a._group] || a._group || a.position?.parent?.name || a.position?.name || '',
       age: a.age ?? null,
       headshot: a.headshot?.href || '',
       status: a.injuries?.[0]?.status || (practice || /^active$/i.test(rosterStatus) ? '' : rosterStatus),

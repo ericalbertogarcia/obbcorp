@@ -760,10 +760,10 @@ function rosterHTML(key) {
   for (const p of roster) (groups[p.group || 'Roster'] ||= []).push(p);
   const label = (g) => g.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^\w/, (c) => c.toUpperCase());
   // Practice squad and injured list sit below the active roster and aren't counted in it.
-  const reserve = (g) => g === 'Practice Squad' || g === 'Injured List';
+  const reserve = (g) => g === 'Practice Squad' || g === 'Injured List' || g === 'Injured Reserve';
   const entries = Object.entries(groups).sort(([a], [b]) => reserve(a) - reserve(b));
   const active = entries.filter(([g]) => !reserve(g)).reduce((n, [, ps]) => n + ps.length, 0);
-  const extra = entries.filter(([g]) => reserve(g)).map(([g, ps]) => `${ps.length} ${g === 'Practice Squad' ? 'practice squad' : 'injured list'}`);
+  const extra = entries.filter(([g]) => reserve(g)).map(([g, ps]) => `${ps.length} ${g.toLowerCase()}`);
   return `<div class="section-title"><span>Roster</span><span class="count">${active} active${extra.length ? ` · ${extra.join(' · ')}` : ''}</span></div>` +
     entries.map(([g, players]) => `<div class="roster-group"><h5>${esc(label(g))}</h5><div class="roster">${players
       .sort((a, b) => (+a.jersey || 999) - (+b.jersey || 999))

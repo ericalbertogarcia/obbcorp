@@ -375,13 +375,14 @@ async function main() {
           if (!old) continue;
           const wasPs = old.group === 'Practice Squad';
           const isPs = p.group === 'Practice Squad';
-          const wasIl = old.group === 'Injured List';
-          const isIl = p.group === 'Injured List';
+          const wasIl = /^Injured (List|Reserve)$/.test(old.group);
+          const isIl = /^Injured (List|Reserve)$/.test(p.group);
+          const il = team.sport === 'baseball' ? 'IL' : 'IR';
           const type = wasPs && !isPs ? 'Promoted' : !wasPs && isPs ? 'Moved to practice squad'
-            : !wasIl && isIl ? 'Placed on IL' : wasIl && !isIl ? 'Activated from IL' : '';
+            : !wasIl && isIl ? `Placed on ${il}` : wasIl && !isIl ? `Activated from ${il}` : '';
           if (type) moves.push({
             id: `roster-${team.key}-${k.replace(/ /g, '-')}-${type.replace(/ /g, '-').toLowerCase()}-${now.slice(0, 10)}`, team: team.key, date: now, type,
-            player: p.name, description: `${p.name}${p.pos ? ` (${p.pos})` : ''}: ${type === 'Promoted' ? 'promoted from the practice squad to the active roster' : type === 'Placed on IL' ? `placed on the ${p.status || 'injured list'}` : type.toLowerCase()}.`, source: 'Roster tracker',
+            player: p.name, description: `${p.name}${p.pos ? ` (${p.pos})` : ''}: ${type === 'Promoted' ? 'promoted from the practice squad to the active roster' : type.startsWith('Placed on') ? `placed on ${p.status || (il === 'IL' ? 'the injured list' : 'injured reserve')}` : type.toLowerCase()}.`, source: 'Roster tracker',
           });
         }
         for (const [k, p] of after) if (!before.has(k)) moves.push({
