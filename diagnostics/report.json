@@ -1,0 +1,4163 @@
+{
+ "at": "2026-10-25T03:29:39.474Z",
+ "liveGeneratedAt": "2026-10-25T03:23:17.269Z",
+ "liveErrors": [
+  "nyr blueshirtbanter.com: HTTP 404",
+  "X_BEARER_TOKEN not set: X posts skipped"
+ ],
+ "teams": {
+  "nyg": {
+   "espnId": "19",
+   "abbr": "NYG",
+   "espnRawStatusCounts": {
+    "Active": 54,
+    "Day-To-Day": 15,
+    "Practice Squad": 14
+   },
+   "espnRawSample": [
+    {
+     "name": "Dalen Cambre",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    },
+    {
+     "name": "J.C. Davis",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Jermaine Eluemunor",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [
+      {
+       "status": "Questionable",
+       "date": "2026-10-25T03:01Z"
+      }
+     ],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 83,
+   "official": {
+    "source": "Sleeper NFL",
+    "count": 93,
+    "statusCounts": {
+     "Inactive": 17,
+     "Active": 75,
+     "listed": 1
+    }
+   },
+   "onEspnNotOfficial": [
+    "DJ James (CB)",
+    "Rico Payton (CB)",
+    "C.J. Ravenell (DE)"
+   ],
+   "onOfficialNotEspn": [
+    "Nate Ebner (DB, Inactive)",
+    "Levine Toilolo (TE, Inactive)",
+    "Dean Lowry (DE, Active)",
+    "Brandon Williams (CB, Inactive)",
+    "Andy Jones (WR, Inactive)",
+    "Woodrow Hamilton (DT, Active)",
+    "Taquan Mizzell (RB, Inactive)",
+    "Clayton Thorson (QB, Active)",
+    "Tommy Stevens (TE, Active)",
+    "Kyle Murphy (OL, Active)",
+    "Dwayne Johnson (DB, Inactive)",
+    "PJ Mustipher (NT, Active)",
+    "New York Giants (DEF)"
+   ],
+   "espnButSleeperInactive": [
+    "Calvin Austin III: Inactive",
+    "Jarrick Bernard-Converse: Inactive",
+    "Braxton Berrios: Inactive",
+    "Korie Black: Inactive",
+    "Brian Burns: Inactive",
+    "Jaxson Dart: Inactive",
+    "Thaddeus Dixon: Inactive",
+    "Tremaine Edmunds: Inactive",
+    "Chauncey Golston: Inactive",
+    "Gunner Olszewski: Inactive",
+    "Roy Robertson-Harris: Inactive"
+   ],
+   "schedule": {
+    "requestedSeason": "2026",
+    "seasonType": 2,
+    "events": 17,
+    "states": {
+     "post": 6,
+     "pre": 11
+    }
+   },
+   "liveLastGame": {
+    "id": "401873000",
+    "date": "2026-10-18T17:00Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401873000",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872988",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872966",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872956",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401872947",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401872930",
+     "odds": false,
+     "checked": false
+    }
+   ],
+   "box": {
+    "id": "401873000",
+    "date": "2026-10-18T17:00Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "drives",
+     "leaders",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "scoringPlays",
+     "news",
+     "header",
+     "article",
+     "videos",
+     "wallclockAvailable",
+     "winprobability",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "NO 0 10 17 7 = 34",
+     "NYG 7 3 0 17 = 27"
+    ],
+    "boxPlayersTeams": [
+     "NYG: New York Passing(2), New York Rushing(6), New York Receiving(7), New York Fumbles(2), New York Defense(23), New York Kick Returns(2), New York Punt Returns(1), New York Kicking(1), New York Punting(1)",
+     "NO: New Orleans Passing(1), New Orleans Rushing(4), New Orleans Receiving(10), New Orleans Fumbles(2), New Orleans Defense(22), New Orleans Interceptions(2), New Orleans Kick Returns(2), New Orleans Punt Returns(1), New Orleans Kicking(1), New Orleans Punting(1)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "name": "passing",
+       "text": "New Orleans Passing",
+       "labels": 8,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "rushing",
+       "text": "New Orleans Rushing",
+       "labels": 5,
+       "athletes": 4,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "receiving",
+       "text": "New Orleans Receiving",
+       "labels": 6,
+       "athletes": 10,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "fumbles",
+       "text": "New Orleans Fumbles",
+       "labels": 3,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "defensive",
+       "text": "New Orleans Defense",
+       "labels": 7,
+       "athletes": 22,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "interceptions",
+       "text": "New Orleans Interceptions",
+       "labels": 3,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kickReturns",
+       "text": "New Orleans Kick Returns",
+       "labels": 5,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "puntReturns",
+       "text": "New Orleans Punt Returns",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kicking",
+       "text": "New Orleans Kicking",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "punting",
+       "text": "New Orleans Punting",
+       "labels": 6,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ],
+     [
+      {
+       "name": "passing",
+       "text": "New York Passing",
+       "labels": 8,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "rushing",
+       "text": "New York Rushing",
+       "labels": 5,
+       "athletes": 6,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "receiving",
+       "text": "New York Receiving",
+       "labels": 6,
+       "athletes": 7,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "fumbles",
+       "text": "New York Fumbles",
+       "labels": 3,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "defensive",
+       "text": "New York Defense",
+       "labels": 7,
+       "athletes": 23,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "interceptions",
+       "text": "New York Interceptions",
+       "labels": 3,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kickReturns",
+       "text": "New York Kick Returns",
+       "labels": 5,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "puntReturns",
+       "text": "New York Punt Returns",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kicking",
+       "text": "New York Kicking",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "punting",
+       "text": "New York Punting",
+       "labels": 6,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": 1.5,
+     "ml": -112,
+     "oppMl": -108,
+     "total": 46.5,
+     "details": "NO -1.5"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "nyj": {
+   "espnId": "20",
+   "abbr": "NYJ",
+   "espnRawStatusCounts": {
+    "Active": 57,
+    "Day-To-Day": 12,
+    "Practice Squad": 13
+   },
+   "espnRawSample": [
+    {
+     "name": "Braelon Allen",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    },
+    {
+     "name": "Brant Banks",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    },
+    {
+     "name": "Andrew Beck",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 82,
+   "official": {
+    "source": "Sleeper NFL",
+    "count": 88,
+    "statusCounts": {
+     "Active": 75,
+     "Inactive": 12,
+     "listed": 1
+    }
+   },
+   "onEspnNotOfficial": [
+    "Caullin Lacy (WR)",
+    "Chip Trayanum (RB)",
+    "Cody Hardy (TE)"
+   ],
+   "onOfficialNotEspn": [
+    "Myles White (WR, Active)",
+    "Ronald Blair (DE, Active)",
+    "Joshua Perkins (TE, Active)",
+    "Ken Webster (CB, Inactive)",
+    "Freedom Akinmoladun (DE, Active)",
+    "Cameron Clark (OT, Inactive)",
+    "Brendon White (LB, Active)",
+    "DeaMonte Trayanum (RB, Inactive)",
+    "New York Jets (DEF)"
+   ],
+   "espnButSleeperInactive": [
+    "Kiko Mauigoa: Inactive",
+    "Tre Brown: Inactive",
+    "Anez Cooper: Inactive",
+    "Kingsley Jonathan: Inactive",
+    "Marcelino McCrary-Ball: Inactive",
+    "Braiden McGregor: Inactive",
+    "David Onyemata: Inactive",
+    "VJ Payne: Inactive",
+    "Arian Smith: Inactive"
+   ],
+   "schedule": {
+    "requestedSeason": "2026",
+    "seasonType": 2,
+    "events": 17,
+    "states": {
+     "post": 6,
+     "pre": 11
+    }
+   },
+   "liveLastGame": {
+    "id": "401873001",
+    "date": "2026-10-18T17:00Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401873001",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872983",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872972",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872954",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401872936",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401872924",
+     "odds": false,
+     "checked": false
+    }
+   ],
+   "box": {
+    "id": "401873001",
+    "date": "2026-10-18T17:00Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "drives",
+     "leaders",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "scoringPlays",
+     "news",
+     "winprobability",
+     "header",
+     "article",
+     "videos",
+     "wallclockAvailable",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "NYJ 3 0 10 6 = 19",
+     "NE 7 10 0 9 = 26"
+    ],
+    "boxPlayersTeams": [
+     "NYJ: New York Passing(1), New York Rushing(4), New York Receiving(8), New York Fumbles(2), New York Defense(17), New York Kick Returns(1), New York Kicking(1), New York Punting(1)",
+     "NE: New England Passing(1), New England Rushing(4), New England Receiving(8), New England Fumbles(3), New England Defense(24), New England Interceptions(1), New England Kick Returns(2), New England Punt Returns(1), New England Kicking(1), New England Punting(1)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "name": "passing",
+       "text": "New York Passing",
+       "labels": 8,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "rushing",
+       "text": "New York Rushing",
+       "labels": 5,
+       "athletes": 4,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "receiving",
+       "text": "New York Receiving",
+       "labels": 6,
+       "athletes": 8,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "fumbles",
+       "text": "New York Fumbles",
+       "labels": 3,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "defensive",
+       "text": "New York Defense",
+       "labels": 7,
+       "athletes": 17,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "interceptions",
+       "text": "New York Interceptions",
+       "labels": 3,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kickReturns",
+       "text": "New York Kick Returns",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "puntReturns",
+       "text": "New York Punt Returns",
+       "labels": 5,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kicking",
+       "text": "New York Kicking",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "punting",
+       "text": "New York Punting",
+       "labels": 6,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ],
+     [
+      {
+       "name": "passing",
+       "text": "New England Passing",
+       "labels": 8,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "rushing",
+       "text": "New England Rushing",
+       "labels": 5,
+       "athletes": 4,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "receiving",
+       "text": "New England Receiving",
+       "labels": 6,
+       "athletes": 8,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "fumbles",
+       "text": "New England Fumbles",
+       "labels": 3,
+       "athletes": 3,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "defensive",
+       "text": "New England Defense",
+       "labels": 7,
+       "athletes": 24,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "interceptions",
+       "text": "New England Interceptions",
+       "labels": 3,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kickReturns",
+       "text": "New England Kick Returns",
+       "labels": 5,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "puntReturns",
+       "text": "New England Punt Returns",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kicking",
+       "text": "New England Kicking",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "punting",
+       "text": "New England Punting",
+       "labels": 6,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": 7.5,
+     "ml": 275,
+     "oppMl": -345,
+     "total": 42.5,
+     "details": "NE -7.5"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "buf": {
+   "espnId": "2",
+   "abbr": "BUF",
+   "espnRawStatusCounts": {
+    "Active": 54,
+    "News": 1,
+    "Day-To-Day": 4,
+    "Practice Squad": 15
+   },
+   "espnRawSample": [
+    {
+     "name": "Josh Allen",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    },
+    {
+     "name": "Kyle Allen",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    },
+    {
+     "name": "Alec Anderson",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 74,
+   "official": {
+    "source": "Sleeper NFL",
+    "count": 79,
+    "statusCounts": {
+     "Active": 73,
+     "Inactive": 5,
+     "listed": 1
+    }
+   },
+   "onEspnNotOfficial": [],
+   "onOfficialNotEspn": [
+    "Star Lotulelei (DT, Active)",
+    "Daryl Williams (OL, Active)",
+    "Duplicate Player (null, Inactive)",
+    "Duplicate Player (null, Inactive)",
+    "Buffalo Bills (DEF)"
+   ],
+   "espnButSleeperInactive": [
+    "Zane Durant: Inactive",
+    "Jordan Hancock: Inactive",
+    "Dorian Strong: Inactive"
+   ],
+   "schedule": {
+    "requestedSeason": "2026",
+    "seasonType": 2,
+    "events": 17,
+    "states": {
+     "post": 6,
+     "pre": 11
+    }
+   },
+   "liveLastGame": {
+    "id": "401873005",
+    "date": "2026-10-18T20:25Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401873005",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872994",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872971",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401872953",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401872932",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401872660",
+     "odds": false,
+     "checked": false
+    }
+   ],
+   "box": {
+    "id": "401873005",
+    "date": "2026-10-18T20:25Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "drives",
+     "leaders",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "news",
+     "scoringPlays",
+     "header",
+     "article",
+     "videos",
+     "wallclockAvailable",
+     "winprobability",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "BUF 3 10 10 10 = 33",
+     "LV 7 6 0 17 = 30"
+    ],
+    "boxPlayersTeams": [
+     "BUF: Buffalo Passing(1), Buffalo Rushing(4), Buffalo Receiving(9), Buffalo Defense(24), Buffalo Interceptions(1), Buffalo Kick Returns(2), Buffalo Punt Returns(1), Buffalo Kicking(1), Buffalo Punting(1)",
+     "LV: Las Vegas Passing(1), Las Vegas Rushing(3), Las Vegas Receiving(8), Las Vegas Defense(23), Las Vegas Kick Returns(2), Las Vegas Kicking(1), Las Vegas Punting(1)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "name": "passing",
+       "text": "Buffalo Passing",
+       "labels": 8,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "rushing",
+       "text": "Buffalo Rushing",
+       "labels": 5,
+       "athletes": 4,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "receiving",
+       "text": "Buffalo Receiving",
+       "labels": 6,
+       "athletes": 9,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "fumbles",
+       "text": "Buffalo Fumbles",
+       "labels": 3,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "defensive",
+       "text": "Buffalo Defense",
+       "labels": 7,
+       "athletes": 24,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "interceptions",
+       "text": "Buffalo Interceptions",
+       "labels": 3,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kickReturns",
+       "text": "Buffalo Kick Returns",
+       "labels": 5,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "puntReturns",
+       "text": "Buffalo Punt Returns",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kicking",
+       "text": "Buffalo Kicking",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "punting",
+       "text": "Buffalo Punting",
+       "labels": 6,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ],
+     [
+      {
+       "name": "passing",
+       "text": "Las Vegas Passing",
+       "labels": 8,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "rushing",
+       "text": "Las Vegas Rushing",
+       "labels": 5,
+       "athletes": 3,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "receiving",
+       "text": "Las Vegas Receiving",
+       "labels": 6,
+       "athletes": 8,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "fumbles",
+       "text": "Las Vegas Fumbles",
+       "labels": 3,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "defensive",
+       "text": "Las Vegas Defense",
+       "labels": 7,
+       "athletes": 23,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "interceptions",
+       "text": "Las Vegas Interceptions",
+       "labels": 3,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kickReturns",
+       "text": "Las Vegas Kick Returns",
+       "labels": 5,
+       "athletes": 2,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "puntReturns",
+       "text": "Las Vegas Punt Returns",
+       "labels": 5,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "kicking",
+       "text": "Las Vegas Kicking",
+       "labels": 5,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      },
+      {
+       "name": "punting",
+       "text": "Las Vegas Punting",
+       "labels": 6,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "text",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": -5.5,
+     "ml": -245,
+     "oppMl": 200,
+     "total": 54.5,
+     "details": "BUF -5.5"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "nyy": {
+   "espnId": "10",
+   "abbr": "NYY",
+   "espnRawStatusCounts": {
+    "Active": 40
+   },
+   "espnRawSample": [
+    {
+     "name": "Brendan Beck",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "positions",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status",
+      "bats",
+      "throws"
+     ]
+    },
+    {
+     "name": "David Bednar",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "nickname",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "positions",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status",
+      "bats",
+      "throws"
+     ]
+    },
+    {
+     "name": "Paul Blackburn",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "nickname",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "positions",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status",
+      "bats",
+      "throws"
+     ]
+    }
+   ],
+   "espnCount": 40,
+   "official": {
+    "source": "MLB Stats API (active + 40-man)",
+    "count": 42,
+    "statusCounts": {
+     "Active": 40,
+     "Injured 60-Day": 2
+    }
+   },
+   "onEspnNotOfficial": [],
+   "onOfficialNotEspn": [
+    "Fernando Cruz (P, Injured 60-Day, not active)",
+    "Kervin Castro (P, Injured 60-Day, not active)"
+   ],
+   "espnNotActive": [],
+   "schedule": {
+    "requestedSeason": "2026",
+    "seasonType": 3,
+    "events": 5,
+    "states": {
+     "post": 5
+    }
+   },
+   "liveLastGame": {
+    "id": "401907987",
+    "date": "2026-10-08T00:00Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401907987",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401907986",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401907985",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401907963",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401907924",
+     "odds": false,
+     "checked": false
+    }
+   ],
+   "box": {
+    "id": "401907987",
+    "date": "2026-10-08T00:00Z",
+    "topKeys": [
+     "notes",
+     "boxscore",
+     "format",
+     "gameInfo",
+     "seasonseries",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "rosters",
+     "news",
+     "header",
+     "article",
+     "videos",
+     "winprobability",
+     "plays",
+     "playsMap",
+     "atBats",
+     "wallclockAvailable",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "probables",
+     "possession",
+     "hits",
+     "errors"
+    ],
+    "linescoreRows": [
+     "TB 0 0 1 1 0 2 0 0 0 = 4",
+     "NYY 0 0 1 1 0 1 0 0 0 = 3"
+    ],
+    "boxPlayersTeams": [
+     "NYY: (13), (3)",
+     "TB: (10), (6)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "labels": 12,
+       "athletes": 10,
+       "keys": [
+        "type",
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "totals",
+        "athletes"
+       ]
+      },
+      {
+       "labels": 10,
+       "athletes": 6,
+       "keys": [
+        "type",
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "totals",
+        "athletes"
+       ]
+      }
+     ],
+     [
+      {
+       "labels": 12,
+       "athletes": 13,
+       "keys": [
+        "type",
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "totals",
+        "athletes"
+       ]
+      },
+      {
+       "labels": 10,
+       "athletes": 3,
+       "keys": [
+        "type",
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "totals",
+        "athletes"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 0,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": -1.5,
+     "ml": -175,
+     "oppMl": 144,
+     "total": 7,
+     "details": "NYY -175"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "nym": {
+   "espnId": "21",
+   "abbr": "NYM",
+   "espnRawStatusCounts": {
+    "Active": 40
+   },
+   "espnRawSample": [
+    {
+     "name": "Philip Abner",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "positions",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status",
+      "bats",
+      "throws"
+     ]
+    },
+    {
+     "name": "Daniel Duarte",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "positions",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status",
+      "bats",
+      "throws"
+     ]
+    },
+    {
+     "name": "Justin Hagenman",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "positions",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status",
+      "bats",
+      "throws"
+     ]
+    }
+   ],
+   "espnCount": 40,
+   "official": {
+    "source": "MLB Stats API (active + 40-man)",
+    "count": 43,
+    "statusCounts": {
+     "Active": 40,
+     "Injured 60-Day": 3
+    }
+   },
+   "onEspnNotOfficial": [],
+   "onOfficialNotEspn": [
+    "Jorge Polanco (DH, Injured 60-Day, not active)",
+    "Reed Garrett (P, Injured 60-Day, not active)",
+    "Tylor Megill (P, Injured 60-Day, not active)"
+   ],
+   "espnNotActive": [],
+   "schedule": {
+    "requestedSeason": "2026",
+    "events": 0,
+    "states": {}
+   },
+   "liveLastGame": null,
+   "liveResults": [],
+   "box": {
+    "note": "no finished game in schedule"
+   }
+  },
+  "njd": {
+   "espnId": "11",
+   "abbr": "NJ",
+   "espnRawStatusCounts": {
+    "Active": 23
+   },
+   "espnRawSample": [
+    {
+     "name": "Jesper Boqvist",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Cody Glass",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Nico Hischier",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 23,
+   "official": {
+    "source": "NHL API",
+    "count": 23,
+    "statusCounts": {
+     "listed": 23
+    }
+   },
+   "onEspnNotOfficial": [
+    "Seamus Casey (D)"
+   ],
+   "onOfficialNotEspn": [
+    "Stefan Noesen (R)"
+   ],
+   "schedule": {
+    "requestedSeason": "2026-27",
+    "seasonType": 2,
+    "events": 84,
+    "states": {
+     "post": 11,
+     "pre": 73
+    }
+   },
+   "liveLastGame": {
+    "id": "401892567",
+    "date": "2026-10-24T19:30Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401892567",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892555",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892540",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892519",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892511",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892488",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892486",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892470",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892451",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401891818",
+     "odds": false,
+     "checked": false
+    }
+   ],
+   "box": {
+    "id": "401892567",
+    "date": "2026-10-24T19:30Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "leaders",
+     "seasonseries",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "news",
+     "plays",
+     "article",
+     "videos",
+     "onIce",
+     "header",
+     "wallclockAvailable",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "LA 0 1 0 = 1",
+     "NJ 0 1 2 = 3"
+    ],
+    "boxPlayersTeams": [
+     "NJ: Forwards(12), Defenses(6), Goalies(1)",
+     "LA: Forwards(12), Defenses(6), Goalies(1)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "name": "forwards",
+       "labels": 21,
+       "athletes": 12,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "defenses",
+       "labels": 21,
+       "athletes": 6,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "skaters",
+       "labels": 21,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "goalies",
+       "labels": 12,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      }
+     ],
+     [
+      {
+       "name": "forwards",
+       "labels": 21,
+       "athletes": 12,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "defenses",
+       "labels": 21,
+       "athletes": 6,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "skaters",
+       "labels": 21,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "goalies",
+       "labels": 12,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": -1.5,
+     "ml": -185,
+     "oppMl": 154,
+     "total": 5.5,
+     "details": "NJ -185"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "nyr": {
+   "espnId": "13",
+   "abbr": "NYR",
+   "espnRawStatusCounts": {
+    "Active": 31
+   },
+   "espnRawSample": [
+    {
+     "name": "Justin Dowling",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Luke Glendening",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Noah Laba",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 31,
+   "official": {
+    "source": "NHL API",
+    "count": 27,
+    "statusCounts": {
+     "listed": 27
+    }
+   },
+   "onEspnNotOfficial": [
+    "Justin Dowling (C)",
+    "Juuso Parssinen (C)",
+    "Joe Veleno (C)",
+    "Vincent Iorio (D)",
+    "Urho Vaakanainen (D)"
+   ],
+   "onOfficialNotEspn": [
+    "Joseph Veleno (C)"
+   ],
+   "schedule": {
+    "requestedSeason": "2026-27",
+    "seasonType": 2,
+    "events": 84,
+    "states": {
+     "post": 13,
+     "pre": 71
+    }
+   },
+   "liveLastGame": {
+    "id": "401892569",
+    "date": "2026-10-24T23:00Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401892569",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892553",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892535",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892527",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892511",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892493",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892483",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892466",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892452",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892443",
+     "odds": false,
+     "checked": false
+    }
+   ],
+   "box": {
+    "id": "401892569",
+    "date": "2026-10-24T23:00Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "leaders",
+     "seasonseries",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "news",
+     "plays",
+     "header",
+     "article",
+     "videos",
+     "wallclockAvailable",
+     "meta",
+     "onIce",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "NYR 0 3 1 = 4",
+     "OTT 2 2 3 = 7"
+    ],
+    "boxPlayersTeams": [
+     "NYR: Forwards(12), Defenses(6), Goalies(1)",
+     "OTT: Forwards(12), Defenses(6), Goalies(1)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "name": "forwards",
+       "labels": 21,
+       "athletes": 12,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "defenses",
+       "labels": 21,
+       "athletes": 6,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "skaters",
+       "labels": 21,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "goalies",
+       "labels": 12,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      }
+     ],
+     [
+      {
+       "name": "forwards",
+       "labels": 21,
+       "athletes": 12,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "defenses",
+       "labels": 21,
+       "athletes": 6,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "skaters",
+       "labels": 21,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "goalies",
+       "labels": 12,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": 1.5,
+     "ml": 105,
+     "oppMl": -125,
+     "total": 6.5,
+     "details": "OTT -125"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "nyi": {
+   "espnId": "12",
+   "abbr": "NYI",
+   "espnRawStatusCounts": {
+    "Active": 26
+   },
+   "espnRawSample": [
+    {
+     "name": "Mathew Barzal",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [
+      {
+       "status": "Injured Reserve",
+       "date": "2026-10-15T16:57Z"
+      }
+     ],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Casey Cizikas",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Bo Horvat",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "alternateId",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "birthCountry",
+      "slug",
+      "headshot",
+      "jersey",
+      "hand",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 26,
+   "official": {
+    "source": "NHL API",
+    "count": 24,
+    "statusCounts": {
+     "listed": 24
+    }
+   },
+   "onEspnNotOfficial": [
+    "Mathew Barzal (C)",
+    "Vladimir Dravecky (D)"
+   ],
+   "onOfficialNotEspn": [],
+   "schedule": {
+    "requestedSeason": "2026-27",
+    "seasonType": 2,
+    "events": 84,
+    "states": {
+     "post": 10,
+     "pre": 74
+    }
+   },
+   "liveLastGame": {
+    "id": "401892557",
+    "date": "2026-10-22T23:30Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401892557",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892541",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892523",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401892507",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892495",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892479",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892462",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892452",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401891818",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401892431",
+     "odds": false,
+     "checked": false
+    }
+   ],
+   "box": {
+    "id": "401892557",
+    "date": "2026-10-22T23:30Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "leaders",
+     "seasonseries",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "news",
+     "plays",
+     "header",
+     "article",
+     "videos",
+     "wallclockAvailable",
+     "onIce",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "LA 2 0 0 1 = 3",
+     "NYI 0 1 1 0 = 2"
+    ],
+    "boxPlayersTeams": [
+     "NYI: Forwards(12), Defenses(6), Goalies(1)",
+     "LA: Forwards(12), Defenses(6), Goalies(1)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "name": "forwards",
+       "labels": 21,
+       "athletes": 12,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "defenses",
+       "labels": 21,
+       "athletes": 6,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "skaters",
+       "labels": 21,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "goalies",
+       "labels": 12,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      }
+     ],
+     [
+      {
+       "name": "forwards",
+       "labels": 21,
+       "athletes": 12,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "defenses",
+       "labels": 21,
+       "athletes": 6,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "skaters",
+       "labels": 21,
+       "athletes": 0,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      },
+      {
+       "name": "goalies",
+       "labels": 12,
+       "athletes": 1,
+       "keys": [
+        "name",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": 1.5,
+     "ml": -105,
+     "oppMl": -115,
+     "total": 5.5,
+     "details": "LA -115"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "nyk": {
+   "espnId": "18",
+   "abbr": "NY",
+   "espnRawStatusCounts": {
+    "Active": 17
+   },
+   "espnRawSample": [
+    {
+     "name": "Jaden Akins",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "jersey",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Jose Alvarado",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [
+      {
+       "status": "Day-To-Day",
+       "date": "2026-10-24T21:34Z"
+      }
+     ],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    },
+    {
+     "name": "OG Anunoby",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "debutYear",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 17,
+   "official": {
+    "source": "Sleeper NBA",
+    "count": 18,
+    "statusCounts": {
+     "ACT": 14,
+     "TWO-WAY": 3,
+     "listed": 1
+    }
+   },
+   "onEspnNotOfficial": [],
+   "onOfficialNotEspn": [
+    "New York Knicks (DEF)"
+   ],
+   "espnButSleeperInactive": [
+    "Jaden Akins: TWO-WAY",
+    "Jose Alvarado: ACT",
+    "OG Anunoby: ACT",
+    "Mikal Bridges: ACT",
+    "Jalen Brunson: ACT",
+    "Jordan Clarkson: ACT",
+    "Pacome Dadiet: ACT",
+    "Mohamed Diawara: ACT",
+    "Andre Drummond: ACT",
+    "Josh Hart: ACT",
+    "Dalton Knecht: TWO-WAY",
+    "Tyler Kolek: ACT",
+    "Miles McBride: ACT",
+    "Tyler Nickel: TWO-WAY",
+    "Landry Shamet: ACT",
+    "Karl-Anthony Towns: ACT",
+    "James Wiseman: ACT"
+   ],
+   "schedule": {
+    "requestedSeason": "2026-27",
+    "seasonType": 2,
+    "events": 80,
+    "states": {
+     "post": 2,
+     "pre": 78
+    }
+   },
+   "liveLastGame": {
+    "id": "401909095",
+    "date": "2026-10-23T23:00Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401909095",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401909089",
+     "odds": true,
+     "checked": true
+    }
+   ],
+   "box": {
+    "id": "401909095",
+    "date": "2026-10-23T23:00Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "leaders",
+     "seasonseries",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "news",
+     "plays",
+     "winprobability",
+     "header",
+     "article",
+     "videos",
+     "wallclockAvailable",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "NY 27 22 24 30 = 103",
+     "BOS 26 24 33 24 = 107"
+    ],
+    "boxPlayersTeams": [
+     "NY: (12)",
+     "BOS: (11)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "labels": 14,
+       "athletes": 14,
+       "keys": [
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ],
+     [
+      {
+       "labels": 14,
+       "athletes": 14,
+       "keys": [
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": 2.5,
+     "ml": 124,
+     "oppMl": -148,
+     "total": 220.5,
+     "details": "BOS -2.5"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "bkn": {
+   "espnId": "17",
+   "abbr": "BKN",
+   "espnRawStatusCounts": {
+    "Active": 18
+   },
+   "espnRawSample": [
+    {
+     "name": "Tyler Bilodeau",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [
+      {
+       "status": "Out",
+       "date": "2026-10-23T21:08Z"
+      }
+     ],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Mikel Brown Jr.",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [
+      {
+       "status": "Out",
+       "date": "2026-10-25T02:32Z"
+      }
+     ],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Noah Clowney",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "contract",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 18,
+   "official": {
+    "source": "Sleeper NBA",
+    "count": 19,
+    "statusCounts": {
+     "ACT": 16,
+     "TWO-WAY": 2,
+     "listed": 1
+    }
+   },
+   "onEspnNotOfficial": [],
+   "onOfficialNotEspn": [
+    "Brooklyn Nets (DEF)"
+   ],
+   "espnButSleeperInactive": [
+    "Tyler Bilodeau: ACT",
+    "Mikel Brown Jr.: ACT",
+    "Noah Clowney: ACT",
+    "Egor Demin: ACT",
+    "Keon Ellis: ACT",
+    "Joshua Jefferson: ACT",
+    "Chaney Johnson: TWO-WAY",
+    "Terance Mann: ACT",
+    "Josh Minott: ACT",
+    "Grant Nelson: TWO-WAY",
+    "Michael Porter Jr.: ACT",
+    "Drake Powell: ACT",
+    "Julius Randle: ACT",
+    "Ben Saraf: ACT",
+    "Day'Ron Sharpe: ACT",
+    "Nolan Traore: ACT",
+    "Moritz Wagner: ACT",
+    "Danny Wolf: ACT"
+   ],
+   "schedule": {
+    "requestedSeason": "2026-27",
+    "seasonType": 2,
+    "events": 80,
+    "states": {
+     "post": 2,
+     "pre": 78
+    }
+   },
+   "liveLastGame": {
+    "id": "401909854",
+    "date": "2026-10-24T23:30Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401909854",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401909836",
+     "odds": true,
+     "checked": true
+    }
+   ],
+   "box": {
+    "id": "401909854",
+    "date": "2026-10-24T23:30Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "leaders",
+     "seasonseries",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "news",
+     "header",
+     "article",
+     "videos",
+     "winprobability",
+     "plays",
+     "wallclockAvailable",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "BKN 30 24 26 41 = 121",
+     "CLE 35 33 28 29 = 125"
+    ],
+    "boxPlayersTeams": [
+     "BKN: (11)",
+     "CLE: (10)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "labels": 14,
+       "athletes": 15,
+       "keys": [
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ],
+     [
+      {
+       "labels": 14,
+       "athletes": 14,
+       "keys": [
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": 11.5,
+     "ml": 380,
+     "oppMl": -500,
+     "total": 228.5,
+     "details": "CLE -11.5"
+    },
+    "pickcenterLen": 1
+   }
+  },
+  "nyl": {
+   "espnId": "9",
+   "abbr": "NY",
+   "espnRawStatusCounts": {
+    "Active": 15
+   },
+   "espnRawSample": [
+    {
+     "name": "Rebecca Allen",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "citizenship",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Pauline Astier",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    },
+    {
+     "name": "Elizabeth Balogun",
+     "status": {
+      "id": "1",
+      "name": "Active",
+      "type": "active",
+      "abbreviation": "Active"
+     },
+     "injuries": [
+      {
+       "status": "Out",
+       "date": "2026-09-22T21:05Z"
+      }
+     ],
+     "keys": [
+      "id",
+      "uid",
+      "guid",
+      "alternateIds",
+      "firstName",
+      "lastName",
+      "fullName",
+      "displayName",
+      "shortName",
+      "weight",
+      "displayWeight",
+      "height",
+      "displayHeight",
+      "age",
+      "dateOfBirth",
+      "links",
+      "birthPlace",
+      "college",
+      "slug",
+      "headshot",
+      "jersey",
+      "position",
+      "injuries",
+      "teams",
+      "contracts",
+      "experience",
+      "status"
+     ]
+    }
+   ],
+   "espnCount": 15,
+   "official": null,
+   "schedule": {
+    "requestedSeason": "2026",
+    "seasonType": 1,
+    "events": 53,
+    "states": {
+     "post": 53
+    }
+   },
+   "liveLastGame": {
+    "id": "401918299",
+    "date": "2026-10-09T23:30Z",
+    "state": "post"
+   },
+   "liveResults": [
+    {
+     "id": "401918299",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401918297",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401918295",
+     "odds": true,
+     "checked": true
+    },
+    {
+     "id": "401918017",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401918014",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401857213",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401857206",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401857202",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401857196",
+     "odds": false,
+     "checked": false
+    },
+    {
+     "id": "401857184",
+     "odds": false,
+     "checked": false
+    }
+   ],
+   "box": {
+    "id": "401918299",
+    "date": "2026-10-09T23:30Z",
+    "topKeys": [
+     "boxscore",
+     "format",
+     "gameInfo",
+     "leaders",
+     "seasonseries",
+     "injuries",
+     "broadcasts",
+     "pickcenter",
+     "odds",
+     "againstTheSpread",
+     "article",
+     "videos",
+     "news",
+     "plays",
+     "winprobability",
+     "header",
+     "wallclockAvailable",
+     "meta",
+     "standings"
+    ],
+    "headerCompetitorKeys": [
+     "id",
+     "uid",
+     "order",
+     "homeAway",
+     "winner",
+     "team",
+     "score",
+     "linescores",
+     "record",
+     "possession"
+    ],
+    "linescoreRows": [
+     "ATL 25 19 22 19 = 85",
+     "NY 18 21 29 15 = 83"
+    ],
+    "boxPlayersTeams": [
+     "NY: (8)",
+     "ATL: (7)"
+    ],
+    "rawPlayerGroups": [
+     [
+      {
+       "labels": 14,
+       "athletes": 12,
+       "keys": [
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ],
+     [
+      {
+       "labels": 14,
+       "athletes": 12,
+       "keys": [
+        "names",
+        "keys",
+        "labels",
+        "descriptions",
+        "athletes",
+        "totals"
+       ]
+      }
+     ]
+    ],
+    "teamStats": 12,
+    "odds": {
+     "provider": "DraftKings",
+     "spread": -3.5,
+     "ml": -162,
+     "oppMl": 136,
+     "total": 169.5,
+     "details": "NY -3.5"
+    },
+    "pickcenterLen": 1
+   }
+  }
+ }
+}
