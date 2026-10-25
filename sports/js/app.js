@@ -1,6 +1,7 @@
 import { leagueBase, espnNews, espnRoster, gameSummary } from './espn.mjs';
 import { INJURY_WORDS, classify, flattenReporters, bskyFeedUrl, parseBskyFeed, mergePosts } from './insiders.mjs';
 import { parseSummary } from './gamecenter.mjs';
+import { teamPath, parsePath, teamMeta, homeMeta } from './seo.mjs';
 
 const FEED_REFRESH_MS = 5 * 60 * 1000;
 const SCORES_REFRESH_MS = 30 * 1000;
@@ -107,7 +108,7 @@ function linesPanelHTML() {
     .filter(({ g }) => g && g.state !== 'post' && Date.parse(g.date) - Date.now() < 8 * 864e5)
     .sort((a, b) => Date.parse(a.g.date) - Date.parse(b.g.date));
   if (!rows.length) return '<div class="empty">No upcoming games this week.</div>';
-  return `<ul class="lines">${rows.map(({ t, g }) => `<li style="${teamVars(t)}"><a href="#/${t.key}${g.state === 'in' ? '/game' : ''}">
+  return `<ul class="lines">${rows.map(({ t, g }) => `<li style="${teamVars(t)}"><a href="${teamPath(t, g.state === 'in' ? 'game' : 'news')}">
       <div class="ln-top">${badges([t.key])}<span>${g.home ? 'vs' : '@'} ${esc(g.opponentAbbr || g.opponent)}</span>
         <span class="ln-when">${g.state === 'in' ? '<b class="live-txt">LIVE</b>' : esc(fmtGameTime(g.date))}</span></div>
       ${g.odds ? `<div class="ln-odds">${oddsCells(t, g.odds).map(([k, v]) => `<span><em>${k}</em> ${esc(v)}</span>`).join('')}</div>` : '<div class="ln-odds muted">Line not posted yet</div>'}
@@ -204,7 +205,7 @@ function currentGame(key) {
 
 async function loadFeed() {
   try {
-    state.feed = await getJSON(`data/feed.json?t=${Date.now()}`);
+    state.feed = await getJSON(`/data/feed.json?t=${Date.now()}`);
   } catch {
     // No feed yet (first deploy) — the live browser fetches below fill in.
   }
@@ -266,7 +267,7 @@ async function loadSummary(key) {
     // Alert on injury plays that weren't there on the previous poll.
     if (prev) {
       const seen = new Set(prev.inGameInjuries.map((p) => p.id));
-      for (const p of next.inGameInjuries) if (!seen.has(p.id)) notify(`${team.name} injury alert`, p.text, `#/${key}/game`);
+      for (const p of next.inGameInjuries) if (!seen.has(p.id)) notify(`${team.name} injury alert`, p.text, teamPath(team, 'game'));
     }
     state.live.summaries[key] = next;
   } catch {
@@ -328,7 +329,7 @@ function notify(title, body, url) {
   if (!alertsOn() || !document.hidden) return;
   try {
     const n = new Notification(title, { body: body.slice(0, 180), tag: body.slice(0, 40) });
-    n.onclick = () => { window.focus(); if (url?.startsWith('#')) location.hash = url; else if (url) window.open(url, '_blank', 'noopener'); };
+    n.onclick = () => { window.focus(); if (url?.startsWith('/')) navigate(url); else if (url) window.open(url, '_blank', 'noopener'); };
   } catch { /* some browsers only allow notifications from a service worker */ }
 }
 
@@ -349,16 +350,15 @@ function renderAlertsButton() {
 // ───────────────────────── rendering ─────────────────────────
 
 function route() {
-  const [, key = '', tab = ''] = location.hash.split('/');
-  const k = state.byKey[key] ? key : '';
-  return { key: k, tab: tab || (k && isLive(k) ? 'game' : 'news') };
+  const { key, tab } = parsePath(location.pathname, state.teams);
+  return { key, tab: tab || (key && isLive(key) ? 'game' : 'news') };
 }
 
 function renderNav() {
   const { key } = route();
   $('#team-nav').innerHTML = [
-    `<a class="chip ${key ? '' : 'active'}" data-key="all" href="#/"><span class="sw"></span>All NY</a>`,
-    ...state.teams.map((t) => `<a class="chip ${key === t.key ? 'active' : ''}" style="${teamVars(t)}" href="#/${t.key}"><span class="sw"></span>${esc(t.name)}${isLive(t.key) ? '<span class="live-pip" title="Live"></span>' : ''}</a>`),
+    `<a class="chip ${key ? '' : 'active'}" data-key="all" href="/"><span class="sw"></span>All NY</a>`,
+    ...state.teams.map((t) => `<a class="chip ${key === t.key ? 'active' : ''}" style="${teamVars(t)}" href="${teamPath(t)}"><span class="sw"></span>${esc(t.name)}${isLive(t.key) ? '<span class="live-pip" title="Live"></span>' : ''}</a>`),
   ].join('');
 }
 
@@ -366,15 +366,15 @@ function renderTicker() {
   $('#ticker').innerHTML = state.teams.map((t) => {
     const g = currentGame(t.key);
     const rec = teamInfo(t.key).record;
-    if (!g) return `<a class="tick" style="${teamVars(t)}" href="#/${t.key}"><b>${esc(t.name)}</b><span class="state">${esc(rec || 'No game scheduled')}</span></a>`;
+    if (!g) return `<a class="tick" style="${teamVars(t)}" href="${teamPath(t)}"><b>${esc(t.name)}</b><span class="state">${esc(rec || 'No game scheduled')}</span></a>`;
     const at = g.home ? 'vs' : '@';
     if (g.state === 'pre' || !g.state) {
       const line = headlineLine(t, lineGame(t.key)?.odds);
-      return `<a class="tick" style="${teamVars(t)}" href="#/${t.key}"><b>${esc(t.name)}</b><span>${at} ${esc(g.opponentAbbr || g.opponent)}</span>${line ? `<span class="tline" title="Betting line">${esc(line)}</span>` : ''}<span class="state">${esc(fmtGameTime(g.date))}</span></a>`;
+      return `<a class="tick" style="${teamVars(t)}" href="${teamPath(t)}"><b>${esc(t.name)}</b><span>${at} ${esc(g.opponentAbbr || g.opponent)}</span>${line ? `<span class="tline" title="Betting line">${esc(line)}</span>` : ''}<span class="state">${esc(fmtGameTime(g.date))}</span></a>`;
     }
     const cls = g.state === 'in' ? 'live' : '';
     const res = g.state === 'post' && g.winner !== null ? `<span class="${g.winner ? 'win' : 'loss'}">${g.winner ? 'W' : 'L'}</span>` : '';
-    return `<a class="tick ${cls}" style="${teamVars(t)}" href="#/${t.key}${g.state === 'in' ? '/game' : ''}"><b>${esc(t.name)}</b>${res}<span class="score">${esc(g.us)}–${esc(g.them)}</span><span>${at} ${esc(g.opponentAbbr || g.opponent)}</span><span class="state">${esc(g.detail)}</span></a>`;
+    return `<a class="tick ${cls}" style="${teamVars(t)}" href="${teamPath(t, g.state === 'in' ? 'game' : 'news')}"><b>${esc(t.name)}</b>${res}<span class="score">${esc(g.us)}–${esc(g.them)}</span><span>${at} ${esc(g.opponentAbbr || g.opponent)}</span><span class="state">${esc(g.detail)}</span></a>`;
   }).join('');
 }
 
@@ -518,7 +518,7 @@ function teamCardsHTML() {
     const info = teamInfo(t.key);
     const g = info.nextGame;
     const sub = g && g.state !== 'post' ? `Next: ${g.home ? 'vs' : '@'} ${g.opponentAbbr || g.opponent} · ${fmtGameTime(g.date)}` : (info.standing || t.league);
-    return `<a class="team-card" style="${teamVars(t)}" href="#/${t.key}">
+    return `<a class="team-card" style="${teamVars(t)}" href="${teamPath(t)}">
       ${logoHTML(t, info)}
       <div><h4>${esc(t.full)}</h4><div class="sub">${esc(sub)}</div></div>
       <div class="rec">${esc(info.record || '—')}</div>
@@ -534,7 +534,7 @@ function liveNowHTML() {
     const s = state.live.summaries[t.key];
     const last = g.lastPlay || s?.plays?.[0]?.text || '';
     const hurt = s?.inGameInjuries?.length;
-    return `<a class="live-card" style="${teamVars(t)}" href="#/${t.key}/game">
+    return `<a class="live-card" style="${teamVars(t)}" href="${teamPath(t, 'game')}">
       <div class="lc-top"><b>${esc(t.name)}</b><span class="score">${esc(g.us)}–${esc(g.them)}</span><span>${g.home ? 'vs' : '@'} ${esc(g.opponentAbbr || g.opponent)}</span><span class="state">${esc(g.detail)}</span></div>
       ${g.situation ? `<div class="lc-sit">${esc(g.situation)}</div>` : ''}
       ${last ? `<div class="lc-play">${esc(last)}</div>` : ''}
@@ -682,8 +682,20 @@ function renderTeam(key, tab) {
   </div>`;
 }
 
+// The title strip comes prerendered with each page; only rewrite it after in-site navigation.
+function renderSeoHead(key, tab) {
+  if (state.seoPath === undefined) { state.seoPath = location.pathname; return; }
+  if (state.seoPath === location.pathname) return;
+  state.seoPath = location.pathname;
+  const t = state.byKey[key];
+  const meta = t ? teamMeta(t, tab) : homeMeta(state.teams);
+  const crumbs = t ? `<nav class="seo-crumbs" aria-label="Breadcrumb"><a href="/">New York Sports</a> › <a href="${teamPath(t)}">${esc(t.full)}</a>${tab !== 'news' ? ` › ${esc(meta.h1.replace(`${t.full} `, ''))}` : ''}</nav>` : '';
+  $('#seo-head').innerHTML = `${crumbs}<h1>${esc(meta.h1)}</h1><p>${esc(meta.description)}</p>`;
+}
+
 function render() {
   const { key, tab } = route();
+  renderSeoHead(key, tab);
   renderNav();
   renderTicker();
   const focused = document.activeElement?.id === 'search';
@@ -693,7 +705,7 @@ function render() {
   const gen = state.feed.generatedAt;
   $('#updated').textContent = state.live.news.length ? `Live · feed ${gen ? timeAgo(gen) : 'pending'}` : gen ? `Updated ${timeAgo(gen)}` : 'Connecting…';
   const anyLive = state.teams.some((t) => isLive(t.key));
-  document.title = `${anyLive ? '● ' : ''}${key ? `${state.byKey[key].full} — NY Sports Bar` : 'NY Sports Bar — The #1 Site for New York Sports'}`;
+  document.title = `${anyLive ? '● ' : ''}${(key ? teamMeta(state.byKey[key], tab) : homeMeta(state.teams)).title}`;
 }
 
 // ───────────────────────── events ─────────────────────────
@@ -709,13 +721,38 @@ document.addEventListener('click', (e) => {
   const kind = e.target.closest('[data-kind]');
   if (kind) { state.kind = kind.dataset.kind; state.shown = PAGE_SIZE; render(); return; }
   const tab = e.target.closest('[data-tab]');
-  if (tab) { location.hash = `#/${route().key}/${tab.dataset.tab}`; return; }
+  if (tab) { navigate(teamPath(state.byKey[route().key], tab.dataset.tab)); return; }
   if (e.target.id === 'more') { state.shown += PAGE_SIZE; render(); return; }
   if (e.target.closest('#refresh')) refreshAll();
   if (e.target.closest('#alerts')) toggleAlerts();
 });
 
-window.addEventListener('hashchange', () => { state.shown = PAGE_SIZE; render(); window.scrollTo({ top: 0 }); });
+// Every team view is a real, prerendered page (see scripts/build-pages.mjs); in-site clicks swap views
+// without a reload, and the address bar always shows a URL that loads the same view directly.
+function navigate(url) {
+  if (url !== location.pathname) history.pushState(null, '', url);
+  state.shown = PAGE_SIZE;
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="/"]');
+  if (!a || a.target || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  navigate(a.getAttribute('href'));
+});
+
+window.addEventListener('popstate', () => { state.shown = PAGE_SIZE; render(); });
+
+// Links from before real URLs (#/nyg/rumors) → /new-york-giants/rumors/
+function redirectOldLink() {
+  const [, oldKey, oldTab] = location.hash.split('/');
+  if (!state.byKey[oldKey]) return false;
+  history.replaceState(null, '', teamPath(state.byKey[oldKey], oldTab || 'news'));
+  return true;
+}
+window.addEventListener('hashchange', () => { if (redirectOldLink()) { state.shown = PAGE_SIZE; render(); } });
 
 // Polls on a timer, skipping work while the tab is hidden unless alerts need it.
 function every(ms, fn) {
@@ -728,12 +765,13 @@ function every(ms, fn) {
 
 async function init() {
   const [teams, reporters, config] = await Promise.all([
-    getJSON('data/teams.json'),
-    getJSON('data/reporters.json').catch(() => ({})),
-    getJSON('data/config.json').catch(() => ({})),
+    getJSON('/data/teams.json'),
+    getJSON('/data/reporters.json').catch(() => ({})),
+    getJSON('/data/config.json').catch(() => ({})),
   ]);
   state.teams = teams;
   state.byKey = Object.fromEntries(teams.map((t) => [t.key, t]));
+  redirectOldLink();
   state.reporters = flattenReporters(reporters);
   state.config = config;
   renderAlertsButton();
