@@ -1,5 +1,5 @@
 import { leagueBase, espnNews, espnRoster, gameSummary } from './espn.mjs';
-import { MOVE_WORDS, INJURY_WORDS, flattenReporters, bskyFeedUrl, parseBskyFeed, mergePosts } from './insiders.mjs';
+import { INJURY_WORDS, classify, flattenReporters, bskyFeedUrl, parseBskyFeed, mergePosts } from './insiders.mjs';
 import { parseSummary } from './gamecenter.mjs';
 
 const FEED_REFRESH_MS = 5 * 60 * 1000;
@@ -152,6 +152,31 @@ function allMoves(teamKey) {
 }
 
 // Everything injury-related for a team (or all teams): in-game plays, reporter posts, headlines, roster statuses.
+// Unconfirmed reports: rumor-flagged headlines (incl. trade-rumor sites) and reporter posts, newest first.
+function rumorItems(teamKey) {
+  const since = Date.now() - 14 * 864e5;
+  const news = allNews().filter((n) => n.isRumor && (!teamKey || n.teams.includes(teamKey)) && Date.parse(n.published) > since)
+    .map((n) => ({ kind: 'news', teams: n.teams, text: n.title, summary: n.summary, url: n.url, source: n.source, date: n.published }));
+  const posts = allInsiders(teamKey).filter((p) => p.isRumor && Date.parse(p.published) > since)
+    .map((p) => ({ kind: 'post', teams: p.teams, text: p.text, url: p.url, source: `${p.reporter} · ${p.outlet}`, date: p.published }));
+  return [...news, ...posts].sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+}
+
+const RUMOR_NOTE = 'Rumors are unconfirmed reports from the outlets and reporters linked.';
+
+function rumorListHTML(items, { compact = false, limit = 50 } = {}) {
+  if (!items.length) return '<div class="empty">No trade or signing rumors in the last two weeks.</div>';
+  return `<ul class="moves rumors">${items.slice(0, limit).map((r) => {
+    const t = state.byKey[r.teams[0]];
+    return `<li class="move" style="${teamVars(t)}"><span class="bar"></span><div>
+      <div class="meta">${compact ? badges(r.teams) : ''}<span class="badge rumor">Rumor</span><span>${esc(timeAgo(r.date))}</span></div>
+      <a class="desc" href="${safeUrl(r.url)}" target="_blank" rel="noopener">${esc(r.text)}</a>
+      ${!compact && r.summary ? `<p class="rsum">${esc(r.summary)}</p>` : ''}
+      <div class="meta"><span>${esc(r.source)}</span>${r.kind === 'post' ? '<span class="plat">Reporter post</span>' : ''}</div>
+    </div></li>`;
+  }).join('')}</ul><p class="rg">${esc(RUMOR_NOTE)}</p>`;
+}
+
 function injuryItems(teamKey) {
   const since = Date.now() - 3 * 864e5;
   const keys = teamKey ? [teamKey] : state.teams.map((t) => t.key);
@@ -190,7 +215,7 @@ async function loadLiveNews() {
     const info = teamInfo(team.key);
     const id = info.espnId || team.espn;
     const json = await getJSON(`${leagueBase(team)}/news?team=${id}&limit=25`);
-    return espnNews(json).map((n) => ({ ...n, teams: [team.key], isMove: MOVE_WORDS.test(n.title), isInjury: INJURY_WORDS.test(n.title) }));
+    return espnNews(json).map((n) => ({ ...n, teams: [team.key], ...classify(n.title) }));
   }));
   const fresh = results.flatMap((r) => (r.status === 'fulfilled' ? r.value : []));
   if (fresh.length) state.live.news = fresh;
@@ -358,7 +383,7 @@ function badges(keys) {
     .map((t) => `<span class="badge" style="${teamVars(t)}">${esc(t.name)}</span>`).join('');
 }
 
-const flags = (x) => `${x.isInjury ? '<span class="badge inj">Injury</span>' : ''}${x.isMove ? '<span class="badge tx">Move</span>' : ''}`;
+const flags = (x) => `${x.isInjury ? '<span class="badge inj">Injury</span>' : ''}${x.isMove ? '<span class="badge tx">Move</span>' : ''}${x.isRumor ? '<span class="badge rumor">Rumor</span>' : ''}`;
 
 function storyHTML(n) {
   const img = n.image ? `<img class="thumb" src="${safeUrl(n.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.story').classList.add('noimg');this.remove()">` : '';
@@ -434,12 +459,13 @@ function newsSection(teamKey) {
   let items = allNews().filter((n) => !teamKey || n.teams.includes(teamKey));
   if (state.kind === 'moves') items = items.filter((n) => n.isMove);
   if (state.kind === 'injuries') items = items.filter((n) => n.isInjury);
+  if (state.kind === 'rumors') items = items.filter((n) => n.isRumor);
   if (q) items = items.filter((n) => `${n.title} ${n.summary} ${n.source}`.toLowerCase().includes(q));
 
   const toolbar = `<div class="toolbar">
     <input class="search" id="search" type="search" placeholder="Search headlines, players, outlets…" value="${esc(state.query)}" aria-label="Search news">
     <div class="seg" role="group" aria-label="Filter">
-      ${[['all', 'All news'], ['moves', 'Transactions'], ['injuries', 'Injuries']].map(([k, l]) => `<button data-kind="${k}" class="${state.kind === k ? 'on' : ''}">${l}</button>`).join('')}
+      ${[['all', 'All news'], ['moves', 'Transactions'], ['rumors', 'Rumors'], ['injuries', 'Injuries']].map(([k, l]) => `<button data-kind="${k}" class="${state.kind === k ? 'on' : ''}">${l}</button>`).join('')}
     </div>
   </div>`;
 
@@ -524,6 +550,7 @@ function renderHome() {
     <aside class="stack">
       <div class="panel"><div class="section-title"><span>Insider Feed</span><span class="count">Beat reporters</span></div>${insidersPanel('', 12)}</div>
       <div class="panel"><div class="section-title"><span>The Lines</span><span class="count">Vegas odds</span></div>${linesPanelHTML()}</div>
+      <div class="panel"><div class="section-title"><span>Rumor Mill</span><span class="count">Trades · signings</span></div>${rumorListHTML(rumorItems(''), { compact: true, limit: 8 })}</div>
       <div class="panel"><div class="section-title"><span>Injury Watch</span></div>${injuryListHTML(injuries, { compact: true })}</div>
       <div class="panel"><div class="section-title"><span>Roster Moves Wire</span></div>${movesHTML(allMoves().slice(0, 12), { compact: true })}</div>
       <div><div class="section-title"><span>The Teams</span></div>${teamCardsHTML()}</div>
@@ -634,11 +661,12 @@ function renderTeam(key, tab) {
     game: () => gameTabHTML(key),
     insiders: () => `<div class="layout"><section>${insidersPanel(key, 60)}</section><aside class="stack"><div class="panel"><div class="section-title"><span>Who we follow</span></div>${reporterDirectory(key)}</div></aside></div>`,
     injuries: () => injuriesTabHTML(key),
+    rumors: () => `<div class="panel">${rumorListHTML(rumorItems(key))}</div>`,
     moves: () => `<div class="panel">${movesHTML(moves)}</div>`,
     roster: () => rosterHTML(key),
   }[tab]?.() ?? newsSection(key);
   const gameLabel = live?.state === 'in' ? '<span class="live-pip"></span>Live' : live?.state === 'post' ? 'Game recap' : 'Game';
-  const tabs = { game: gameLabel, insiders: 'Insiders', news: 'News', injuries: 'Injuries', moves: `Roster Moves (${moves.length})`, roster: 'Roster' };
+  const tabs = { game: gameLabel, insiders: 'Insiders', news: 'News', rumors: 'Rumors', injuries: 'Injuries', moves: `Roster Moves (${moves.length})`, roster: 'Roster' };
   return `<div style="${teamVars(t)}">
     <section class="team-hero">
       <div class="team-hero-top">${logoHTML(t, info)}

@@ -12,7 +12,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { ESPN, espnRoster, espnNews, gameSummary } from '../sports/js/espn.mjs';
 import {
-  MOVE_WORDS, INJURY_WORDS, flattenReporters, buildXQueries, xSearchUrl, parseXSearch,
+  classify, flattenReporters, buildXQueries, xSearchUrl, parseXSearch,
   bskyFeedUrl, parseBskyFeed, teamsForPost, mergePosts,
 } from '../sports/js/insiders.mjs';
 
@@ -220,7 +220,7 @@ async function insiders(teams, prev) {
     attempt(`rss ${r.name}`, async () => parseFeed(await fetchText(r.rss), r.outlet).map((i) => ({
       id: `rss-${normTitle(i.title).replace(/ /g, '-').slice(0, 60)}`, platform: 'article', url: i.url, published: i.published,
       text: i.title, image: i.image, reporter: r.name, outlet: r.outlet, handle: r.x || '', avatar: '',
-      teams: teamsForPost(i.title, r, teams), isMove: MOVE_WORDS.test(i.title), isInjury: INJURY_WORDS.test(i.title), national: !r.team,
+      teams: teamsForPost(i.title, r, teams), ...classify(i.title), national: !r.team,
     })).filter((p) => p.published && p.teams.length), [])))).flat();
 
   const cutoff = Date.now() - INSIDER_MAX_AGE_DAYS * 864e5;
@@ -297,9 +297,12 @@ async function main() {
 
     const gn = `https://news.google.com/rss/search?q=${encodeURIComponent(`${team.query} when:7d`)}&hl=en-US&gl=US&ceid=US:en`;
     const gnMoves = `https://news.google.com/rss/search?q=${encodeURIComponent(`${team.query} (signs OR trade OR waived OR released OR acquire OR "injured reserve" OR "injured list" OR activated OR recalled OR claimed) when:14d`)}&hl=en-US&gl=US&ceid=US:en`;
-    for (const url of [gn, gnMoves, ...team.feeds]) {
+    const gnRumors = `https://news.google.com/rss/search?q=${encodeURIComponent(`${team.query} (rumors OR rumor OR "trade talks" OR "interest in" OR "linked to" OR "trade target" OR pursuing OR suitors) when:14d`)}&hl=en-US&gl=US&ceid=US:en`;
+    // Trade-rumor sites and the rumor search mark everything as rumor unless it reads as a done deal.
+    const rumorSources = new Set([gnRumors, ...(team.rumorFeeds || [])]);
+    for (const url of [gn, gnMoves, ...team.feeds, ...rumorSources]) {
       const items = await attempt(`${team.key} ${hostOf(url)}`, async () => parseFeed(await fetchText(url), hostOf(url)), []);
-      for (const i of items.slice(0, 40)) rawNews.push({ ...i, teams: [team.key], feed: url === gnMoves ? 'moves' : 'news' });
+      for (const i of items.slice(0, 40)) rawNews.push({ ...i, teams: [team.key], rumorSource: rumorSources.has(url) });
     }
   }));
 
@@ -315,7 +318,7 @@ async function main() {
       existing.teams = [...new Set([...existing.teams, ...teamKeys])];
       existing.image ||= item.image;
       existing.summary ||= item.summary;
-      existing.isMove ||= item.isMove || (item.feed === 'moves' && MOVE_WORDS.test(item.title));
+      if (item.rumorSource && !existing.rumorSource) Object.assign(existing, { rumorSource: true }, classify(existing.title, { rumorSource: true }));
       continue;
     }
     byKey.set(k, {
@@ -327,8 +330,8 @@ async function main() {
       published: item.published,
       image: item.image || '',
       teams: teamKeys,
-      isMove: item.isMove || MOVE_WORDS.test(item.title),
-      isInjury: INJURY_WORDS.test(item.title),
+      rumorSource: !!item.rumorSource,
+      ...classify(item.title, { rumorSource: !!item.rumorSource }),
     });
   }
   const news = [...byKey.values()]

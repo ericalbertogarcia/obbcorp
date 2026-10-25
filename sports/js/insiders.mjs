@@ -4,6 +4,17 @@
 export const MOVE_WORDS = /\b(signs?|signed|signing|re-signs?|re-signed|re-signing|waived?|waives|waiving|releases?|released|releasing|trades?|traded|trading|acquires?|acquired|acquiring|claims?|claimed|claiming|activated?|placed|recalls?|recalled|optioned|reassigned|designated for assignment|DFA|injured reserve|injured list|extension|called up|promoted|cuts?)\b/i;
 export const INJURY_WORDS = /\b(injur(y|ed|ies)|hurt|carted|concussion|evaluated|questionable to return|doubtful to return|ruled out|out for the (game|night|season)|left the game|limped|trainers?|blue tent|medical tent|day-to-day|MRI|X-rays?|sprain(ed)?|strain(ed)?|torn|fracture[d]?|IL\b|IR\b|surgery|sidelined|exited)\b/i;
 
+// Speculation rather than a done deal: interest, talks, targets, "could/expected to" sign or trade.
+export const RUMOR_WORDS = /\b(rumou?rs?|rumou?red|rumblings|chatter|buzz|whispers|speculation|hot stove|linked to|(has|have|had|showing|shown|showed|expressed) interest|interest in|interested in|in talks|talks with|trade talks|discussions? with|discussing|exploring|explore|eyeing|targeting|trade (candidate|target|market|block|bait|chip|idea)s?|on the (trade )?block|shopping|kick(ed|ing|s)? the tires|checked in on|checking in on|monitoring|in the mix|front-?runners?|suitors?|pursu(e|es|ed|ing|it)|considering|weighing|could (trade|sign|land|acquire|deal|move|pursue|target|re-sign)|might (trade|sign|deal)|would (trade|sign|move|deal)|expected to (sign|trade|pursue|meet|visit|re-sign)|plan(s|ning)? to (sign|trade|pursue)|mock trade|potential (trade|deal|target)|possible (trade|deal|target)|deadline (buzz|chatter|target|deal)s?)\b/i;
+
+// One place decides what a headline or post is. A rumor is never also counted as a move,
+// so "Yankees interested in trading for X" stays out of the moves wire.
+export function classify(text, { rumorSource = false } = {}) {
+  const move = MOVE_WORDS.test(text);
+  const isRumor = RUMOR_WORDS.test(text) || (rumorSource && !move);
+  return { isRumor, isMove: move && !isRumor, isInjury: INJURY_WORDS.test(text) };
+}
+
 const X_QUERY_LIMIT = 480; // X recent search caps query length at 512 on the lower tiers.
 
 // One flat list; national insiders carry `league` and no team.
@@ -29,8 +40,7 @@ function post({ id, platform, reporter, text, url, published, avatar, image, tea
     reporter: reporter.name, outlet: reporter.outlet, handle: platform === 'bsky' ? reporter.bsky : reporter.x,
     avatar: avatar || '', image: image || '',
     teams: teamsForPost(text, reporter, teams),
-    isMove: MOVE_WORDS.test(text),
-    isInjury: INJURY_WORDS.test(text),
+    ...classify(text),
     national: !reporter.team,
   };
 }
