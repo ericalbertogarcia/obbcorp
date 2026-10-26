@@ -1,0 +1,1878 @@
+{
+ "errors": [
+  "nyr blueshirtbanter.com: HTTP 404",
+  "X_BEARER_TOKEN not set: X posts skipped"
+ ],
+ "futures": {
+  "fetchedAt": "2026-10-26T20:34:40.142Z",
+  "leagues": {
+   "NFL": {
+    "season": 2026,
+    "markets": [
+     {
+      "id": "1561",
+      "name": "Super Bowl Winner",
+      "kind": "team",
+      "type": "winLeague",
+      "provider": "DraftKings",
+      "size": 32,
+      "ny": [
+       {
+        "teamKey": "buf",
+        "name": "Buffalo Bills",
+        "odds": "+700",
+        "prob": 0.125,
+        "rank": 2
+       },
+       {
+        "teamKey": "nyg",
+        "name": "New York Giants",
+        "odds": "+9000",
+        "prob": 0.01098901098901099,
+        "rank": 20
+       },
+       {
+        "teamKey": "nyj",
+        "name": "New York Jets",
+        "odds": "+80000",
+        "prob": 0.0012484394506866417,
+        "rank": 29
+       }
+      ],
+      "top": [
+       {
+        "name": "San Francisco 49ers",
+        "abbr": "SF",
+        "teamKey": null,
+        "odds": "+580",
+        "prob": 0.14705882352941177
+       },
+       {
+        "name": "Buffalo Bills",
+        "abbr": "BUF",
+        "teamKey": "buf",
+        "odds": "+700",
+        "prob": 0.125
+       },
+       {
+        "name": "Kansas City Chiefs",
+        "abbr": "KC",
+        "teamKey": null,
+        "odds": "+850",
+        "prob": 0.10526315789473684
+       },
+       {
+        "name": "Los Angeles Rams",
+        "abbr": "LAR",
+        "teamKey": null,
+        "odds": "+1100",
+        "prob": 0.08333333333333333
+       },
+       {
+        "name": "Seattle Seahawks",
+        "abbr": "SEA",
+        "teamKey": null,
+        "odds": "+1100",
+        "prob": 0.08333333333333333
+       },
+       {
+        "name": "Baltimore Ravens",
+        "abbr": "BAL",
+        "teamKey": null,
+        "odds": "+1200",
+        "prob": 0.07692307692307693
+       },
+       {
+        "name": "Jacksonville Jaguars",
+        "abbr": "JAX",
+        "teamKey": null,
+        "odds": "+1300",
+        "prob": 0.07142857142857142
+       },
+       {
+        "name": "Chicago Bears",
+        "abbr": "CHI",
+        "teamKey": null,
+        "odds": "+1400",
+        "prob": 0.06666666666666667
+       },
+       {
+        "name": "Cincinnati Bengals",
+        "abbr": "CIN",
+        "teamKey": null,
+        "odds": "+1700",
+        "prob": 0.05555555555555555
+       },
+       {
+        "name": "Minnesota Vikings",
+        "abbr": "MIN",
+        "teamKey": null,
+        "odds": "+1700",
+        "prob": 0.05555555555555555
+       }
+      ]
+     },
+     {
+      "id": "2757",
+      "name": "AFC Champion",
+      "kind": "team",
+      "type": "winConference",
+      "provider": "DraftKings",
+      "size": 16,
+      "ny": [
+       {
+        "teamKey": "buf",
+        "name": "Buffalo Bills",
+        "odds": "+385",
+        "prob": 0.20618556701030927,
+        "rank": 2
+       },
+       {
+        "teamKey": "nyj",
+        "name": "New York Jets",
+        "odds": "+37000",
+        "prob": 0.0026954177897574125,
+        "rank": 14
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "3904",
+      "name": "NFC Champion",
+      "kind": "team",
+      "type": "winConference",
+      "provider": "DraftKings",
+      "size": 16,
+      "ny": [
+       {
+        "teamKey": "nyg",
+        "name": "New York Giants",
+        "odds": "+3900",
+        "prob": 0.025,
+        "rank": 11
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2740",
+      "name": "AFC East Division Winner",
+      "kind": "team",
+      "type": "winDivision",
+      "provider": "DraftKings",
+      "size": 4,
+      "ny": [
+       {
+        "teamKey": "buf",
+        "name": "Buffalo Bills",
+        "odds": "-240",
+        "prob": 0.7058823529411765,
+        "rank": 1
+       },
+       {
+        "teamKey": "nyj",
+        "name": "New York Jets",
+        "odds": "+6400",
+        "prob": 0.015384615384615385,
+        "rank": 3
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "3906",
+      "name": "NFC East Division Winner",
+      "kind": "team",
+      "type": "winDivision",
+      "provider": "DraftKings",
+      "size": 4,
+      "ny": [
+       {
+        "teamKey": "nyg",
+        "name": "New York Giants",
+        "odds": "+115",
+        "prob": 0.46511627906976744,
+        "rank": 1
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "208273",
+      "name": "Team To Win Most Games (reg. season)",
+      "kind": "team",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 28,
+      "ny": [
+       {
+        "teamKey": "buf",
+        "name": "Buffalo Bills",
+        "odds": "+450",
+        "prob": 0.18181818181818182,
+        "rank": 2
+       },
+       {
+        "teamKey": "nyg",
+        "name": "New York Giants",
+        "odds": "+20000",
+        "prob": 0.004975124378109453,
+        "rank": 16
+       },
+       {
+        "teamKey": "nyj",
+        "name": "New York Jets",
+        "odds": "+40000",
+        "prob": 0.0024937655860349127,
+        "rank": 23
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1208",
+      "name": "Regular Season MVP",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 51,
+      "ny": [
+       {
+        "name": "Josh Allen",
+        "teamKey": "buf",
+        "odds": "+170",
+        "prob": 0.37037037037037035,
+        "rank": 1
+       },
+       {
+        "name": "Geno Smith",
+        "teamKey": "nyj",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 34
+       },
+       {
+        "name": "James Cook III",
+        "teamKey": "buf",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 47
+       },
+       {
+        "name": "J.J. McCarthy",
+        "teamKey": "nyg",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 49
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1209",
+      "name": "Offensive Player of the Year",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 80,
+      "ny": [
+       {
+        "name": "Josh Allen",
+        "teamKey": "buf",
+        "odds": "+2800",
+        "prob": 0.034482758620689655,
+        "rank": 6
+       },
+       {
+        "name": "James Cook III",
+        "teamKey": "buf",
+        "odds": "+3500",
+        "prob": 0.027777777777777776,
+        "rank": 11
+       },
+       {
+        "name": "Malik Nabers",
+        "teamKey": "nyg",
+        "odds": "+3500",
+        "prob": 0.027777777777777776,
+        "rank": 12
+       },
+       {
+        "name": "Garrett Wilson",
+        "teamKey": "nyj",
+        "odds": "+10000",
+        "prob": 0.009900990099009901,
+        "rank": 37
+       },
+       {
+        "name": "Breece Hall",
+        "teamKey": "nyj",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 73
+       },
+       {
+        "name": "Cam Skattebo",
+        "teamKey": "nyg",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 80
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1210",
+      "name": "Defensive Player of the Year",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 93,
+      "ny": [
+       {
+        "name": "Greg Rousseau",
+        "teamKey": "buf",
+        "odds": "+1500",
+        "prob": 0.0625,
+        "rank": 6
+       },
+       {
+        "name": "Abdul Carter",
+        "teamKey": "nyg",
+        "odds": "+3500",
+        "prob": 0.027777777777777776,
+        "rank": 11
+       },
+       {
+        "name": "Bradley Chubb",
+        "teamKey": "buf",
+        "odds": "+10000",
+        "prob": 0.009900990099009901,
+        "rank": 27
+       },
+       {
+        "name": "Will McDonald IV",
+        "teamKey": "nyj",
+        "odds": "+10000",
+        "prob": 0.009900990099009901,
+        "rank": 34
+       },
+       {
+        "name": "Jevon Holland",
+        "teamKey": "nyg",
+        "odds": "+15000",
+        "prob": 0.006622516556291391,
+        "rank": 54
+       },
+       {
+        "name": "Ed Oliver",
+        "teamKey": "buf",
+        "odds": "+20000",
+        "prob": 0.004975124378109453,
+        "rank": 62
+       },
+       {
+        "name": "Kayvon Thibodeaux",
+        "teamKey": "nyg",
+        "odds": "+20000",
+        "prob": 0.004975124378109453,
+        "rank": 67
+       },
+       {
+        "name": "Minkah Fitzpatrick",
+        "teamKey": "nyj",
+        "odds": "+25000",
+        "prob": 0.00398406374501992,
+        "rank": 72
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1211",
+      "name": "Offensive Rookie of the Year",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 45,
+      "ny": [
+       {
+        "name": "Omar Cooper Jr.",
+        "teamKey": "nyj",
+        "odds": "+1000",
+        "prob": 0.09090909090909091,
+        "rank": 3
+       },
+       {
+        "name": "Kenyon Sadiq",
+        "teamKey": "nyj",
+        "odds": "+6500",
+        "prob": 0.015151515151515152,
+        "rank": 13
+       },
+       {
+        "name": "Malachi Fields",
+        "teamKey": "nyg",
+        "odds": "+7500",
+        "prob": 0.013157894736842105,
+        "rank": 14
+       },
+       {
+        "name": "Skyler Bell",
+        "teamKey": "buf",
+        "odds": "+8000",
+        "prob": 0.012345679012345678,
+        "rank": 18
+       },
+       {
+        "name": "Cade Klubnik",
+        "teamKey": "nyj",
+        "odds": "+10000",
+        "prob": 0.009900990099009901,
+        "rank": 21
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1212",
+      "name": "Defensive Rookie of the Year",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 43,
+      "ny": [
+       {
+        "name": "David Bailey",
+        "teamKey": "nyj",
+        "odds": "+180",
+        "prob": 0.35714285714285715,
+        "rank": 1
+       },
+       {
+        "name": "TJ Parker",
+        "teamKey": "buf",
+        "odds": "+8000",
+        "prob": 0.012345679012345678,
+        "rank": 23
+       },
+       {
+        "name": "D'Angelo Ponds",
+        "teamKey": "nyj",
+        "odds": "+10000",
+        "prob": 0.009900990099009901,
+        "rank": 34
+       },
+       {
+        "name": "Davison Igbinosun",
+        "teamKey": "buf",
+        "odds": "+12000",
+        "prob": 0.008264462809917356,
+        "rank": 35
+       },
+       {
+        "name": "Jalon Kilgore",
+        "teamKey": "buf",
+        "odds": "+20000",
+        "prob": 0.004975124378109453,
+        "rank": 43
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1214",
+      "name": "Comeback Player of the Year",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 31,
+      "ny": [
+       {
+        "name": "Malik Nabers",
+        "teamKey": "nyg",
+        "odds": "+450",
+        "prob": 0.18181818181818182,
+        "rank": 2
+       },
+       {
+        "name": "J.J. McCarthy",
+        "teamKey": "nyg",
+        "odds": "+2800",
+        "prob": 0.034482758620689655,
+        "rank": 10
+       },
+       {
+        "name": "Garrett Wilson",
+        "teamKey": "nyj",
+        "odds": "+8000",
+        "prob": 0.012345679012345678,
+        "rank": 16
+       },
+       {
+        "name": "Geno Smith",
+        "teamKey": "nyj",
+        "odds": "+10000",
+        "prob": 0.009900990099009901,
+        "rank": 17
+       },
+       {
+        "name": "Cam Skattebo",
+        "teamKey": "nyg",
+        "odds": "+10000",
+        "prob": 0.009900990099009901,
+        "rank": 25
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1215",
+      "name": "Most Regular Season Passing Yards",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 19,
+      "ny": [
+       {
+        "name": "Josh Allen",
+        "teamKey": "buf",
+        "odds": "+2500",
+        "prob": 0.038461538461538464,
+        "rank": 9
+       },
+       {
+        "name": "Geno Smith",
+        "teamKey": "nyj",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 17
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1216",
+      "name": "Most Regular Season Rushing Yards",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 20,
+      "ny": [
+       {
+        "name": "James Cook III",
+        "teamKey": "buf",
+        "odds": "+450",
+        "prob": 0.18181818181818182,
+        "rank": 4
+       },
+       {
+        "name": "Cam Skattebo",
+        "teamKey": "nyg",
+        "odds": "+17000",
+        "prob": 0.005847953216374269,
+        "rank": 15
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "1217",
+      "name": "Most Regular Season Receiving Yards",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 23,
+      "ny": [
+       {
+        "name": "Malik Nabers",
+        "teamKey": "nyg",
+        "odds": "+2000",
+        "prob": 0.047619047619047616,
+        "rank": 9
+       },
+       {
+        "name": "Garrett Wilson",
+        "teamKey": "nyj",
+        "odds": "+15000",
+        "prob": 0.006622516556291391,
+        "rank": 20
+       }
+      ],
+      "top": []
+     }
+    ]
+   },
+   "MLB": {
+    "season": 2026,
+    "markets": [
+     {
+      "id": "2761",
+      "name": "World Series Winner",
+      "kind": "team",
+      "type": "winLeague",
+      "provider": "ESPN BET",
+      "size": 30,
+      "ny": [
+       {
+        "teamKey": "nyy",
+        "name": "New York Yankees",
+        "odds": "+800",
+        "prob": 0.1111111111111111,
+        "rank": 2
+       },
+       {
+        "teamKey": "nym",
+        "name": "New York Mets",
+        "odds": "+1500",
+        "prob": 0.0625,
+        "rank": 8
+       }
+      ],
+      "top": [
+       {
+        "name": "Los Angeles Dodgers",
+        "abbr": "LAD",
+        "teamKey": null,
+        "odds": "+350",
+        "prob": 0.2222222222222222
+       },
+       {
+        "name": "New York Yankees",
+        "abbr": "NYY",
+        "teamKey": "nyy",
+        "odds": "+800",
+        "prob": 0.1111111111111111
+       },
+       {
+        "name": "Philadelphia Phillies",
+        "abbr": "PHI",
+        "teamKey": null,
+        "odds": "+1200",
+        "prob": 0.07692307692307693
+       },
+       {
+        "name": "Houston Astros",
+        "abbr": "HOU",
+        "teamKey": null,
+        "odds": "+1200",
+        "prob": 0.07692307692307693
+       },
+       {
+        "name": "Toronto Blue Jays",
+        "abbr": "TOR",
+        "teamKey": null,
+        "odds": "+1200",
+        "prob": 0.07692307692307693
+       },
+       {
+        "name": "Atlanta Braves",
+        "abbr": "ATL",
+        "teamKey": null,
+        "odds": "+1400",
+        "prob": 0.06666666666666667
+       },
+       {
+        "name": "Seattle Mariners",
+        "abbr": "SEA",
+        "teamKey": null,
+        "odds": "+1400",
+        "prob": 0.06666666666666667
+       },
+       {
+        "name": "New York Mets",
+        "abbr": "NYM",
+        "teamKey": "nym",
+        "odds": "+1500",
+        "prob": 0.0625
+       },
+       {
+        "name": "Boston Red Sox",
+        "abbr": "BOS",
+        "teamKey": null,
+        "odds": "+1500",
+        "prob": 0.0625
+       },
+       {
+        "name": "San Diego Padres",
+        "abbr": "SD",
+        "teamKey": null,
+        "odds": "+1800",
+        "prob": 0.05263157894736842
+       }
+      ]
+     },
+     {
+      "id": "3294",
+      "name": "National League Winner",
+      "kind": "team",
+      "type": "",
+      "provider": "ESPN BET",
+      "size": 15,
+      "ny": [
+       {
+        "teamKey": "nym",
+        "name": "New York Mets",
+        "odds": "+600",
+        "prob": 0.14285714285714285,
+        "rank": 3
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "3295",
+      "name": "American League Winner",
+      "kind": "team",
+      "type": "",
+      "provider": "ESPN BET",
+      "size": 15,
+      "ny": [
+       {
+        "teamKey": "nyy",
+        "name": "New York Yankees",
+        "odds": "+300",
+        "prob": 0.25,
+        "rank": 1
+       }
+      ],
+      "top": []
+     }
+    ]
+   },
+   "NHL": {
+    "season": 2027,
+    "markets": [
+     {
+      "id": "14495",
+      "name": "Hart Trophy Winner",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 86,
+      "ny": [
+       {
+        "name": "Jack Hughes",
+        "teamKey": "njd",
+        "odds": "+3500",
+        "prob": 0.027777777777777776,
+        "rank": 10
+       },
+       {
+        "name": "Igor Shesterkin",
+        "teamKey": "nyr",
+        "odds": "+7500",
+        "prob": 0.013157894736842105,
+        "rank": 13
+       },
+       {
+        "name": "Connor Hellebuyck",
+        "teamKey": "njd",
+        "odds": "+8000",
+        "prob": 0.012345679012345678,
+        "rank": 17
+       },
+       {
+        "name": "Matthew Schaefer",
+        "teamKey": "nyi",
+        "odds": "+15000",
+        "prob": 0.006622516556291391,
+        "rank": 42
+       },
+       {
+        "name": "Ilya Sorokin",
+        "teamKey": "nyi",
+        "odds": "+25000",
+        "prob": 0.00398406374501992,
+        "rank": 55
+       },
+       {
+        "name": "Mathew Barzal",
+        "teamKey": "nyi",
+        "odds": "+25000",
+        "prob": 0.00398406374501992,
+        "rank": 56
+       },
+       {
+        "name": "Mika Zibanejad",
+        "teamKey": "nyr",
+        "odds": "+30000",
+        "prob": 0.0033222591362126247,
+        "rank": 70
+       },
+       {
+        "name": "J.T. Miller",
+        "teamKey": "nyr",
+        "odds": "+30000",
+        "prob": 0.0033222591362126247,
+        "rank": 71
+       },
+       {
+        "name": "Adam Fox",
+        "teamKey": "nyr",
+        "odds": "+30000",
+        "prob": 0.0033222591362126247,
+        "rank": 78
+       },
+       {
+        "name": "Nico Hischier",
+        "teamKey": "njd",
+        "odds": "+30000",
+        "prob": 0.0033222591362126247,
+        "rank": 79
+       },
+       {
+        "name": "Jesper Bratt",
+        "teamKey": "njd",
+        "odds": "+30000",
+        "prob": 0.0033222591362126247,
+        "rank": 80
+       }
+      ],
+      "top": []
+     }
+    ]
+   },
+   "NBA": {
+    "season": 2027,
+    "markets": [
+     {
+      "id": "2564",
+      "name": "NBA Championship Winner",
+      "kind": "team",
+      "type": "winLeague",
+      "provider": "DraftKings",
+      "size": 30,
+      "ny": [
+       {
+        "teamKey": "nyk",
+        "name": "New York Knicks",
+        "odds": "+1000",
+        "prob": 0.09090909090909091,
+        "rank": 4
+       },
+       {
+        "teamKey": "bkn",
+        "name": "Brooklyn Nets",
+        "odds": "+100000",
+        "prob": 0.000999000999000999,
+        "rank": 27
+       }
+      ],
+      "top": [
+       {
+        "name": "Oklahoma City Thunder",
+        "abbr": "OKC",
+        "teamKey": null,
+        "odds": "+295",
+        "prob": 0.25316455696202533
+       },
+       {
+        "name": "San Antonio Spurs",
+        "abbr": "SA",
+        "teamKey": null,
+        "odds": "+295",
+        "prob": 0.25316455696202533
+       },
+       {
+        "name": "Philadelphia 76ers",
+        "abbr": "PHI",
+        "teamKey": null,
+        "odds": "+950",
+        "prob": 0.09523809523809523
+       },
+       {
+        "name": "New York Knicks",
+        "abbr": "NY",
+        "teamKey": "nyk",
+        "odds": "+1000",
+        "prob": 0.09090909090909091
+       },
+       {
+        "name": "Boston Celtics",
+        "abbr": "BOS",
+        "teamKey": null,
+        "odds": "+1100",
+        "prob": 0.08333333333333333
+       },
+       {
+        "name": "Toronto Raptors",
+        "abbr": "TOR",
+        "teamKey": null,
+        "odds": "+1400",
+        "prob": 0.06666666666666667
+       },
+       {
+        "name": "Minnesota Timberwolves",
+        "abbr": "MIN",
+        "teamKey": null,
+        "odds": "+1700",
+        "prob": 0.05555555555555555
+       },
+       {
+        "name": "Houston Rockets",
+        "abbr": "HOU",
+        "teamKey": null,
+        "odds": "+2000",
+        "prob": 0.047619047619047616
+       },
+       {
+        "name": "Los Angeles Lakers",
+        "abbr": "LAL",
+        "teamKey": null,
+        "odds": "+2500",
+        "prob": 0.038461538461538464
+       },
+       {
+        "name": "Denver Nuggets",
+        "abbr": "DEN",
+        "teamKey": null,
+        "odds": "+2500",
+        "prob": 0.038461538461538464
+       }
+      ]
+     },
+     {
+      "id": "2566",
+      "name": "Eastern Conference Winner",
+      "kind": "team",
+      "type": "winConference",
+      "provider": "DraftKings",
+      "size": 15,
+      "ny": [
+       {
+        "teamKey": "nyk",
+        "name": "New York Knicks",
+        "odds": "+425",
+        "prob": 0.19047619047619047,
+        "rank": 2
+       },
+       {
+        "teamKey": "bkn",
+        "name": "Brooklyn Nets",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 15
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "8425",
+      "name": "Atlantic Division Winner",
+      "kind": "team",
+      "type": "winDivision",
+      "provider": "DraftKings",
+      "size": 5,
+      "ny": [
+       {
+        "teamKey": "nyk",
+        "name": "New York Knicks",
+        "odds": "+400",
+        "prob": 0.2,
+        "rank": 3
+       },
+       {
+        "teamKey": "bkn",
+        "name": "Brooklyn Nets",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 5
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2568",
+      "name": "In-Season Tournament Winner‎",
+      "kind": "team",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 30,
+      "ny": [
+       {
+        "teamKey": "nyk",
+        "name": "New York Knicks",
+        "odds": "+1600",
+        "prob": 0.058823529411764705,
+        "rank": 7
+       },
+       {
+        "teamKey": "bkn",
+        "name": "Brooklyn Nets",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 29
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2569",
+      "name": "In-Season East Group A Winner",
+      "kind": "team",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 5,
+      "ny": [
+       {
+        "teamKey": "bkn",
+        "name": "Brooklyn Nets",
+        "odds": "+1200",
+        "prob": 0.07692307692307693,
+        "rank": 4
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2570",
+      "name": "In-Season East Group B Winner",
+      "kind": "team",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 5,
+      "ny": [
+       {
+        "teamKey": "nyk",
+        "name": "New York Knicks",
+        "odds": "+300",
+        "prob": 0.25,
+        "rank": 2
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2581",
+      "name": "Regular Season MVP",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 31,
+      "ny": [
+       {
+        "name": "Jalen Brunson",
+        "teamKey": "nyk",
+        "odds": "+5000",
+        "prob": 0.0196078431372549,
+        "rank": 9
+       },
+       {
+        "name": "Karl-Anthony Towns",
+        "teamKey": "nyk",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 28
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2582",
+      "name": "Rookie of the Year",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 30,
+      "ny": [
+       {
+        "name": "Mikel Brown Jr.",
+        "teamKey": "bkn",
+        "odds": "+6000",
+        "prob": 0.01639344262295082,
+        "rank": 9
+       },
+       {
+        "name": "Joshua Jefferson",
+        "teamKey": "bkn",
+        "odds": "+25000",
+        "prob": 0.00398406374501992,
+        "rank": 30
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2583",
+      "name": "Defensive Player of the Year",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 63,
+      "ny": [
+       {
+        "name": "OG Anunoby",
+        "teamKey": "nyk",
+        "odds": "+7000",
+        "prob": 0.014084507042253521,
+        "rank": 11
+       },
+       {
+        "name": "Karl-Anthony Towns",
+        "teamKey": "nyk",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 42
+       },
+       {
+        "name": "Josh Hart",
+        "teamKey": "nyk",
+        "odds": "+50000",
+        "prob": 0.001996007984031936,
+        "rank": 44
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2584",
+      "name": "Most Improved Player",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 103,
+      "ny": [
+       {
+        "name": "Egor Demin",
+        "teamKey": "bkn",
+        "odds": "+8000",
+        "prob": 0.012345679012345678,
+        "rank": 31
+       },
+       {
+        "name": "Day'Ron Sharpe",
+        "teamKey": "bkn",
+        "odds": "+8000",
+        "prob": 0.012345679012345678,
+        "rank": 42
+       },
+       {
+        "name": "Danny Wolf",
+        "teamKey": "bkn",
+        "odds": "+15000",
+        "prob": 0.006622516556291391,
+        "rank": 83
+       }
+      ],
+      "top": []
+     },
+     {
+      "id": "2585",
+      "name": "6th Man of the Year",
+      "kind": "player",
+      "type": "",
+      "provider": "DraftKings",
+      "size": 76,
+      "ny": [
+       {
+        "name": "Miles McBride",
+        "teamKey": "nyk",
+        "odds": "+15000",
+        "prob": 0.006622516556291391,
+        "rank": 63
+       },
+       {
+        "name": "Moritz Wagner",
+        "teamKey": "bkn",
+        "odds": "+15000",
+        "prob": 0.006622516556291391,
+        "rank": 64
+       },
+       {
+        "name": "Andre Drummond",
+        "teamKey": "nyk",
+        "odds": "+20000",
+        "prob": 0.004975124378109453,
+        "rank": 75
+       }
+      ],
+      "top": []
+     }
+    ]
+   },
+   "WNBA": {
+    "season": 2027,
+    "markets": []
+   }
+  }
+ },
+ "fantasy": {
+  "season": "2026",
+  "week": 7,
+  "players": [
+   {
+    "id": "8146",
+    "teamKey": "nyj",
+    "name": "Garrett Wilson",
+    "pos": "WR",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 16.74,
+     "half": 13.72,
+     "std": 10.71
+    },
+    "actual": {
+     "ppr": 4.6,
+     "half": 3.6,
+     "std": 2.6
+    },
+    "last": {
+     "ppr": 8.4,
+     "half": 6.4,
+     "std": 4.4
+    }
+   },
+   {
+    "id": "1373",
+    "teamKey": "nyj",
+    "name": "Geno Smith",
+    "pos": "QB",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 16.03,
+     "half": 16.03,
+     "std": 16.03
+    },
+    "actual": {
+     "ppr": 24.48,
+     "half": 24.48,
+     "std": 24.48
+    },
+    "last": {
+     "ppr": 12.98,
+     "half": 12.98,
+     "std": 12.98
+    }
+   },
+   {
+    "id": "11576",
+    "teamKey": "nyj",
+    "name": "Braelon Allen",
+    "pos": "RB",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 15.77,
+     "half": 14.37,
+     "std": 12.97
+    },
+    "actual": {
+     "ppr": 19.4,
+     "half": 16.4,
+     "std": 13.4
+    },
+    "last": {
+     "ppr": 12.4,
+     "half": 11.4,
+     "std": 10.4
+    }
+   },
+   {
+    "id": "11632",
+    "teamKey": "nyg",
+    "name": "Malik Nabers",
+    "pos": "WR",
+    "opp": "HOU",
+    "injury": "",
+    "proj": {
+     "ppr": 14.19,
+     "half": 11.38,
+     "std": 8.57
+    },
+    "actual": {
+     "ppr": 18.1,
+     "half": 14.6,
+     "std": 11.1
+    },
+    "last": {
+     "ppr": 28.5,
+     "half": 22.5,
+     "std": 16.5
+    }
+   },
+   {
+    "id": "11565",
+    "teamKey": "nyg",
+    "name": "J.J. McCarthy",
+    "pos": "QB",
+    "opp": "HOU",
+    "injury": "",
+    "proj": {
+     "ppr": 13.62,
+     "half": 13.62,
+     "std": 13.62
+    },
+    "actual": {
+     "ppr": 10.18,
+     "half": 10.18,
+     "std": 10.18
+    },
+    "last": {
+     "ppr": 17.32,
+     "half": 17.32,
+     "std": 17.32
+    }
+   },
+   {
+    "id": "8131",
+    "teamKey": "nyg",
+    "name": "Isaiah Likely",
+    "pos": "TE",
+    "opp": "HOU",
+    "injury": "",
+    "proj": {
+     "ppr": 12.84,
+     "half": 10.19,
+     "std": 7.53
+    },
+    "actual": {
+     "ppr": 3.2,
+     "half": 2.2,
+     "std": 1.2
+    },
+    "last": {
+     "ppr": 23.9,
+     "half": 20.9,
+     "std": 17.9
+    }
+   },
+   {
+    "id": "13276",
+    "teamKey": "nyj",
+    "name": "Omar Cooper Jr.",
+    "pos": "WR",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 9.42,
+     "half": 7.7,
+     "std": 5.98
+    },
+    "actual": {
+     "ppr": 22.5,
+     "half": 20,
+     "std": 17.5
+    },
+    "last": {
+     "ppr": 22.3,
+     "half": 19.3,
+     "std": 16.3
+    }
+   },
+   {
+    "id": "NYJ",
+    "teamKey": "nyj",
+    "name": "New York Jets D/ST",
+    "pos": "DEF",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 8.54,
+     "half": 8.54,
+     "std": 8.54
+    },
+    "actual": {
+     "ppr": 1,
+     "half": 1,
+     "std": 1
+    },
+    "last": {
+     "ppr": 7,
+     "half": 7,
+     "std": 7
+    }
+   },
+   {
+    "id": "13833",
+    "teamKey": "nyg",
+    "name": "Dominic Zvada",
+    "pos": "K",
+    "opp": "HOU",
+    "injury": "",
+    "proj": {
+     "ppr": 8.14,
+     "half": 8.14,
+     "std": 8.14
+    },
+    "actual": {
+     "ppr": 1,
+     "half": 1,
+     "std": 1
+    },
+    "last": {
+     "ppr": 8,
+     "half": 8,
+     "std": 8
+    }
+   },
+   {
+    "id": "5119",
+    "teamKey": "nyj",
+    "name": "Jason Sanders",
+    "pos": "K",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 7.65,
+     "half": 7.65,
+     "std": 7.65
+    },
+    "actual": {
+     "ppr": 4,
+     "half": 4,
+     "std": 4
+    },
+    "last": {
+     "ppr": 15,
+     "half": 15,
+     "std": 15
+    }
+   },
+   {
+    "id": "12481",
+    "teamKey": "nyg",
+    "name": "Cam Skattebo",
+    "pos": "RB",
+    "opp": "HOU",
+    "injury": "Questionable",
+    "proj": {
+     "ppr": 6.96,
+     "half": 6.25,
+     "std": 5.53
+    },
+    "actual": {
+     "ppr": 19.1,
+     "half": 18.6,
+     "std": 18.1
+    },
+    "last": null
+   },
+   {
+    "id": "11625",
+    "teamKey": "nyj",
+    "name": "Adonai Mitchell",
+    "pos": "WR",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 6.56,
+     "half": 5.36,
+     "std": 4.16
+    },
+    "actual": null,
+    "last": null
+   },
+   {
+    "id": "11571",
+    "teamKey": "nyj",
+    "name": "Isaiah Davis",
+    "pos": "RB",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 6.22,
+     "half": 5.53,
+     "std": 4.84
+    },
+    "actual": {
+     "ppr": 8.4,
+     "half": 6.9,
+     "std": 5.4
+    },
+    "last": {
+     "ppr": 3.6,
+     "half": 3.1,
+     "std": 2.6
+    }
+   },
+   {
+    "id": "NYG",
+    "teamKey": "nyg",
+    "name": "New York Giants D/ST",
+    "pos": "DEF",
+    "opp": "HOU",
+    "injury": "",
+    "proj": {
+     "ppr": 5.85,
+     "half": 5.85,
+     "std": 5.85
+    },
+    "actual": {
+     "ppr": 1,
+     "half": 1,
+     "std": 1
+    },
+    "last": {
+     "ppr": 2,
+     "half": 2,
+     "std": 2
+    }
+   },
+   {
+    "id": "11655",
+    "teamKey": "nyg",
+    "name": "Tyrone Tracy Jr.",
+    "pos": "RB",
+    "opp": "HOU",
+    "injury": "Questionable",
+    "proj": {
+     "ppr": 5.48,
+     "half": 4.8,
+     "std": 4.12
+    },
+    "actual": {
+     "ppr": 8.7,
+     "half": 8.2,
+     "std": 7.7
+    },
+    "last": {
+     "ppr": 18.5,
+     "half": 17.5,
+     "std": 16.5
+    }
+   },
+   {
+    "id": "13285",
+    "teamKey": "nyg",
+    "name": "Malachi Fields",
+    "pos": "WR",
+    "opp": "HOU",
+    "injury": "",
+    "proj": {
+     "ppr": 5.32,
+     "half": 4.35,
+     "std": 3.39
+    },
+    "actual": {
+     "ppr": 12.3,
+     "half": 10.3,
+     "std": 8.3
+    },
+    "last": {
+     "ppr": 3.9,
+     "half": 2.9,
+     "std": 1.9
+    }
+   },
+   {
+    "id": "13330",
+    "teamKey": "nyj",
+    "name": "Kenyon Sadiq",
+    "pos": "TE",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 4.85,
+     "half": 3.93,
+     "std": 3.01
+    },
+    "actual": {
+     "ppr": 1.6,
+     "half": 1.1,
+     "std": 0.6
+    },
+    "last": {
+     "ppr": 2.2,
+     "half": 1.7,
+     "std": 1.2
+    }
+   },
+   {
+    "id": "12498",
+    "teamKey": "nyj",
+    "name": "Mason Taylor",
+    "pos": "TE",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 4.34,
+     "half": 3.36,
+     "std": 2.37
+    },
+    "actual": {
+     "ppr": 25.2,
+     "half": 22.7,
+     "std": 20.2
+    },
+    "last": {
+     "ppr": 7.3,
+     "half": 5.3,
+     "std": 3.3
+    }
+   },
+   {
+    "id": "6130",
+    "teamKey": "nyg",
+    "name": "Devin Singletary",
+    "pos": "RB",
+    "opp": "HOU",
+    "injury": "",
+    "proj": {
+     "ppr": 4.3,
+     "half": 3.8,
+     "std": 3.31
+    },
+    "actual": {
+     "ppr": 14.5,
+     "half": 13,
+     "std": 11.5
+    },
+    "last": {
+     "ppr": 4.3,
+     "half": 3.8,
+     "std": 3.3
+    }
+   },
+   {
+    "id": "7090",
+    "teamKey": "nyg",
+    "name": "Darnell Mooney",
+    "pos": "WR",
+    "opp": "HOU",
+    "injury": "",
+    "proj": {
+     "ppr": 3.27,
+     "half": 2.66,
+     "std": 2.05
+    },
+    "actual": {
+     "ppr": 1.7,
+     "half": 1.2,
+     "std": 0.7
+    },
+    "last": {
+     "ppr": 2,
+     "half": 2,
+     "std": 2
+    }
+   },
+   {
+    "id": "8145",
+    "teamKey": "nyj",
+    "name": "Jeremy Ruckert",
+    "pos": "TE",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 2.75,
+     "half": 2.14,
+     "std": 1.53
+    },
+    "actual": null,
+    "last": null
+   },
+   {
+    "id": "4351",
+    "teamKey": "nyj",
+    "name": "Tim Patrick",
+    "pos": "WR",
+    "opp": "MIA",
+    "injury": "",
+    "proj": {
+     "ppr": 1.77,
+     "half": 1.45,
+     "std": 1.12
+    },
+    "actual": null,
+    "last": {
+     "ppr": 2.5,
+     "half": 2,
+     "std": 1.5
+    }
+   }
+  ],
+  "trending": {
+   "add": [
+    {
+     "name": "Caleb Douglas",
+     "pos": "WR",
+     "team": "MIA",
+     "teamKey": null,
+     "count": 361448
+    },
+    {
+     "name": "Darius Cooper",
+     "pos": "WR",
+     "team": "PHI",
+     "teamKey": null,
+     "count": 270067
+    },
+    {
+     "name": "KC Concepcion Jr.",
+     "pos": "WR",
+     "team": "CLE",
+     "teamKey": null,
+     "count": 224352
+    },
+    {
+     "name": "Seth McGowan",
+     "pos": "RB",
+     "team": "IND",
+     "teamKey": null,
+     "count": 165112
+    },
+    {
+     "name": "Omar Cooper Jr.",
+     "pos": "WR",
+     "team": "NYJ",
+     "teamKey": "nyj",
+     "count": 130976
+    },
+    {
+     "name": "Kaelon Black",
+     "pos": "RB",
+     "team": "SF",
+     "teamKey": null,
+     "count": 111384
+    },
+    {
+     "name": "Tre Tucker",
+     "pos": "WR",
+     "team": "LV",
+     "teamKey": null,
+     "count": 95304
+    },
+    {
+     "name": "New England Patriots D/ST",
+     "pos": "DEF",
+     "team": "NE",
+     "teamKey": null,
+     "count": 85232
+    },
+    {
+     "name": "Emanuel Wilson",
+     "pos": "RB",
+     "team": "SEA",
+     "teamKey": null,
+     "count": 75798
+    },
+    {
+     "name": "Chase McLaughlin",
+     "pos": "K",
+     "team": "TB",
+     "teamKey": null,
+     "count": 59072
+    },
+    {
+     "name": "Blake Corum",
+     "pos": "RB",
+     "team": "LAR",
+     "teamKey": null,
+     "count": 57832
+    },
+    {
+     "name": "Jacksonville Jaguars D/ST",
+     "pos": "DEF",
+     "team": "JAX",
+     "teamKey": null,
+     "count": 56820
+    }
+   ],
+   "drop": [
+    {
+     "name": "Konata Mumpfield",
+     "pos": "WR",
+     "team": "LAR",
+     "teamKey": null,
+     "count": 204426
+    },
+    {
+     "name": "Tyler Higbee",
+     "pos": "TE",
+     "team": "LAR",
+     "teamKey": null,
+     "count": 160569
+    },
+    {
+     "name": "Roschon Johnson",
+     "pos": "RB",
+     "team": "CHI",
+     "teamKey": null,
+     "count": 119616
+    },
+    {
+     "name": "Cleveland Browns D/ST",
+     "pos": "DEF",
+     "team": "CLE",
+     "teamKey": null,
+     "count": 91707
+    },
+    {
+     "name": "Dameon Pierce",
+     "pos": "RB",
+     "team": "PHI",
+     "teamKey": null,
+     "count": 85928
+    },
+    {
+     "name": "Michael Mayer",
+     "pos": "TE",
+     "team": "LV",
+     "teamKey": null,
+     "count": 62010
+    },
+    {
+     "name": "Houston Texans D/ST",
+     "pos": "DEF",
+     "team": "HOU",
+     "teamKey": null,
+     "count": 61640
+    },
+    {
+     "name": "MarShawn Lloyd",
+     "pos": "RB",
+     "team": "GB",
+     "teamKey": null,
+     "count": 59481
+    },
+    {
+     "name": "Kyler Murray",
+     "pos": "QB",
+     "team": "MIN",
+     "teamKey": null,
+     "count": 50800
+    },
+    {
+     "name": "New York Jets D/ST",
+     "pos": "DEF",
+     "team": "NYJ",
+     "teamKey": "nyj",
+     "count": 47984
+    },
+    {
+     "name": "Malik Washington",
+     "pos": "WR",
+     "team": "MIA",
+     "teamKey": null,
+     "count": 47368
+    },
+    {
+     "name": "Adonai Mitchell",
+     "pos": "WR",
+     "team": "NYJ",
+     "teamKey": "nyj",
+     "count": 45360
+    }
+   ]
+  },
+  "fetchedAt": "2026-10-26T20:34:40.635Z",
+  "count": 22
+ },
+ "seasonYears": {
+  "nyl": 2026,
+  "nyk": 2027,
+  "nyg": 2026,
+  "nyj": 2026,
+  "bkn": 2027,
+  "nyy": 2026,
+  "nym": 2026,
+  "buf": 2026,
+  "njd": 2027,
+  "nyr": 2027,
+  "nyi": 2027
+ }
+}
