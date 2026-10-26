@@ -1,0 +1,39 @@
+name: Verify data changes
+
+# Temporary: runs the updater against live data and commits a summary to this branch.
+on:
+  push:
+    branches: [claude/nyc-sports-news-site-7jjbt4]
+    paths: ['.github/workflows/verify.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: curl -fsSL https://www.nysportsbar.com/data/feed.json -o sports/data/feed.json
+      - run: node scripts/update-sports.mjs
+      - name: Summarize
+        run: |
+          mkdir -p diagnostics
+          node -e "
+          const f = require('./sports/data/feed.json');
+          const out = { errors: f.errors, futures: f.futures, fantasy: f.fantasy && { ...f.fantasy, players: f.fantasy.players?.slice(0, 40), count: f.fantasy.players?.length },
+            seasonYears: Object.fromEntries(Object.entries(f.teams).map(([k, t]) => [k, t.seasonYear])) };
+          require('fs').writeFileSync('diagnostics/verify.json', JSON.stringify(out, null, 1));
+          "
+          cp sports/data/feed.json diagnostics/feed.json
+      - name: Commit summary
+        run: |
+          git config user.name "ny-sports-bar-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics
+          git commit -m "Data verification summary"
+          git push origin "HEAD:$GITHUB_REF_NAME"

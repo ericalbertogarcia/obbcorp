@@ -166,6 +166,111 @@ async function officialRoster(team, espnList) {
   return list.map((p) => ({ ...p, status: p.status || injuries.get(nameKey(p.name)) || '' }));
 }
 
+// ───────────────────────── futures ─────────────────────────
+// ESPN's core API lists every futures market for a season (championship, conference, division,
+// player awards) as rows of { team|athlete $ref, value: "+500" }. We keep markets with a NY
+// team or player in them, plus the top of each championship board.
+
+const CORE = 'https://sports.core.api.espn.com/v2/sports';
+const FUTURES_TTL_MS = 30 * 60e3;
+const americanToProb = (s) => { const n = Number(String(s).replace('+', '')); return !Number.isFinite(n) || !n ? 0 : n > 0 ? 100 / (n + 100) : -n / (-n + 100); };
+const MARKET_ORDER = { winLeague: 0, winConference: 1, winDivision: 2 };
+
+async function leagueFutures(sport, league, nyTeams, teamOut) {
+  const year = Math.max(...nyTeams.map((t) => teamOut[t.key]?.seasonYear || 0));
+  if (!year) return null;
+  // Once every NY team in a league is done for the season, show next season's board.
+  const done = nyTeams.every((t) => !teamOut[t.key]?.nextGame);
+  const season = done ? year + 1 : year;
+  const list = await fetchJSON(`${CORE}/${sport}/leagues/${league}/seasons/${season}/futures?limit=100`);
+  if (!list.items?.length) return { season, markets: [] };
+  const teamList = await fetchJSON(`${ESPN}/${sport}/${league}/teams`);
+  const names = new Map((teamList.sports?.[0]?.leagues?.[0]?.teams || []).map(({ team }) => [String(team.id), { name: team.displayName, abbr: team.abbreviation }]));
+  const nyTeamIds = new Map(nyTeams.map((t) => [String(teamOut[t.key]?.espnId), t.key]));
+  const nyPlayers = new Map(nyTeams.flatMap((t) => Object.entries(teamOut[t.key]?.espnPlayers || {}).map(([id, name]) => [id, { name, teamKey: t.key }])));
+
+  const markets = [];
+  for (const item of list.items) {
+    const book = item.futures?.[0];
+    if (!book?.books?.length) continue;
+    const rows = book.books.map((b) => {
+      const ref = b.team?.$ref || b.athlete?.$ref || '';
+      const id = (ref.match(/\/(?:teams|athletes)\/(\d+)/) || [])[1];
+      return { id, kind: b.team ? 'team' : 'player', odds: String(b.value), prob: americanToProb(b.value) };
+    }).filter((r) => r.id).sort((a, b) => b.prob - a.prob);
+    const kind = rows[0]?.kind;
+    const ny = rows.map((r, i) => ({ ...r, rank: i + 1 })).flatMap((r) => {
+      if (kind === 'team' && nyTeamIds.has(r.id)) return [{ teamKey: nyTeamIds.get(r.id), name: names.get(r.id)?.name, odds: r.odds, prob: r.prob, rank: r.rank }];
+      if (kind === 'player' && nyPlayers.has(r.id)) return [{ ...nyPlayers.get(r.id), odds: r.odds, prob: r.prob, rank: r.rank }];
+      return [];
+    });
+    if (!ny.length) continue;
+    markets.push({
+      id: String(item.id), name: (item.displayName || item.name || '').replace(/^(NFL|NBA|NHL|MLB|WNBA)\s*-\s*/, ''), kind,
+      type: item.type || '', provider: book.provider?.name || 'Sportsbook', size: rows.length, ny,
+      // The full board only for championship-level team markets; player boards would need a lookup per name.
+      top: kind === 'team' && item.type === 'winLeague' ? rows.slice(0, 10).map((r) => ({ ...names.get(r.id), teamKey: nyTeamIds.get(r.id) || null, odds: r.odds, prob: r.prob })) : [],
+    });
+  }
+  markets.sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'team' ? -1 : 1) || (MARKET_ORDER[a.type] ?? 3) - (MARKET_ORDER[b.type] ?? 3));
+  return { season, markets };
+}
+
+async function futures(teams, teamOut, prev) {
+  if (prev.futures?.fetchedAt && Date.now() - Date.parse(prev.futures.fetchedAt) < FUTURES_TTL_MS) return prev.futures;
+  const byLeague = new Map();
+  for (const t of teams) {
+    const k = `${t.sport}/${t.espnLeague}`;
+    byLeague.set(k, [...(byLeague.get(k) || []), t]);
+  }
+  const out = { fetchedAt: new Date().toISOString(), leagues: {} };
+  for (const [k, nyTeams] of byLeague) {
+    const [sport, league] = k.split('/');
+    const res = await attempt(`${league} futures`, () => leagueFutures(sport, league, nyTeams, teamOut));
+    out.leagues[nyTeams[0].league] = res || prev.futures?.leagues?.[nyTeams[0].league] || null;
+  }
+  return out;
+}
+
+// ───────────────────────── fantasy football ─────────────────────────
+// Sleeper's public API: league week, weekly projections (rotowire) and stats, and trending
+// waiver adds/drops across all Sleeper leagues.
+
+const SLEEPER = 'https://api.sleeper.app';
+const FANTASY_POS = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
+
+async function fantasy(teams, prev) {
+  const nfl = new Map(teams.filter((t) => t.league === 'NFL').map((t) => [t.espn.toUpperCase(), t.key]));
+  const state = await fetchJSON(`${SLEEPER}/v1/state/nfl`);
+  const week = Number(state.display_week || state.week);
+  const season = state.season;
+  if (state.season_type !== 'regular' && state.season_type !== 'post') return { season, week, offseason: true, fetchedAt: new Date().toISOString() };
+  const q = `season_type=${state.season_type}&${FANTASY_POS.map((p) => `position[]=${p}`).join('&')}`;
+  const [proj, stats, last] = await Promise.all([
+    fetchJSON(`${SLEEPER}/projections/nfl/${season}/${week}?${q}`),
+    attempt('fantasy stats', () => fetchJSON(`${SLEEPER}/stats/nfl/${season}/${week}?${q}`), []),
+    week > 1 ? attempt('fantasy last week', () => fetchJSON(`${SLEEPER}/stats/nfl/${season}/${week - 1}?${q}`), []) : [],
+  ]);
+  const pts = (s) => (s?.stats?.pts_ppr == null ? null : { ppr: s.stats.pts_ppr, half: s.stats.pts_half_ppr, std: s.stats.pts_std });
+  const statMap = new Map((stats || []).map((s) => [s.player_id, s]));
+  const lastMap = new Map((last || []).map((s) => [s.player_id, s]));
+  const who = new Map();
+  for (const p of [...proj, ...(stats || []), ...(last || [])]) if (p.player && !who.has(p.player_id)) who.set(p.player_id, p);
+  const name = (p) => (p.player.position === 'DEF' ? `${p.player.first_name} ${p.player.last_name} D/ST` : `${p.player.first_name} ${p.player.last_name}`);
+
+  const players = proj.filter((p) => nfl.has(p.team) && FANTASY_POS.includes(p.player?.position) && (p.stats?.pts_ppr ?? 0) >= 1)
+    .map((p) => ({
+      id: p.player_id, teamKey: nfl.get(p.team), name: name(p), pos: p.player.position, opp: p.opponent || '',
+      injury: p.player.injury_status || '', proj: pts(p), actual: pts(statMap.get(p.player_id)), last: pts(lastMap.get(p.player_id)),
+    }))
+    .sort((a, b) => b.proj.ppr - a.proj.ppr);
+
+  const trend = async (kind) => (await attempt(`fantasy trending ${kind}`, () => fetchJSON(`${SLEEPER}/v1/players/nfl/trending/${kind}?lookback_hours=24&limit=25`), []))
+    .map((t) => { const p = who.get(t.player_id); return p ? { name: name(p), pos: p.player.position, team: p.team || p.player.team || '', teamKey: nfl.get(p.team || p.player.team) || null, count: t.count } : null; })
+    .filter(Boolean).slice(0, 12);
+  return { season, week, players, trending: { add: await trend('add'), drop: await trend('drop') }, fetchedAt: new Date().toISOString() };
+}
+
 // Last few finished games with their closing lines. Schedules carry scores but no lines, so a line
 // comes from (1) last run's results, (2) the pregame line we saved while it was the next game, or
 // (3) the game summary's pickcenter, fetched a few games per run and never again once checked.
@@ -218,6 +323,7 @@ async function teamData(team, prevTeam = {}) {
     out.lastGame = done[done.length - 1] || null;
     if (!out.nextGame || out.nextGame.state === 'post') out.nextGame = games.find((g) => g.state !== 'post') || null;
     out.results = await recentResults(team, base, t, done, prevTeam);
+    out.seasonYear = sched.requestedSeason?.year || sched.season?.year || null;
   }
 
   // Team schedules carry no betting lines; the scoreboard for the game's date does.
@@ -234,6 +340,8 @@ async function teamData(team, prevTeam = {}) {
   out.roster = official || espnList;
   // Roster diffs only compare like with like; a source change (or this format change) skips one diff.
   out.rosterSource = official ? (team.mlbId ? 'mlb' : 'nhl') : 'espn-v2';
+  // ESPN athlete ids → names, for matching player award futures to this team's players.
+  out.espnPlayers = Object.fromEntries(espnList.map((p) => [p.id, p.name]));
 
   const news = await attempt(`${team.key} espn news`, () => fetchJSON(`${base}/news?team=${t.id}&limit=30`), { articles: [] });
   out.news = espnNews(news);
@@ -444,6 +552,8 @@ async function main() {
     .slice(0, MAX_NEWS);
 
   const insiderData = await insiders(teams, prev);
+  const futuresData = await futures(teams, teamOut, prev);
+  const fantasyData = (await attempt('fantasy', () => fantasy(teams, prev))) || prev.fantasy || null;
 
   const seen = new Set();
   moves = moves
@@ -451,7 +561,7 @@ async function main() {
     .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
     .slice(0, MAX_MOVES);
 
-  const content = { teams: teamOut, news, moves, ...insiderData };
+  const content = { teams: teamOut, news, moves, ...insiderData, futures: futuresData, fantasy: fantasyData };
   await writeFile(FEED_PATH, JSON.stringify({ generatedAt: now, ...content, errors }, null, 1) + '\n');
   console.log(`news=${news.length} moves=${moves.length} insiders=${insiderData.insiders.length} teams=${Object.keys(teamOut).length} errors=${errors.length}`);
   if (insiderData.reporterStatus.missing.length) console.warn(`  ! X handles not found: ${insiderData.reporterStatus.missing.join(', ')}`);
