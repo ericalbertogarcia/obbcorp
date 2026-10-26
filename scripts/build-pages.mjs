@@ -7,7 +7,8 @@
 // prerendered lists in #app with the live view, which carries the same headlines.
 // Run after scripts/update-sports.mjs. No dependencies.
 
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { SITE_NAME, TAGLINE, TAB_PATHS, INDEXED_TABS, SECTIONS, teamPath, teamMeta, homeMeta } from '../sports/js/seo.mjs';
@@ -198,8 +199,27 @@ const HOME_LD = [
 
 // ───────────────────────── build ─────────────────────────
 
-function fill(template, { headHtml, top, body, links }) {
+// Browsers cache CSS/JS for 10 minutes, so a fresh page could run yesterday's script. Every asset URL
+// gets ?v=<hash of the code>: the HTML links, and the relative imports between modules.
+async function stampAssets() {
+  const jsDir = path.join(OUT, 'js');
+  const files = (await readdir(jsDir)).filter((f) => /\.m?js$/.test(f)).sort();
+  const hash = createHash('sha1');
+  for (const f of files) hash.update(await readFile(path.join(jsDir, f)));
+  hash.update(await readFile(path.join(OUT, 'css', 'style.css')));
+  const v = hash.digest('hex').slice(0, 10);
+  for (const f of files) {
+    const p = path.join(jsDir, f);
+    const src = await readFile(p, 'utf8');
+    await writeFile(p, src.replace(/from '(\.\/[\w-]+\.m?js)'/g, `from '$1?v=${v}'`));
+  }
+  return v;
+}
+
+function fill(template, { headHtml, top, body, links, version }) {
   const out = template
+    .replace('href="/css/style.css"', `href="/css/style.css?v=${version}"`)
+    .replace('src="/js/app.js"', `src="/js/app.js?v=${version}"`)
     .replace(/<title>[\s\S]*?<\/title>\s*<meta name="description"[^>]*>/, headHtml)
     .replace('<div class="seo-head" id="seo-head"></div>', `<div class="seo-head" id="seo-head">${top}</div>`)
     .replace('<main id="app" class="page"></main>', `<main id="app" class="page">${body}</main>`)
@@ -217,10 +237,11 @@ async function main() {
 
   await rm(OUT, { recursive: true, force: true });
   await cp(SRC, OUT, { recursive: true });
+  const version = await stampAssets();
 
   const pages = [];
   const home = homeMeta(teams);
-  const homeHtml = fill(template, { headHtml: head({ ...home, url: `${SITE}/`, ld: HOME_LD }), ...homeBody(teams, feed), links });
+  const homeHtml = fill(template, { headHtml: head({ ...home, url: `${SITE}/`, ld: HOME_LD }), ...homeBody(teams, feed), links, version });
   await writeFile(path.join(OUT, 'index.html'), homeHtml);
   pages.push({ loc: `${SITE}/`, priority: '1.0' });
   // GitHub Pages serves 404.html for unknown paths; the app then routes by URL like any page.
@@ -234,6 +255,7 @@ async function main() {
       top: `${crumbs}<h1>${esc(s.h1)}</h1><p>${esc(s.description)}</p>`,
       body: k === 'futures' ? futuresBody(teams, feed) : fantasyBody(teams, feed),
       links,
+      version,
     });
     await mkdir(path.join(OUT, s.path), { recursive: true });
     await writeFile(path.join(OUT, s.path, 'index.html'), html);
@@ -248,6 +270,7 @@ async function main() {
         headHtml: head({ ...teamMeta(t, tab), url: SITE + p, noindex, ld: teamLd(t, tab) }),
         ...teamBody(t, tab, feed),
         links,
+        version,
       });
       await mkdir(path.join(OUT, p), { recursive: true });
       await writeFile(path.join(OUT, p, 'index.html'), html);
