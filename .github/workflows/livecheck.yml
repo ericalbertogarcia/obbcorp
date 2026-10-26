@@ -1,0 +1,17 @@
+name: Live check
+
+on:
+  push:
+    branches: [claude/nyc-sports-news-site-7jjbt4]
+    paths: ['.github/workflows/livecheck.yml']
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          F=$(curl -fsSL "https://www.nysportsbar.com/data/feed.json?t=$(date +%s)")
+          echo "::notice title=generated::$(echo "$F" | jq -r .generatedAt)"
+          echo "::notice title=futures::$(echo "$F" | jq -c '.futures.leagues | to_entries | map({league: .key, season: .value.season, markets: (.value.markets | map(.name + " (" + (.ny | map(.name + " " + .odds) | join(", ")) + ")"))})' | head -c 3800)"
+          echo "::notice title=fantasy::$(echo "$F" | jq -c '{week: .fantasy.week, players: (.fantasy.players | length), byes: .fantasy.byes}')"
+          echo "::notice title=pages::$(for p in futures fantasy-football; do curl -s -o /dev/null -w "$p %{http_code} " https://www.nysportsbar.com/$p/; done)"
