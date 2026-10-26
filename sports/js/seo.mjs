@@ -9,6 +9,22 @@ export const TAB_PATHS = { news: '', results: 'results', rumors: 'rumors', injur
 // Live and insider views change minute to minute and add little for search; they're noindexed.
 export const INDEXED_TABS = ['news', 'results', 'rumors', 'injuries', 'roster', 'moves'];
 
+// Site-wide sections beyond the team pages.
+export const SECTIONS = {
+  futures: {
+    path: '/futures/', label: 'Futures',
+    title: 'New York Futures Odds: Super Bowl, World Series, NBA Title & Stanley Cup | NY Sports Bar',
+    h1: 'New York Futures Odds',
+    description: 'Championship, conference, division and award odds for the Giants, Jets, Bills, Yankees, Mets, Knicks, Nets, Liberty, Devils, Rangers and Islanders, updated throughout the day.',
+  },
+  fantasy: {
+    path: '/fantasy-football/', label: 'Fantasy',
+    title: 'Fantasy Football: Giants, Jets & Bills Projections, Points & Waiver Trends | NY Sports Bar',
+    h1: 'Fantasy Football',
+    description: 'Weekly fantasy football projections and points for every Giants, Jets and Bills player in PPR, half-PPR and standard scoring, plus the most added and dropped players and injury news.',
+  },
+};
+
 export function teamPath(team, tab = 'news') {
   const seg = TAB_PATHS[tab];
   return `/${team.slug}/${seg ? `${seg}/` : ''}`;
@@ -16,6 +32,8 @@ export function teamPath(team, tab = 'news') {
 
 export function parsePath(pathname, teams) {
   const [slug = '', seg = ''] = pathname.split('/').filter(Boolean);
+  const section = Object.keys(SECTIONS).find((k) => SECTIONS[k].path === `/${slug}/`);
+  if (section) return { key: '', tab: '', section };
   const team = teams.find((t) => t.slug === slug);
   if (!team) return { key: '', tab: '' };
   const tab = Object.keys(TAB_PATHS).find((k) => TAB_PATHS[k] === seg) ?? '';

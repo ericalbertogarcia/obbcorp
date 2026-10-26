@@ -447,3 +447,45 @@ code { font-size: 12px; background: var(--panel-2); padding: 1px 5px; border-rad
 .period[open] summary { border-bottom: 1px solid var(--line); }
 .period .plays { padding: 0 12px 4px; }
 .period .plays li { grid-template-columns: 52px minmax(0, 1fr); }
+
+/* ── Section chips (Futures, Fantasy) ── */
+.chip.sec { color: var(--text); border-style: dashed; }
+.chip.sec.active { background: var(--accent); border-color: var(--accent); border-style: solid; color: #fff; }
+
+/* ── Futures ── */
+.fut-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 760px) { .fut-grid { grid-template-columns: minmax(0, 1fr); } }
+.board { list-style: none; font-variant-numeric: tabular-nums; }
+.board li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto 52px; gap: 8px; align-items: center; padding: 7px 8px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.board li.ny { background: color-mix(in srgb, var(--c1) 30%, transparent); border-left: 3px solid var(--c1); font-weight: 600; }
+.board li.gap { margin-top: 10px; border-top: 1px dashed var(--line); }
+.board .bd-rank { color: var(--muted); font-size: 12px; text-align: right; }
+.board .bd-odds { font-family: var(--cond); font-weight: 700; font-size: 16px; }
+.board .bd-pct, .fr-meta { color: var(--muted); font-size: 12px; text-align: right; }
+.futures { list-style: none; display: grid; gap: 6px; }
+.futures li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px; background: var(--panel-2); border-left: 3px solid var(--c1, var(--line)); font-size: 14px; }
+.fr-who { display: flex; align-items: center; gap: 8px; min-width: 0; flex-wrap: wrap; }
+.fr-odds { font-family: var(--cond); font-weight: 800; font-size: 18px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.awards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.awards h5 { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.section-title a.count:hover { color: var(--text); }
+
+/* ── Fantasy ── */
+.fantasy-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; font-family: var(--cond); font-size: 20px; letter-spacing: .5px; }
+.fantasy { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.fantasy th, .fantasy td { padding: 8px 8px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.fantasy thead th { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.fantasy tbody th { font-weight: 600; }
+.fantasy tbody th .inj { font-size: 11px; font-weight: 600; margin-left: 4px; }
+.fantasy .num { text-align: right; }
+.fantasy td.win { color: var(--good); } .fantasy td.loss { color: var(--bad); }
+.pos { display: inline-block; min-width: 32px; text-align: center; padding: 2px 5px; border-radius: 4px; font-family: var(--cond); font-weight: 700; font-size: 12px; background: var(--panel-2); color: var(--text); }
+.pos-QB { background: #7c2d4a; } .pos-RB { background: #1f6f5c; } .pos-WR { background: #2a4f8f; } .pos-TE { background: #8a5a14; } .pos-K { background: #4b4f5c; } .pos-DEF { background: #5b3b8c; }
+.trend { list-style: none; counter-reset: t; }
+.trend li { display: grid; grid-template-columns: 22px 36px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 7px 4px; border-bottom: 1px solid var(--line); font-size: 14px; counter-increment: t; }
+.trend li::before { content: counter(t); color: var(--muted); font-size: 12px; text-align: right; }
+.trend li.ny { background: color-mix(in srgb, var(--c1) 28%, transparent); }
+.trend .tm { color: var(--muted); font-size: 12px; }
+.trend .ct { font-family: var(--cond); font-weight: 700; color: var(--muted); }
+@media (max-width: 480px) { .fantasy th, .fantasy td { padding: 7px 5px; } }
+@media (max-width: 480px) { .fantasy tbody th .inj { display: block; margin: 2px 0 0; } .fantasy th:first-child, .fantasy td:first-child { padding-right: 2px; } }

@@ -87,8 +87,11 @@ const isoOrNull = (d) => { const t = Date.parse(d); return Number.isNaN(t) ? nul
 
 // ───────────────────────── RSS / Atom ─────────────────────────
 
+// Feed titles like "New York Giants News, Scores, Stats & Standings | New York Post" → "New York Post".
+const cleanSource = (s = '') => s.split(/\s+[|–—]\s+/).pop().trim();
+
 export function parseFeed(xml, fallbackSource = '') {
-  const channelTitle = stripTags(tag(xml.split(/<(item|entry)[\s>]/i)[0], 'title')) || fallbackSource;
+  const channelTitle = cleanSource(stripTags(tag(xml.split(/<(item|entry)[\s>]/i)[0], 'title'))) || fallbackSource;
   const blocks = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) || [];
   return blocks.map((b) => {
     let title = stripTags(tag(b, 'title'));
@@ -179,8 +182,9 @@ const MARKET_ORDER = { winLeague: 0, winConference: 1, winDivision: 2 };
 async function leagueFutures(sport, league, nyTeams, teamOut) {
   const year = Math.max(...nyTeams.map((t) => teamOut[t.key]?.seasonYear || 0));
   if (!year) return null;
-  // Once every NY team in a league is done for the season, show next season's board.
-  const done = nyTeams.every((t) => !teamOut[t.key]?.nextGame);
+  // Once every NY team in a league is done for the season (no game, or only next season's spring
+  // training / preseason months away), show next season's board.
+  const done = nyTeams.every((t) => { const g = teamOut[t.key]?.nextGame; return !g || Date.parse(g.date) - Date.now() > 60 * 864e5; });
   const season = done ? year + 1 : year;
   const list = await fetchJSON(`${CORE}/${sport}/leagues/${league}/seasons/${season}/futures?limit=100`);
   if (!list.items?.length) return { season, markets: [] };
@@ -206,6 +210,7 @@ async function leagueFutures(sport, league, nyTeams, teamOut) {
     });
     if (!ny.length) continue;
     markets.push({
+      seenAt: new Date().toISOString(),
       id: String(item.id), name: (item.displayName || item.name || '').replace(/^(NFL|NBA|NHL|MLB|WNBA)\s*-\s*/, ''), kind,
       type: item.type || '', provider: book.provider?.name || 'Sportsbook', size: rows.length, ny,
       // The full board only for championship-level team markets; player boards would need a lookup per name.
@@ -214,6 +219,17 @@ async function leagueFutures(sport, league, nyTeams, teamOut) {
   }
   markets.sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'team' ? -1 : 1) || (MARKET_ORDER[a.type] ?? 3) - (MARKET_ORDER[b.type] ?? 3));
   return { season, markets };
+}
+
+// ESPN's futures list for a season comes back incomplete at times (a market present one hour,
+// missing the next), so markets seen in the last day are kept until they reappear.
+const FUTURES_KEEP_MS = 24 * 3600e3;
+function mergeMarkets(fresh, old) {
+  if (!old || old.season !== fresh.season) return fresh;
+  const now = Date.now();
+  const seen = new Set(fresh.markets.map((m) => m.id));
+  const kept = old.markets.filter((m) => !seen.has(m.id) && now - Date.parse(m.seenAt || 0) < FUTURES_KEEP_MS);
+  return { ...fresh, markets: [...fresh.markets, ...kept].sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'team' ? -1 : 1) || (MARKET_ORDER[a.type] ?? 3) - (MARKET_ORDER[b.type] ?? 3)) };
 }
 
 async function futures(teams, teamOut, prev) {
@@ -226,8 +242,9 @@ async function futures(teams, teamOut, prev) {
   const out = { fetchedAt: new Date().toISOString(), leagues: {} };
   for (const [k, nyTeams] of byLeague) {
     const [sport, league] = k.split('/');
+    const old = prev.futures?.leagues?.[nyTeams[0].league];
     const res = await attempt(`${league} futures`, () => leagueFutures(sport, league, nyTeams, teamOut));
-    out.leagues[nyTeams[0].league] = res || prev.futures?.leagues?.[nyTeams[0].league] || null;
+    out.leagues[nyTeams[0].league] = res ? mergeMarkets(res, old) : old || null;
   }
   return out;
 }
@@ -268,7 +285,9 @@ async function fantasy(teams, prev) {
   const trend = async (kind) => (await attempt(`fantasy trending ${kind}`, () => fetchJSON(`${SLEEPER}/v1/players/nfl/trending/${kind}?lookback_hours=24&limit=25`), []))
     .map((t) => { const p = who.get(t.player_id); return p ? { name: name(p), pos: p.player.position, team: p.team || p.player.team || '', teamKey: nfl.get(p.team || p.player.team) || null, count: t.count } : null; })
     .filter(Boolean).slice(0, 12);
-  return { season, week, players, trending: { add: await trend('add'), drop: await trend('drop') }, fetchedAt: new Date().toISOString() };
+  // A team with no projections this week is on its bye.
+  const byes = [...nfl.values()].filter((k) => !players.some((p) => p.teamKey === k));
+  return { season, week, players, byes, trending: { add: await trend('add'), drop: await trend('drop') }, fetchedAt: new Date().toISOString() };
 }
 
 // Last few finished games with their closing lines. Schedules carry scores but no lines, so a line
@@ -539,7 +558,7 @@ async function main() {
       title: item.title,
       url: item.url,
       summary: item.summary || '',
-      source: item.source || hostOf(item.url),
+      source: cleanSource(item.source) || hostOf(item.url),
       published: item.published,
       image: item.image || '',
       teams: teamKeys,

@@ -1,7 +1,7 @@
 import { leagueBase, espnNews, espnRoster, gameSummary, betResults, resultsRecord } from './espn.mjs';
 import { INJURY_WORDS, classify, flattenReporters, bskyFeedUrl, parseBskyFeed, mergePosts } from './insiders.mjs';
 import { parseSummary } from './gamecenter.mjs';
-import { teamPath, parsePath, teamMeta, homeMeta } from './seo.mjs';
+import { teamPath, parsePath, teamMeta, homeMeta, SECTIONS } from './seo.mjs';
 
 const FEED_REFRESH_MS = 5 * 60 * 1000;
 const SCORES_REFRESH_MS = 30 * 1000;
@@ -20,6 +20,7 @@ const state = {
   seenPosts: null,
   freshPosts: new Set(),
   periodOpen: {},
+  scoring: 'ppr',
   query: '',
   kind: 'all',
   shown: PAGE_SIZE,
@@ -365,14 +366,15 @@ function renderAlertsButton() {
 // ───────────────────────── rendering ─────────────────────────
 
 function route() {
-  const { key, tab } = parsePath(location.pathname, state.teams);
-  return { key, tab: tab || (key && isLive(key) ? 'game' : 'news') };
+  const { key, tab, section } = parsePath(location.pathname, state.teams);
+  return { key, section, tab: tab || (key && isLive(key) ? 'game' : 'news') };
 }
 
 function renderNav() {
-  const { key } = route();
+  const { key, section } = route();
   $('#team-nav').innerHTML = [
-    `<a class="chip ${key ? '' : 'active'}" data-key="all" href="/"><span class="sw"></span>All NY</a>`,
+    `<a class="chip ${key || section ? '' : 'active'}" data-key="all" href="/"><span class="sw"></span>All NY</a>`,
+    ...Object.entries(SECTIONS).map(([k, s]) => `<a class="chip sec ${section === k ? 'active' : ''}" href="${s.path}">${esc(s.label)}</a>`),
     ...state.teams.map((t) => `<a class="chip ${key === t.key ? 'active' : ''}" style="${teamVars(t)}" href="${teamPath(t)}"><span class="sw"></span>${esc(t.name)}${isLive(t.key) ? '<span class="live-pip" title="Live"></span>' : ''}</a>`),
   ].join('');
 }
@@ -716,7 +718,7 @@ function gameTabHTML(key) {
       ${next.odds ? oddsStripHTML(t, next.odds) : '<p class="rg">Betting line not posted yet.</p>'}
       ${next.odds ? `<p class="rg">${esc(RG_NOTE)}</p>` : ''}</div>` : ''}
       <p class="rg" style="margin:12px 0 16px">Live play-by-play, scoring and injury updates appear here at first pitch, puck drop, tip-off or kickoff.</p>
-      <div class="stack">${lastGameRecapHTML(key)}</div>`;
+      <div class="stack">${teamFuturesHTML(key)}${lastGameRecapHTML(key)}</div>`;
   }
   if (!s) {
     if (state.live.summaryTried.has(key)) return '<div class="empty">Live game data is unavailable right now — retrying shortly.</div>';
@@ -764,6 +766,99 @@ function injuriesTabHTML(key) {
       ${rows.length ? `<ul class="leaders">${rows.map((r) => `<li><span>${esc(r.pos)}</span><b>${esc(r.name)}</b><span class="inj">${esc(r.status)}</span></li>`).join('')}</ul>` : '<div class="empty">No players listed.</div>'}</div>
     </aside>
   </div>`;
+}
+
+// ───────────────────────── futures ─────────────────────────
+
+const LEAGUE_ORDER = ['NFL', 'MLB', 'NBA', 'WNBA', 'NHL'];
+const pct = (p) => `${(p * 100).toFixed(p >= 0.095 ? 0 : 1)}%`;
+const ordinal = (n) => `${n}${['th', 'st', 'nd', 'rd'][(n % 100 >> 3) === 1 ? 0 : n % 10] || 'th'}`;
+
+function futuresLeagues() {
+  const leagues = state.feed.futures?.leagues || {};
+  return LEAGUE_ORDER.filter((l) => leagues[l]).map((l) => ({ league: l, ...leagues[l] }));
+}
+
+function futureRowHTML(r, size, { showTeam = true } = {}) {
+  const t = state.byKey[r.teamKey];
+  return `<li style="${teamVars(t)}"><span class="fr-who">${showTeam ? badges([r.teamKey]) : ''}<b>${esc(r.name || t?.full || '')}</b></span>
+    <span class="fr-odds">${esc(r.odds)}</span><span class="fr-meta">${pct(r.prob)} · ${ordinal(r.rank)} of ${size}</span></li>`;
+}
+
+function boardHTML(m) {
+  const inTop = new Set(m.top.filter((r) => r.teamKey).map((r) => r.teamKey));
+  const extra = m.ny.filter((r) => !inTop.has(r.teamKey));
+  return `<ol class="board">${m.top.map((r, i) => `<li class="${r.teamKey ? 'ny' : ''}" style="${teamVars(state.byKey[r.teamKey])}"><span class="bd-rank">${i + 1}</span><span class="bd-name">${esc(r.name || '')}</span><span class="bd-odds">${esc(r.odds)}</span><span class="bd-pct">${pct(r.prob)}</span></li>`).join('')}
+    ${extra.map((r) => `<li class="ny gap" style="${teamVars(state.byKey[r.teamKey])}"><span class="bd-rank">${r.rank}</span><span class="bd-name">${esc(r.name)}</span><span class="bd-odds">${esc(r.odds)}</span><span class="bd-pct">${pct(r.prob)}</span></li>`).join('')}</ol>`;
+}
+
+function renderFutures() {
+  const leagues = futuresLeagues();
+  if (!leagues.length) return '<div class="empty">Futures odds are loading — check back after the next update.</div>';
+  return `<div class="stack">${leagues.map(({ league, season, markets }) => {
+    const team = markets.filter((m) => m.kind === 'team');
+    const players = markets.filter((m) => m.kind === 'player');
+    const champ = team.find((m) => m.type === 'winLeague');
+    const label = league === 'NFL' || league === 'MLB' || league === 'WNBA' ? `${season} season` : `${season - 1}–${String(season).slice(2)} season`;
+    if (!markets.length) return `<section class="panel"><div class="section-title"><span>${league} futures</span><span class="count">${esc(label)}</span></div><div class="empty">Odds for the ${esc(label)} haven't been posted yet.</div></section>`;
+    return `<section class="panel"><div class="section-title"><span>${league} futures</span><span class="count">${esc(label)} · ${esc(markets[0].provider)}</span></div>
+      <div class="fut-grid">
+        ${champ ? `<div><h4 class="box-team">${esc(champ.name)}</h4>${boardHTML(champ)}</div>` : ''}
+        <div class="stack">${team.filter((m) => m !== champ).map((m) => `<div><h4 class="box-team">${esc(m.name)}</h4><ul class="futures">${m.ny.map((r) => futureRowHTML(r, m.size)).join('')}</ul></div>`).join('')}</div>
+      </div>
+      ${players.length ? `<h4 class="box-team">Player awards</h4><div class="awards">${players.map((m) => `<div><h5>${esc(m.name)}</h5><ul class="futures">${m.ny.slice(0, 5).map((r) => futureRowHTML(r, m.size)).join('')}</ul></div>`).join('')}</div>` : ''}
+    </section>`;
+  }).join('')}<p class="rg">Implied probability includes the sportsbook's margin. ${esc(RG_NOTE)}</p></div>`;
+}
+
+// One team's futures, for its own page.
+function teamFuturesHTML(key) {
+  const t = state.byKey[key];
+  const lg = state.feed.futures?.leagues?.[t.league];
+  const team = (lg?.markets || []).filter((m) => m.kind === 'team').flatMap((m) => m.ny.filter((r) => r.teamKey === key).map((r) => ({ ...r, market: m.name, size: m.size })));
+  const players = (lg?.markets || []).filter((m) => m.kind === 'player').flatMap((m) => m.ny.filter((r) => r.teamKey === key).map((r) => ({ ...r, market: m.name, size: m.size }))).sort((a, b) => a.rank - b.rank).slice(0, 6);
+  if (!team.length && !players.length) return '';
+  const row = (r, who) => `<li><span class="fr-who"><b>${esc(who)}</b></span><span class="fr-odds">${esc(r.odds)}</span><span class="fr-meta">${pct(r.prob)} · ${ordinal(r.rank)} of ${r.size}</span></li>`;
+  return `<div class="panel"><div class="section-title"><span>Season futures</span><a class="count" href="${SECTIONS.futures.path}">All NY futures ›</a></div>
+    <ul class="futures">${team.map((r) => row(r, r.market)).join('')}${players.map((r) => row(r, `${r.name} · ${r.market}`)).join('')}</ul>
+    <p class="rg">${esc(RG_NOTE)}</p></div>`;
+}
+
+// ───────────────────────── fantasy football ─────────────────────────
+
+const SCORING = { ppr: 'PPR', half: 'Half PPR', std: 'Standard' };
+const fpts = (p) => (p == null ? '—' : p.toFixed(1));
+const compact = (n) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${Math.round(n / 1e3)}K` : String(n));
+
+function renderFantasy() {
+  const f = state.feed.fantasy;
+  if (!f) return '<div class="empty">Fantasy data is loading — check back after the next update.</div>';
+  if (f.offseason) return '<div class="empty">Fantasy football is in the offseason. Projections return in Week 1.</div>';
+  const sc = state.scoring;
+  const nfl = state.teams.filter((t) => t.league === 'NFL');
+  const toggle = `<div class="seg" role="group" aria-label="Scoring">${Object.entries(SCORING).map(([k, l]) => `<button data-scoring="${k}" class="${sc === k ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+  const teamTable = (t) => {
+    const rows = f.players.filter((p) => p.teamKey === t.key).sort((a, b) => (b.proj?.[sc] ?? 0) - (a.proj?.[sc] ?? 0));
+    const body = f.byes?.includes(t.key) || !rows.length ? '<div class="empty">On bye this week.</div>'
+      : `<div class="table-wrap"><table class="fantasy"><thead><tr><th>Pos</th><th>Player</th><th>Opp</th><th>Proj</th><th>Actual</th><th>Last wk</th></tr></thead><tbody>${rows.map((p) => `<tr>
+          <td><span class="pos pos-${esc(p.pos)}">${esc(p.pos)}</span></td>
+          <th>${esc(p.name)}${p.injury ? ` <span class="inj">${esc(p.injury)}</span>` : ''}</th>
+          <td>${esc(p.opp)}</td><td class="num"><b>${fpts(p.proj?.[sc])}</b></td>
+          <td class="num ${p.actual && p.proj ? (p.actual[sc] >= p.proj[sc] ? 'win' : 'loss') : ''}">${fpts(p.actual?.[sc])}</td><td class="num">${fpts(p.last?.[sc])}</td></tr>`).join('')}</tbody></table></div>`;
+    return `<section class="panel" style="${teamVars(t)}"><div class="section-title"><span>${esc(t.full)}</span><a class="count" href="${teamPath(t, 'injuries')}">Injury report ›</a></div>${body}</section>`;
+  };
+  const trendList = (list) => `<ol class="trend">${list.map((p) => `<li class="${p.teamKey ? 'ny' : ''}" style="${teamVars(state.byKey[p.teamKey])}"><span class="pos pos-${esc(p.pos)}">${esc(p.pos)}</span><b>${esc(p.name)}</b><span class="tm">${esc(p.team)}</span><span class="ct">${compact(p.count)}</span></li>`).join('')}</ol>`;
+  const news = nfl.flatMap((t) => injuryItems(t.key).slice(0, 4)).sort((a, b) => Date.parse(b.date) - Date.parse(a.date)).slice(0, 10);
+  return `<div class="fantasy-head"><div><b>Week ${esc(f.week)}</b> · ${esc(f.season)} season</div>${toggle}</div>
+    <div class="layout">
+      <section class="stack">${nfl.map(teamTable).join('')}
+        <p class="rg">Projections by Rotowire via Sleeper. "Actual" fills in as games are played; green beat the projection, red fell short.</p></section>
+      <aside class="stack">
+        <div class="panel"><div class="section-title"><span>Most added</span><span class="count">Last 24h · Sleeper</span></div>${trendList(f.trending?.add || [])}</div>
+        <div class="panel"><div class="section-title"><span>Most dropped</span><span class="count">Last 24h</span></div>${trendList(f.trending?.drop || [])}</div>
+        <div class="panel"><div class="section-title"><span>Injury news</span><span class="count">Giants · Jets · Bills</span></div>${injuryListHTML(news, { compact: true })}</div>
+      </aside>
+    </div>`;
 }
 
 function rosterHTML(key) {
@@ -820,29 +915,33 @@ function renderTeam(key, tab) {
 }
 
 // The title strip comes prerendered with each page; only rewrite it after in-site navigation.
-function renderSeoHead(key, tab) {
+function pageMeta(key, tab, section) {
+  return section ? SECTIONS[section] : key ? teamMeta(state.byKey[key], tab) : homeMeta(state.teams);
+}
+
+function renderSeoHead(key, tab, section) {
   if (state.seoPath === undefined) { state.seoPath = location.pathname; return; }
   if (state.seoPath === location.pathname) return;
   state.seoPath = location.pathname;
   const t = state.byKey[key];
-  const meta = t ? teamMeta(t, tab) : homeMeta(state.teams);
+  const meta = pageMeta(key, tab, section);
   const crumbs = t ? `<nav class="seo-crumbs" aria-label="Breadcrumb"><a href="/">New York Sports</a> › <a href="${teamPath(t)}">${esc(t.full)}</a>${tab !== 'news' ? ` › ${esc(meta.h1.replace(`${t.full} `, ''))}` : ''}</nav>` : '';
   $('#seo-head').innerHTML = `${crumbs}<h1>${esc(meta.h1)}</h1><p>${esc(meta.description)}</p>`;
 }
 
 function render() {
-  const { key, tab } = route();
-  renderSeoHead(key, tab);
+  const { key, tab, section } = route();
+  renderSeoHead(key, tab, section);
   renderNav();
   renderTicker();
   const focused = document.activeElement?.id === 'search';
   const caret = focused ? document.activeElement.selectionStart : 0;
-  $('#app').innerHTML = key ? renderTeam(key, tab) : renderHome();
+  $('#app').innerHTML = section === 'futures' ? renderFutures() : section === 'fantasy' ? renderFantasy() : key ? renderTeam(key, tab) : renderHome();
   if (focused) { const s = $('#search'); s.focus(); s.setSelectionRange(caret, caret); }
   const gen = state.feed.generatedAt;
   $('#updated').textContent = state.live.news.length ? `Live · feed ${gen ? timeAgo(gen) : 'pending'}` : gen ? `Updated ${timeAgo(gen)}` : 'Connecting…';
   const anyLive = state.teams.some((t) => isLive(t.key));
-  document.title = `${anyLive ? '● ' : ''}${(key ? teamMeta(state.byKey[key], tab) : homeMeta(state.teams)).title}`;
+  document.title = `${anyLive ? '● ' : ''}${pageMeta(key, tab, section).title}`;
 }
 
 // ───────────────────────── events ─────────────────────────
@@ -857,6 +956,8 @@ document.addEventListener('input', (e) => {
 document.addEventListener('click', (e) => {
   const kind = e.target.closest('[data-kind]');
   if (kind) { state.kind = kind.dataset.kind; state.shown = PAGE_SIZE; render(); return; }
+  const scoring = e.target.closest('[data-scoring]');
+  if (scoring) { state.scoring = scoring.dataset.scoring; store.set('scoring', state.scoring); render(); return; }
   const tab = e.target.closest('[data-tab]');
   if (tab) { navigate(teamPath(state.byKey[route().key], tab.dataset.tab)); return; }
   if (e.target.id === 'more') { state.shown += PAGE_SIZE; render(); return; }
@@ -919,6 +1020,7 @@ async function init() {
   redirectOldLink();
   state.reporters = flattenReporters(reporters);
   state.config = config;
+  state.scoring = store.get('scoring') || 'ppr';
   renderAlertsButton();
   render();
   await loadFeed();

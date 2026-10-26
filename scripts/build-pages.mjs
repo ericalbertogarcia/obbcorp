@@ -10,7 +10,7 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { SITE_NAME, TAGLINE, TAB_PATHS, INDEXED_TABS, teamPath, teamMeta, homeMeta } from '../sports/js/seo.mjs';
+import { SITE_NAME, TAGLINE, TAB_PATHS, INDEXED_TABS, SECTIONS, teamPath, teamMeta, homeMeta } from '../sports/js/seo.mjs';
 import { betResults, resultsRecord } from '../sports/js/espn.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -126,9 +126,36 @@ function homeBody(teams, feed) {
 }
 
 // Footer links on every page: every team and its main sections, for visitors and crawlers alike.
+function futuresBody(teams, feed) {
+  const byKey = Object.fromEntries(teams.map((t) => [t.key, t]));
+  const leagues = Object.entries(feed.futures?.leagues || {}).filter(([, v]) => v?.markets?.length);
+  const pct = (p) => `${(p * 100).toFixed(1)}%`;
+  const champ = leagues.flatMap(([, v]) => v.markets.filter((m) => m.type === 'winLeague').flatMap((m) => m.ny.map((r) => `${r.name} ${r.odds} to win the ${m.name.replace(/ Winner$/, '')}`)));
+  return `<article class="seo-page">
+    ${champ.length ? `<p>Current championship odds: ${esc(champ.join('; '))}.</p>` : ''}
+    ${leagues.map(([league, v]) => `<section><h2>${esc(league)} futures (${esc(v.season)} season)</h2>
+      <ul class="seo-list">${v.markets.flatMap((m) => m.ny.map((r) => `<li>${esc(m.name)}: <a href="${byKey[r.teamKey] ? teamPath(byKey[r.teamKey]) : '/'}">${esc(r.name)}</a> ${esc(r.odds)} <span class="meta">${pct(r.prob)} implied · ranked ${r.rank} of ${m.size} · ${esc(m.provider)}</span></li>`)).join('')}</ul></section>`).join('') || '<p>Futures odds are loading.</p>'}
+    <p>Betting odds are for information only. 21+. Gambling problem? Call 1-877-8-HOPENY or text HOPENY (467369).</p></article>`;
+}
+
+function fantasyBody(teams, feed) {
+  const f = feed.fantasy;
+  if (!f || f.offseason || !f.players) return '<article class="seo-page"><p>Fantasy projections return when the NFL season starts.</p></article>';
+  const nfl = teams.filter((t) => t.league === 'NFL');
+  const pts = (p) => (p == null ? '—' : p.ppr.toFixed(1));
+  return `<article class="seo-page"><p>Week ${esc(f.week)} fantasy football projections (PPR) for the ${esc(nfl.map((t) => t.name).join(', '))}.</p>
+    ${nfl.map((t) => {
+      const rows = f.players.filter((p) => p.teamKey === t.key);
+      return `<section><h2>${esc(t.full)} fantasy projections, Week ${esc(f.week)}</h2>${f.byes?.includes(t.key) || !rows.length ? '<p>On bye this week.</p>'
+        : `<table class="seo-table"><thead><tr><th>Pos</th><th>Player</th><th>Opp</th><th>Proj</th><th>Last week</th></tr></thead><tbody>${rows.map((p) => `<tr><td>${esc(p.pos)}</td><td>${esc(p.name)}${p.injury ? ` (${esc(p.injury)})` : ''}</td><td>${esc(p.opp)}</td><td>${pts(p.proj)}</td><td>${pts(p.last)}</td></tr>`).join('')}</tbody></table>`}</section>`;
+    }).join('')}
+    <section><h2>Most added players this week</h2><ol>${(f.trending?.add || []).map((p) => `<li>${esc(p.name)} (${esc(p.pos)}, ${esc(p.team)})</li>`).join('')}</ol></section></article>`;
+}
+
 function footerLinks(teams) {
   return `<h2>New York teams</h2><ul>${teams.map((t) => `<li><a href="${teamPath(t)}">${esc(t.full)}</a>
-    <a href="${teamPath(t, 'rumors')}">Rumors</a> <a href="${teamPath(t, 'injuries')}">Injuries</a> <a href="${teamPath(t, 'roster')}">Roster</a></li>`).join('')}</ul>`;
+    <a href="${teamPath(t, 'rumors')}">Rumors</a> <a href="${teamPath(t, 'injuries')}">Injuries</a> <a href="${teamPath(t, 'roster')}">Roster</a></li>`).join('')}
+    ${Object.values(SECTIONS).map((s) => `<li><a href="${s.path}">${esc(s.h1)}</a></li>`).join('')}</ul>`;
 }
 
 // ───────────────────────── head ─────────────────────────
@@ -198,6 +225,20 @@ async function main() {
   pages.push({ loc: `${SITE}/`, priority: '1.0' });
   // GitHub Pages serves 404.html for unknown paths; the app then routes by URL like any page.
   await writeFile(path.join(OUT, '404.html'), homeHtml.replace('<link rel="canonical"', '<meta name="robots" content="noindex">\n<link rel="canonical"'));
+
+  for (const [k, s] of Object.entries(SECTIONS)) {
+    const crumbs = `<nav class="seo-crumbs" aria-label="Breadcrumb"><a href="/">New York Sports</a> › ${esc(s.h1)}</nav>`;
+    const html = fill(template, {
+      headHtml: head({ ...s, url: SITE + s.path, ld: [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+        itemListElement: [{ '@type': 'ListItem', position: 1, name: 'New York Sports', item: `${SITE}/` }, { '@type': 'ListItem', position: 2, name: s.h1, item: SITE + s.path }] }] }),
+      top: `${crumbs}<h1>${esc(s.h1)}</h1><p>${esc(s.description)}</p>`,
+      body: k === 'futures' ? futuresBody(teams, feed) : fantasyBody(teams, feed),
+      links,
+    });
+    await mkdir(path.join(OUT, s.path), { recursive: true });
+    await writeFile(path.join(OUT, s.path, 'index.html'), html);
+    pages.push({ loc: SITE + s.path, priority: '0.8' });
+  }
 
   for (const t of teams) {
     for (const tab of Object.keys(TAB_PATHS)) {
