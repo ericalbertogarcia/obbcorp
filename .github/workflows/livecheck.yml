@@ -1,0 +1,16 @@
+name: Live check
+
+on:
+  push:
+    branches: [claude/nyc-sports-news-site-7jjbt4]
+    paths: ['.github/workflows/livecheck.yml']
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::notice title=html arrows::$(curl -s https://www.nysportsbar.com/ | grep -o 'sc-btn [a-z]*' | sort | uniq -c | tr '\n' ' ')"
+          echo "::notice title=css rule::$(curl -s https://www.nysportsbar.com/css/style.css | grep -c 'sc-btn')"
+          echo "::notice title=js fn::$(curl -s https://www.nysportsbar.com/js/app.js | grep -c 'updateScrollers')"
+          echo "::notice title=cache headers::$(curl -sI https://www.nysportsbar.com/js/app.js | grep -i -E 'cache-control|last-modified|age:' | tr '\r\n' '  ')"
