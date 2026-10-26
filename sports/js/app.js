@@ -929,11 +929,47 @@ function renderSeoHead(key, tab, section) {
   $('#seo-head').innerHTML = `${crumbs}<h1>${esc(meta.h1)}</h1><p>${esc(meta.description)}</p>`;
 }
 
+// ‹ › arrows on the ticker and team bar: shown only when that row can scroll further that way.
+function updateScrollers() {
+  for (const box of document.querySelectorAll('.scroller')) {
+    const row = box.querySelector('.ticker, .team-nav');
+    const max = row.scrollWidth - row.clientWidth;
+    box.querySelector('.sc-btn.prev').hidden = row.scrollLeft <= 4;
+    box.querySelector('.sc-btn.next').hidden = row.scrollLeft >= max - 4;
+  }
+}
+
+function setupScrollers() {
+  for (const box of document.querySelectorAll('.scroller')) {
+    const row = box.querySelector('.ticker, .team-nav');
+    row.addEventListener('scroll', updateScrollers, { passive: true });
+    box.querySelector('.sc-btn.prev').addEventListener('click', () => row.scrollBy({ left: -row.clientWidth * 0.8 }));
+    box.querySelector('.sc-btn.next').addEventListener('click', () => row.scrollBy({ left: row.clientWidth * 0.8 }));
+  }
+  window.addEventListener('resize', updateScrollers);
+  // Chip widths change once the web font loads; re-center and recheck the arrows then.
+  document.fonts?.ready.then(() => { state.navPath = null; revealActiveChip(); updateScrollers(); });
+}
+
+// After navigating, bring the current page's chip into view in the team bar.
+function revealActiveChip() {
+  if (state.navPath === location.pathname) return;
+  state.navPath = location.pathname;
+  const row = $('#team-nav');
+  const chip = row.querySelector('.chip.active');
+  if (!chip) return;
+  const c = chip.getBoundingClientRect();
+  const r = row.getBoundingClientRect();
+  row.scrollTo({ left: Math.max(0, row.scrollLeft + c.left - r.left - (r.width - c.width) / 2) });
+}
+
 function render() {
   const { key, tab, section } = route();
   renderSeoHead(key, tab, section);
   renderNav();
   renderTicker();
+  revealActiveChip();
+  updateScrollers();
   const focused = document.activeElement?.id === 'search';
   const caret = focused ? document.activeElement.selectionStart : 0;
   $('#app').innerHTML = section === 'futures' ? renderFutures() : section === 'fantasy' ? renderFantasy() : key ? renderTeam(key, tab) : renderHome();
@@ -1021,6 +1057,7 @@ async function init() {
   state.reporters = flattenReporters(reporters);
   state.config = config;
   state.scoring = store.get('scoring') || 'ppr';
+  setupScrollers();
   renderAlertsButton();
   render();
   await loadFeed();
