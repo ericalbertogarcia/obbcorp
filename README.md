@@ -1,7 +1,7 @@
 # obb-corp
 obb corp apparel 
 
-## NY Sports Bar — [nysportsbar.com](https://nysportsbar.com)
+## NY Sports Bar — [nysportsbar.com](https://www.nysportsbar.com)
 
 _The #1 site for New York sports._
 

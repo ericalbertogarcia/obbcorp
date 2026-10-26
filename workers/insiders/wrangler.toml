@@ -4,6 +4,6 @@ compatibility_date = "2025-06-01"
 
 [vars]
 # Only this site may use the proxy, so other sites can't spend your X quota.
-ALLOWED_ORIGIN = "https://nysportsbar.com"
+ALLOWED_ORIGIN = "https://www.nysportsbar.com"
 CACHE_SECONDS = "60"
 WINDOW_MINUTES = "15"

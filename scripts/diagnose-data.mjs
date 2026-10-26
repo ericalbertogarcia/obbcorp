@@ -48,7 +48,7 @@ async function official(team, sleeperCache) {
 async function main() {
   const teams = JSON.parse(await readFile(path.join(ROOT, 'sports/data/teams.json'), 'utf8'));
   let live = null;
-  try { live = await get('https://nysportsbar.com/data/feed.json'); } catch (e) { live = { error: e.message }; }
+  try { live = await get('https://www.nysportsbar.com/data/feed.json'); } catch (e) { live = { error: e.message }; }
   const sleeperCache = {};
   const report = { at: new Date().toISOString(), liveGeneratedAt: live?.generatedAt, liveErrors: live?.errors, teams: {} };
 

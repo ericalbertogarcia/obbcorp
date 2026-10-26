@@ -16,7 +16,9 @@ import { betResults, resultsRecord } from '../sports/js/espn.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'sports');
 const OUT = path.join(ROOT, 'dist');
-const SITE = (process.env.SITE_URL || 'https://nysportsbar.com').replace(/\/$/, '');
+// GitHub Pages serves the site on www (nysportsbar.com redirects there), so URLs in canonicals,
+// the sitemap and social tags use www to avoid pointing search engines at a redirect.
+const SITE = (process.env.SITE_URL || 'https://www.nysportsbar.com').replace(/\/$/, '');
 const TZ = 'America/New_York';
 
 const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
