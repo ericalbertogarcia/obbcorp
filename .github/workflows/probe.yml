@@ -1,0 +1,16 @@
+name: Probe data sources
+
+on:
+  push:
+    branches: [claude/nyc-sports-news-site-7jjbt4]
+    paths: ['.github/workflows/probe.yml']
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          L=$(curl -s "https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2027/futures?limit=100")
+          echo "::notice title=items::$(echo "$L" | jq -c '[.items[] | {name, type, n: (.futures[0].books | length), first: .futures[0].books[0:2]}]' | head -c 3500)"
+          echo "::notice title=metro::$(echo "$L" | jq -c '[.items[] | select(.name|test("Metropolitan")) | .futures[0].books[]]' | head -c 3000)"
+          echo "::notice title=site ids::$(curl -s https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams | jq -c '[.sports[0].leagues[0].teams[].team | select(.abbreviation|test("^(NJ|NYR|NYI)$")) | {id, abbreviation}]')"
